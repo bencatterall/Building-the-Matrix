@@ -40,6 +40,11 @@ public:
 	};
 
 	bool isLoaded() { return loaded;  }
+
+	///
+	/// Get  the OpenGL shader program object ID
+	/// @return the OpenGL shader program object ID
+	///
 	GLuint getProgram() { return programObj; }
 
 };

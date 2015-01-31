@@ -78,6 +78,7 @@ void Display::init() {
 	else {
 		//Create the window
 		window = glfwCreateWindow(resolutionW, resolutionH, "test", nullptr, nullptr);
+
 		//Direct rendering from a window handle to the Hmd
 		ovrHmd_AttachToWindow(hmd, glfwGetWin32Window(window), nullptr, nullptr);
 #ifdef DEBUG
@@ -90,6 +91,7 @@ void Display::init() {
 		cerr << "ERROR: Couldn't create window" << std::endl;
 		exit(EXIT_FAILURE);
 	}
+
 	//Setup context and glfw callbacks
 	glfwSetWindowPos(window, windowPosX, windowPosY);
 	glfwMakeContextCurrent(window);
@@ -145,8 +147,6 @@ void Display::init() {
 	//Bind the frame buffer as the output one
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
 
-	//GL options
-
 	//Init GLEW
 	glewInit();
 	if (glewIsSupported("GL_VERSION_4_5")) {
@@ -160,6 +160,8 @@ void Display::init() {
 #endif
 	}
 }
+
+///Test function
 void Display::Output()
 {
 	// Optional: we can overwrite the previous console to more
@@ -206,8 +208,10 @@ void Display::updateRenderTarget(int width, int height) {
 	if (!frameBufferObject) {
 		//If no frame buffer, create all objects
 		glGenFramebuffers(1, &frameBufferObject);
+
 		//texture for colour buffers
 		glGenTextures(1, &frameBufferTexture);
+
 		//render buffer for depth buffer
 		glGenRenderbuffers(1, &frameBufferDepth);
 
@@ -276,6 +280,7 @@ Display::~Display() {
 	cleanup();
 }
 
+
 void Display::run() {
 
 	while (!glfwWindowShouldClose(window)) {
@@ -289,7 +294,7 @@ void Display::run() {
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
-		glDisable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 
 		ovrPosef headPose[2];
 		//For each eye
@@ -311,7 +316,6 @@ void Display::run() {
 			Matrix4f proj = ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 1000.0f, true);
 			glm::mat4 projectionMatrixPreTrans = glm::make_mat4(proj.M[0]);
 			glm::mat4 projectionMatrix = glm::transpose(projectionMatrixPreTrans);
-
 
 			//View matrix
 			//position of eyes

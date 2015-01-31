@@ -128,6 +128,6 @@ GLuint Shader::loadShader(GLenum type, const std::string src) {
 		glDeleteShader(shader);
 		throw Shader::LoadException("Unable to create shader");
 	}
-	return shader;
 
+	return shader;
 }

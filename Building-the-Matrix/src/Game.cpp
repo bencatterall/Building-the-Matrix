@@ -7,6 +7,11 @@
 #include <time.h>
 void Game::init() {
 
+
+	///
+	/// Test data 
+	///
+
 	/**
 	 * The vertices are needed in a counter-clockwise facing orientation
 	 *   6 --- 7
@@ -78,10 +83,12 @@ void Game::init() {
 	};
 
 	GLfloat* cubeVertexData = new GLfloat[sizeof(cubeData) / sizeof(GLfloat)];
+
 	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
-	*(cubeVertexData + i) = 10.0f*cubeData[i];
-	cout << "" << cubeVertexData[i] << std::endl;
-}
+		*(cubeVertexData + i) = 10.0f*cubeData[i];
+		cout << "" << cubeVertexData[i] << std::endl;
+	}
+
 	for (int i = 0; i < numCubes; ++i) {
 		cubes[i] = new RenderableComponent();
 		std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
@@ -92,28 +99,25 @@ void Game::init() {
 		cubes[i]->setShader(shader);
 		cubes[i]->setVertexData(cubeVertexData, sizeof(cubeData) / sizeof(GLfloat), false);
 		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
-
 	}
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
-
-	//Move camera to the position of the player
-	srand(time(nullptr));
-
-	//modelViewMatrix = glm::mat4(1.0f);
-	//projectionMatrix = glm::mat4(1.0f);
+	
 	for (int i = 0; i < numCubes; ++i) {
 		float xPos = 0.0f, yPos = -10.0f, zPos = -50.0f;
 
+		//Move camera to the position of the player
 		modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
 
+		//Get the renderable component and bind in the shader
 		RenderableComponent* renderableComponent = cubes[i];
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
+
 		if (!objectShader)
 			continue;
-		renderableComponent->bindShader();
 
+		renderableComponent->bindShader();
 
 		renderableComponent->setProjectionMatrix(projectionMatrix);
 		renderableComponent->setModelviewMatrix(modelViewMatrix);
@@ -136,7 +140,8 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		renderableComponent->bindTextures();
 
 		//draw arrays
-		glDrawArrays(GL_TRIANGLES, 0, 36); //renderableComponent->getNumVerticesRender());
+		//TODO add switch to allow index drawing
+		glDrawArrays(GL_TRIANGLES, 0, renderableComponent->getNumVerticesRender());
 
 		//Release vertex, textures and shaders
 		renderableComponent->releaseTextures();

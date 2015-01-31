@@ -3,8 +3,7 @@
 
 #include "shader.hpp"
 #include "RenderableComponent.hpp"
-#define VERTEX_POS_INDX 0
-#define VERTEX_TEXCOORD0_INDX 1
+
 RenderableComponent::RenderableComponent() {
 	//Generate the vertex buffers
 	glGenBuffers(1, &vboVertexId);
@@ -14,6 +13,7 @@ RenderableComponent::~RenderableComponent() {
 	//Delete the vertex buffers
 	glDeleteBuffers(1, &vboVertexId);
 	glDeleteBuffers(1, &vboTextureId);
+
 	delete[] vertexData;
 	delete[] textureCoordsData;
 }
