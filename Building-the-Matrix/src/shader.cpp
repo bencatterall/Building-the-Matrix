@@ -1,11 +1,10 @@
-#include <string>
 #include "shader.hpp"
+#include <string>
 
-
-Shader::Shader(const std::string program_name) :
-	Shader(program_name + ".vs", program_name + ".fs")
+Shader::Shader(const std::string programName) :
+	Shader(programName + ".vs", programName + ".fs")
 {
-
+	this->programName = programName;
 }
 
 Shader::Shader(const std::string vs, const std::string fs) 

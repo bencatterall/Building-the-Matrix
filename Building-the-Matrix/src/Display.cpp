@@ -13,6 +13,7 @@ void Display::init() {
 	//Initialise the OVR and create a HMD
 	ovr_Initialize();
 	hmd = ovrHmd_Create(0);
+
 	if (!hmd) {
 		cout << "Failed to openl Oculus HMD, falling back onto virtual debug." << std::endl;
 		hmd = ovrHmd_CreateDebug(ovrHmd_DK2);
@@ -20,7 +21,12 @@ void Display::init() {
 		//Called when creating normally but not on debug
 		ovrHmd_ResetFrameTiming(hmd, 0);
 	}
-	if (!hmd) { cerr << "FAIL to init hmd" << std::endl; exit(0); }
+	//If we failed to create a debug version
+	if (!hmd) { 
+		cerr << "Failed to init debug Oculus HMD." << std::endl; 
+		//TODO: switch to desktop mode
+		exit(EXIT_FAILURE);
+	}
 
 	//Setup tracking 
 	ovrHmd_ConfigureTracking(hmd, ovrTrackingCap_Orientation | ovrTrackingCap_Position | ovrTrackingCap_MagYawCorrection, 0);
@@ -34,6 +40,7 @@ void Display::init() {
 	int resolutionH = hmd->Resolution.h;
 
 	if (!glfwInit()) {
+		cerr << "Failed to init GLFW." << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	glfwSetErrorCallback(glfwErrorCallback);
@@ -76,6 +83,7 @@ void Display::init() {
 #endif
 	}
 	else {
+		//Direct Mode
 		//Create the window
 		window = glfwCreateWindow(resolutionW, resolutionH, "test", nullptr, nullptr);
 
