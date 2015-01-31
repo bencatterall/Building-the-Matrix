@@ -36,7 +36,7 @@ void RenderableComponent::setVertexData(GLfloat* newVertexData, size_t dataSize,
 
 	//Pass in data to the buffer buffer
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboVertexId);
-	glBufferData(GL_ARRAY_BUFFER, this->vertexDataSize, this->vertexData, usage);
+	glBufferData(GL_ARRAY_BUFFER, this->vertexDataSize*sizeof(GLfloat), this->vertexData, usage);
 
 	//Restore previous program
 	glUseProgram(id);
@@ -61,7 +61,7 @@ void RenderableComponent::setTextureCoordsData(GLfloat* newTextureData, size_t d
 
 	//Pass in data to the buffer buffer
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
-	glBufferData(GL_ARRAY_BUFFER, this->textureCoordsDataSize, this->textureCoordsData, usage);
+	glBufferData(GL_ARRAY_BUFFER, this->textureCoordsDataSize*sizeof(GLfloat), this->textureCoordsData, usage);
 
 	//Release shader
 	glUseProgram(id);
@@ -95,11 +95,10 @@ void RenderableComponent::releaseVBOs() {
 }
 void RenderableComponent::bindShader() {
 	if (!shader){
-		std::cout << "ERROR" << std::endl;
-		//exit(0);
-	}// exit(0); }
+		std::cout << "ERROR: Can't bind shader" << std::endl;
+		return;
+	}
 		
-
 	glUseProgram(shader->getProgram());
 }
 void RenderableComponent::releaseShader() {

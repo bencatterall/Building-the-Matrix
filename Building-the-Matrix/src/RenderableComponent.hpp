@@ -139,7 +139,7 @@ public:
 	///
 	/// Set the vertex data to use for this component.
 	/// @param new_vertex_data The new data to use for ther vertices of this object
-	/// @param the size of the data in bytes
+	/// @param the size of the data in GLfloats
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
 	///
 	void setVertexData(GLfloat* newVertexData, size_t dataSize, bool isDynamic);
@@ -152,7 +152,7 @@ public:
 	///
 	/// Set the texture coordinate data to use for this component
 	/// @param new_texture_data The new data to use for ther tehadxture coordinates of this object
-	/// @param data_size The size of the data in bytes
+	/// @param data_size The size of the data in GLfloats
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static
 	///
 	void setTextureCoordsData(GLfloat* newTextureData, size_t dataSize, bool isDynamic);

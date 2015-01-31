@@ -90,7 +90,7 @@ void Game::init() {
 			exit(0);
 
 		cubes[i]->setShader(shader);
-		cubes[i]->setVertexData(cubeVertexData, sizeof(cubeData), false);
+		cubes[i]->setVertexData(cubeVertexData, sizeof(cubeData) / sizeof(GLfloat), false);
 		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
 
 	}
