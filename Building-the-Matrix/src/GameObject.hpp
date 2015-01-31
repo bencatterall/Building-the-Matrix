@@ -6,12 +6,18 @@
 #include <memory>
 
 class GameObject {
-	bool isRenderable = false;
+	///
+	///Unique ID used to refer to the object
+	///
+	int ID = 0;
+	bool renderable = false;
 	std::shared_ptr<RenderableComponent> renderableComponent;
 public:
 	GameObject();
 	~GameObject();
-
+	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
+	bool isRenderable() { return renderable; }
+	int getID() { return ID;  }
 };
 
 
