@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H
 
 #include "Common.hpp"
+#include "LocationComponent.hpp"
 #include "RenderableComponent.hpp"
 #include <memory>
 
@@ -12,6 +13,7 @@ class GameObject {
 	int ID = 0;
 	bool renderable = false;
 	std::shared_ptr<RenderableComponent> renderableComponent;
+	std::shared_ptr<LocationComponent> locationComponent;
 public:
 	GameObject();
 	~GameObject();

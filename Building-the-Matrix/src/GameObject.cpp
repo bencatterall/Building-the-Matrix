@@ -1,6 +1,8 @@
 #include "GameObject.hpp"
+#include "ObjectManager.hpp"
 GameObject::GameObject() {
-	//TODO: Request a unique ID, this needs to be from a factory...
+	//Get a GUID for the ObjectManager
+	this->ID = ObjectManager::getNextID();
 }
 
 GameObject::~GameObject() {

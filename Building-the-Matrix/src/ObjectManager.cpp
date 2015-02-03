@@ -1,5 +1,9 @@
 #include "ObjectManager.hpp"
 
+int ObjectManager::nextID = 1;
+
+std::mutex ObjectManager::objManagerIndexMutex;
+
 bool ObjectManager::addObject(std::shared_ptr<GameObject> gameObject){
 	//Insert the object into the map
 	auto ret = gameObjects.insert(
