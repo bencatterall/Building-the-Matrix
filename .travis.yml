@@ -1,0 +1,14 @@
+language: cpp
+
+compiler:
+    - gcc
+
+before-install:
+    - sudo apt-get update -qq
+
+install:
+    - true
+    - chmod +x ./run-tests.sh
+
+script:
+    - ./run-tests.sh
