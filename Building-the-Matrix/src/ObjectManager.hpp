@@ -8,7 +8,7 @@
 #include <mutex> //std::mutex, std::lock_guard
 
 ///
-///
+/// 
 ///
 class ObjectManager {
 	///
@@ -46,10 +46,11 @@ public:
 		catch (...) {
 #ifdef DEBUG
 			std::cerr << "ERROR: In generating object ID" << std::endl;
-#endif
+#endif 
 		}
 		return index;
 	}
+
 	///
 	/// Add an object to the object Manager
 	///

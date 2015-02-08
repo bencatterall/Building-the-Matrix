@@ -45,6 +45,14 @@ class RenderableComponent {
 	///
 	size_t textureCoordsDataSize = 0;
 	///
+	/// The buffer holding the colour coordinate data
+	///
+	GLfloat* colourData = nullptr;
+	///
+	/// The size of the colour buffer in bytes
+	///
+	size_t colourDataSize = 0;
+	///
 	/// The vertex buffer object identifier for the vertex buffer
 	///
 	GLuint vboVertexId = 0;
@@ -52,7 +60,10 @@ class RenderableComponent {
 	/// The vertex buffer object identifier for the texture buffer
 	///
 	GLuint vboTextureId = 0;
-
+	///
+	/// The colour buffer object identifier for the colour buffer
+	///
+	GLuint vboColourId = 0;
 	///
 	/// The shader used to render this component. This is a pointer because more than
 	/// one RenderableComponent can have the same shader
@@ -145,6 +156,25 @@ public:
 	void setVertexData(GLfloat* newVertexData, size_t dataSize, bool isDynamic);
 
 	///
+	/// Get a pointer to the colour data
+	///
+	GLfloat* getColourData() { return colourData; }
+
+	///
+	/// Get the size of the colour data
+	///
+	size_t getColourDataSize() { return colourDataSize; }
+
+	///
+	/// Set the colour data to use for this component.
+	/// @param newColourData The new data to use for the per-vertex colours of this object
+	/// @param the size of the data in GLfloats
+	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
+	///
+	void setColourData(GLfloat* newColourData, size_t dataSize, bool isDynamic);
+
+
+	///
 	/// Get a pointer to the texture coordinate data
 	///
 	GLfloat* getTextureCoordsData() { return textureCoordsData; }
@@ -196,5 +226,13 @@ public:
 	/// @param data the data to put into the buffer
 	///
 	void updateVertexBuffer(GLintptr offset, size_t size, GLfloat* data);
+
+	///
+	/// Update the colour buffer
+	/// @param offset the byte offset into the buffer
+	/// @param size the size of the data to put into the buffer in bytes
+	/// @param data the data to put into the buffer
+	///
+	void updateColourBuffer(GLintptr offset, size_t size, GLfloat* data);
 };
 #endif

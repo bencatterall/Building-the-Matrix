@@ -82,11 +82,54 @@ void Game::init() {
 		1.0f, -1.0f, 1.0f
 	};
 
-	GLfloat* cubeVertexData = new GLfloat[sizeof(cubeData) / sizeof(GLfloat)];
+	GLfloat cubeColours[] = {
+		1.0f, 1.0f, 1.0f, 1.0f,// triangle 1 : begin
+		0.5f, 1.0f, 1.0f, 1.0f,
+		1.0f, 0.5f, 1.0f, 1.0f, // triangle 1 : end
+		1.0f, 1.0f, 0.5f, 1.0f, // triangle 2 : begin
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f, // triangle 2 : end
+		1.0f, 0.5f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
 
+		1.0f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+
+		0.5f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		0.5f, 1.0f, 1.0f, 1.0f,
+		1.0f, 0.5f, 1.0f, 1.0f,
+		1.0f, 0.5f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 0.5f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 0.5f, 1.0f,
+		0.5f, 0.5f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 0.5f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f
+	};
+
+	GLfloat* cubeVertexData = new GLfloat[sizeof(cubeData) / sizeof(GLfloat)];
+	GLfloat* cubeColourData = new GLfloat[sizeof(cubeColours) / sizeof(GLfloat)];
 	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
 		*(cubeVertexData + i) = 10.0f*cubeData[i];
-		cout << "" << cubeVertexData[i] << std::endl;
+	}
+	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
+		*(cubeColourData + i) = cubeColours[i];
 	}
 
 	for (int i = 0; i < numCubes; ++i) {
@@ -99,6 +142,7 @@ void Game::init() {
 		cubes[i]->setShader(shader);
 		cubes[i]->setVertexData(cubeVertexData, sizeof(cubeData) / sizeof(GLfloat), false);
 		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
+		cubes[i]->setColourData(cubeColourData, sizeof(cubeColours) / sizeof(GLfloat), false);
 	}
 }
 
