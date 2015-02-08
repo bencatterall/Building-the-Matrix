@@ -6,6 +6,7 @@ Texture::Texture(std::string filename) {
 	std::vector<unsigned char> image = imgLoader.loadImage(filename, width, height);
 
 	//Copy data across
+	//TODO: Stop all this copying
 	this->width = width;
 	this->height = height;
 	pixelDataSize = image.size();

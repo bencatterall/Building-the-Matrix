@@ -15,8 +15,12 @@ class GameObject {
 	std::shared_ptr<RenderableComponent> renderableComponent;
 	std::shared_ptr<LocationComponent> locationComponent;
 public:
+	///Objects are renderable by default
 	GameObject();
+	GameObject(bool renderable);
 	~GameObject();
+
+	std::shared_ptr<LocationComponent> getLocationComponent() { return locationComponent;  }
 	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
 	bool isRenderable() { return renderable; }
 	int getID() { return ID;  }
