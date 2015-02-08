@@ -1,10 +1,13 @@
 #include "Game.hpp"
+#include "Texture.hpp"
+
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <algorithm>
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
+
 void Game::init() {
 
 
@@ -122,14 +125,62 @@ void Game::init() {
 		1.0f, 1.0f, 0.5f, 1.0f,
 		1.0f, 1.0f, 1.0f, 1.0f
 	};
+	
+	GLfloat cubeTextureCoords[] = {
+		1.0f, 1.0f,// triangle 1 : begin
+		0.5f, 1.0f, 
+		1.0f, 0.5f, // triangle 1 : end
+		1.0f, 1.0f, // triangle 2 : begin
+		1.0f, 1.0f, 
+		1.0f, 1.0f, // triangle 2 : end
+		1.0f, 0.5f, 
+		1.0f, 1.0f,
+		1.0f, 1.0f, 
+
+		1.0f, 1.0f, 
+		0.5f, 1.0f, 
+		1.0f, 1.0f, 
+
+		0.5f, 1.0f, 
+		0.5f, 1.0f,
+		0.5f, 1.0f, 
+		0.5f, 1.0f, 
+		0.5f, 1.0f, 
+		0.5f, 1.0f, 
+		0.5f, 1.0f,
+		1.0f, 1.0f, 
+		1.0f, 1.0f, 
+		1.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 1.0f, 
+		1.0f, 1.0f,
+		0.5f, 1.0f, 
+		1.0f, 0.5f, 
+		1.0f, 0.5f, 
+		1.0f, 1.0f, 
+		1.0f, 0.5f, 
+		1.0f, 1.0f,
+		1.0f, 1.0f,
+		0.5f, 0.5f, 
+		1.0f, 1.0f, 
+		1.0f, 1.0f, 
+		1.0f, 1.0f, 
+	};
+	Texture* texture = new Texture("resources/textures/grass.png");
+
+
 
 	GLfloat* cubeVertexData = new GLfloat[sizeof(cubeData) / sizeof(GLfloat)];
 	GLfloat* cubeColourData = new GLfloat[sizeof(cubeColours) / sizeof(GLfloat)];
+	GLfloat* cubeTextureCoordsData = new GLfloat[sizeof(cubeTextureCoords) / sizeof(GLfloat)];
 	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
 		*(cubeVertexData + i) = 10.0f*cubeData[i];
 	}
 	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
 		*(cubeColourData + i) = cubeColours[i];
+	}
+	for (size_t i = 0; i < sizeof(cubeTextureCoords) / sizeof(GLfloat); ++i) {
+		*(cubeTextureCoordsData + i) = cubeTextureCoords[i];
 	}
 
 	for (int i = 0; i < numCubes; ++i) {
@@ -140,9 +191,11 @@ void Game::init() {
 			exit(0);
 
 		cubes[i]->setShader(shader);
+		cubes[i]->setTexture(texture);
 		cubes[i]->setVertexData(cubeVertexData, sizeof(cubeData) / sizeof(GLfloat), false);
 		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
 		cubes[i]->setColourData(cubeColourData, sizeof(cubeColours) / sizeof(GLfloat), false);
+		cubes[i]->setTextureCoordsData(cubeTextureCoordsData, sizeof(cubeTextureCoords) / sizeof(GLfloat), false);
 	}
 }
 

@@ -34,7 +34,7 @@ Shader::Shader(const std::string vs, const std::string fs)
 	// TODO: Untemparary-ify this.
 	glBindAttribLocation(programObj, /* VERTEX_POS_INDX */ 0, "a_position");
 	glBindAttribLocation(programObj, /* VERTEX_COLOUR_INDX */ 1, "a_colour");
-	//glBindAttribLocation(programObj, /* VERTEX_TEXCOORD0_INDX */ 2, "a_texCoord");
+	glBindAttribLocation(programObj, /* VERTEX_TEXCOORD0_INDX */ 2, "a_texCoord");
 
 	//Link it
 	glLinkProgram(programObj);

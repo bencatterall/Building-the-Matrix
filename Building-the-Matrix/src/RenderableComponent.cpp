@@ -106,20 +106,21 @@ void RenderableComponent::bindVBOs() {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboColourId);
 	glVertexAttribPointer(1 /*VERTEX_POS_INDX*/, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 		
-	//glEnableVertexAttribArray(2 /*VERTEX_TEXCOORD0_INDX*/);
-	//glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
-	//glVertexAttribPointer(2 /* VERTEX_TEXCOORD0_INDX */, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-
+	glEnableVertexAttribArray(2 /*VERTEX_TEXCOORD0_INDX*/);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
+	glVertexAttribPointer(2 /* VERTEX_TEXCOORD0_INDX */, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	//set sampler texture to unit 0
 	//TODO: Check this is ok
-	//glUniform1i(glGetUniformLocation(shader->getProgram(), "s_texture"), 0);
+	glUniform1i(glGetUniformLocation(shader->getProgram(), "s_texture"), 0);
 }
 void RenderableComponent::bindTextures() {
 	glActiveTexture(GL_TEXTURE0);
 	//Bind tiles texture
 	//TODO: FINISH BINDING
-	//glBindTexture(GL_TEXTURE_2D, texture_atlas->get_gl_texture());
+	if (!texture)
+		return;
+	glBindTexture(GL_TEXTURE_2D, texture->getID());
 }
 void RenderableComponent::releaseTextures() {
 	glBindTexture(GL_TEXTURE_2D, 0);

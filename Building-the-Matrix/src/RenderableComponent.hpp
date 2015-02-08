@@ -2,6 +2,7 @@
 #define RENDERABLE_COMPONENT_H
 #include "Common.hpp"
 #include "shader.hpp"
+#include "Texture.hpp"
 #include <memory>
 
 
@@ -25,45 +26,60 @@
 ///
 class RenderableComponent {
 	///
+	/// The texture for this object
+	///
+	Texture* texture = nullptr;
+
+	///
 	/// The buffer holding the vertex data
 	///
 	GLfloat* vertexData = nullptr;
+
 	///
 	/// The size of the vertex data in bytes
 	///
 	size_t vertexDataSize = 0;
+
 	///
 	/// The number of vertices to render
 	///
 	GLsizei numVerticesRender = 0;
+
 	///
 	/// The buffer holding the texture coordinate data
 	///
 	GLfloat* textureCoordsData = nullptr;
+
 	///
 	/// The size of the texture coordinate buffer in bytes
 	///
 	size_t textureCoordsDataSize = 0;
+
 	///
 	/// The buffer holding the colour coordinate data
 	///
 	GLfloat* colourData = nullptr;
+
 	///
 	/// The size of the colour buffer in bytes
 	///
 	size_t colourDataSize = 0;
+
 	///
 	/// The vertex buffer object identifier for the vertex buffer
 	///
 	GLuint vboVertexId = 0;
+
 	///
 	/// The vertex buffer object identifier for the texture buffer
 	///
 	GLuint vboTextureId = 0;
+
 	///
 	/// The colour buffer object identifier for the colour buffer
 	///
 	GLuint vboColourId = 0;
+
 	///
 	/// The shader used to render this component. This is a pointer because more than
 	/// one RenderableComponent can have the same shader
@@ -106,6 +122,10 @@ public:
 	/// @param new_modelview_matrix the new modelview matrix
 	///
 	void setModelviewMatrix(glm::mat4 newModelviewMatrix) { modelviewMatrix = newModelviewMatrix; }
+
+	void setTexture(Texture* texture) { this->texture = texture; }
+
+	Texture* getTexture() { return texture; }
 
 	///
 	/// Bind the shader program to the Opengl pipeline to use it for rendering
