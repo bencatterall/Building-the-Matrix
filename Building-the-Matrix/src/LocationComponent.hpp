@@ -26,7 +26,12 @@ public:
 		LocationComponent(glm::vec3(0.0, 0.0, 0.0), glm::mat4(1.0)) {
 	}
 
-	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat, double sf=1.0);
+	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat, double sf = 1.0) :
+		position(pos), rotationMatrix(rotationMat),
+		scaleFactor(sf)
+	{
+
+	}
 
 
 	///

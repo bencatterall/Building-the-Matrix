@@ -2,6 +2,7 @@
 
 #include "Game.hpp"
 #include "ImageLoader.hpp"
+#ifndef TEST
 int main(int argc, char **argv) {
 
 	Game game;
@@ -9,3 +10,4 @@ int main(int argc, char **argv) {
 	game.run();
 	return 0;
 }
+#endif
