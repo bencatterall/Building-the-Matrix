@@ -27,9 +27,6 @@
 *.out
 *.app
 
-
-#Visual Studio files
-*.vcxproj
-*.vcxproj.filters
-*.sln
-*.sdf
+#Visual studio
+*.suo
+*.sdf0
