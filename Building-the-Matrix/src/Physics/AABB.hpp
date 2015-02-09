@@ -1,8 +1,6 @@
 #ifndef AABB_H
 #define AABB_H
-
-#include <glm/vec3.hpp>
-#include <glm/vector_relational.hpp>
+#include "../Common.hpp"
 #include <memory>
 #include <vector>
 

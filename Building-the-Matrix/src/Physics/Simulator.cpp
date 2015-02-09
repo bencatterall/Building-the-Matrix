@@ -8,7 +8,7 @@
 
 Simulator::Simulator()
 {
-	objMan = ObjectManager::getInstance();
+	//objMan = ObjectManager::getInstance();
 	accumulator = 0;
 }
 
@@ -23,7 +23,7 @@ Simulator & Simulator::getInstance() {
 }
 
 void Simulator::tick(float timestep){
-	accumulator += timestep;
+	/*accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
 
@@ -36,7 +36,7 @@ void Simulator::tick(float timestep){
 		}
 
 		processCollisions();
-	}
+	}*/
 }
 
 void Simulator::processCollisions(){
