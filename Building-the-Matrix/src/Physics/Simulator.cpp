@@ -1,8 +1,8 @@
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
 #include "Simulator.hpp"
-#include "Graphics\ObjectManager.hpp"
-#include "Graphics\GameObject.hpp"
+#include "..\ObjectManager.hpp"
+#include "..\GameObject.hpp"
 
 #define THRESHOLD 0.01f
 
@@ -28,10 +28,10 @@ void Simulator::tick(float timestep){
 		accumulator -= THRESHOLD;
 
 		// Step by THRESHOLD
-		for (int i = 0; i < objMan.objectCount();; i++)
+		for (int i = 0; i < objMan.objectCount(); i++)
 		{
-			GameObject gameObj = objMan::getObject(i);
-			PhysicsObject physObj = gameObj.getPhysicsComponent();
+			std::shared_ptr<GameObject> gameObj = objMan.getObject(i);
+			PhysicsObject physObj = gameObj->getPhysicsComponent();
 			PhysicsMaths::stepObject(physObj, THRESHOLD);
 		}
 
