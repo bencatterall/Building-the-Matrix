@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Building-the-Matrix", "Buil
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleJSONServer", "SimpleJSONServerClient\SimpleJSONServerClient.vcxproj", "{9FBAA347-8EBD-4CFD-B215-B19FA155ECCE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleJSONClient", "SimpleJSONClient\SimpleJSONClient.vcxproj", "{0586FE81-EB12-42AA-96AA-CFDA806B5320}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -23,10 +21,6 @@ Global
 		{9FBAA347-8EBD-4CFD-B215-B19FA155ECCE}.Debug|Win32.Build.0 = Debug|Win32
 		{9FBAA347-8EBD-4CFD-B215-B19FA155ECCE}.Release|Win32.ActiveCfg = Release|Win32
 		{9FBAA347-8EBD-4CFD-B215-B19FA155ECCE}.Release|Win32.Build.0 = Release|Win32
-		{0586FE81-EB12-42AA-96AA-CFDA806B5320}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0586FE81-EB12-42AA-96AA-CFDA806B5320}.Debug|Win32.Build.0 = Debug|Win32
-		{0586FE81-EB12-42AA-96AA-CFDA806B5320}.Release|Win32.ActiveCfg = Release|Win32
-		{0586FE81-EB12-42AA-96AA-CFDA806B5320}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
