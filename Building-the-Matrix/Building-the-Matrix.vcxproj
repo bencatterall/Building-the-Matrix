@@ -72,10 +72,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\LodePNG\lodepng.cpp" />
+    <ClCompile Include="src\Client\Address.cpp" />
+    <ClCompile Include="src\Client\clientMain.cpp" />
+    <ClCompile Include="src\Client\Socket.cpp" />
     <ClCompile Include="src\Display.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\ImageLoader.cpp" />
+    <ClCompile Include="src\JSON\JsonClass.cpp" />
+    <ClCompile Include="src\JSON\UpdateManager.cpp" />
     <ClCompile Include="src\LocationComponent.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
@@ -86,11 +91,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
+    <ClInclude Include="src\Client\Address.hpp" />
+    <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\Display.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\GameObject.hpp" />
     <ClInclude Include="src\ImageLoader.hpp" />
+    <ClInclude Include="src\JSON\UpdateManager.hpp" />
     <ClInclude Include="src\LocationComponent.hpp" />
     <ClInclude Include="src\ObjectManager.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />

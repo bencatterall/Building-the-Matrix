@@ -19,6 +19,18 @@
     <Filter Include="Header Files\tests">
       <UniqueIdentifier>{93a5d573-4d1e-4fdf-b9dc-6003da1d97b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\JSON">
+      <UniqueIdentifier>{e3cdf66e-053a-403a-b444-9c4fcfb0c3e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\JSON">
+      <UniqueIdentifier>{83863065-496e-49c3-9bf6-2ec41b50297a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client">
+      <UniqueIdentifier>{b07c9c68-d2e9-4eb6-8d7c-a94b5e3eae47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client">
+      <UniqueIdentifier>{c431a563-cdef-4be0-96a7-fd8803092a92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Display.cpp">
@@ -57,6 +69,21 @@
     <ClCompile Include="tests\TestObjManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\JSON\JsonClass.cpp">
+      <Filter>Source Files\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSON\UpdateManager.cpp">
+      <Filter>Source Files\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Client\Address.cpp">
+      <Filter>Source Files\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Client\clientMain.cpp">
+      <Filter>Source Files\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Client\Socket.cpp">
+      <Filter>Source Files\Client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.hpp">
@@ -91,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="Dependencies\Catch\catch.hpp">
       <Filter>Header Files\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSON\UpdateManager.hpp">
+      <Filter>Header Files\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Client\Address.hpp">
+      <Filter>Header Files\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Client\Socket.hpp">
+      <Filter>Header Files\Client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

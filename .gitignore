@@ -30,3 +30,4 @@
 #Visual studio
 *.suo
 *.sdf0
+*.tlog
