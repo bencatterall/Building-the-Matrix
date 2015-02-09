@@ -15,7 +15,7 @@ class Display {
 
 
 	static void glfwErrorCallback(int error, const char* desc) {
-		cerr << "ERROR: In GLFW: " << error << " " << desc << std::endl;
+		std::cerr << "ERROR: In GLFW: " << error << " " << desc << std::endl;
 	}
 
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -27,6 +27,8 @@ class Display {
 		ovrHmd_GetHSWDisplayState(hmd, &hswDisplayState);
 		if (hswDisplayState.Displayed)
 			ovrHmd_DismissHSWDisplay(hmd);
+
+		//handle user input
 	}
 
 	void cleanup();

@@ -38,7 +38,7 @@ using namespace std;
 #define DEBUG
 
 //Enable tests
-#define TEST
+//#define TEST
 
 //TODO: Remove this hack
 extern ovrHmd hmd;
