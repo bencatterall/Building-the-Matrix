@@ -12,7 +12,7 @@ typedef std::vector<vec3> vertexVector;
 class AABB
 {
 public:
-	AABB(const vec3 *, int);
+	AABB(const std::shared_ptr<vertexVector>);
 	AABB(const vertexVector);
 	AABB(const GameObjectID);
 	virtual ~AABB();

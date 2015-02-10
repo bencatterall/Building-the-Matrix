@@ -35,12 +35,12 @@ public:
 	std::shared_ptr<PhysicsObject> getPhysicsComponent() { return physicsObject; }
 
 	bool isRenderable() { return renderable; }
-	int getID() { return ID;  }
+	GameObjectID getID() { return ID; }
 
-	int setGlobalID(int globalID) {
+	void setGlobalID(GameObjectID globalID) {
 		this->globalID = globalID;
 	}
-	int getGlobalID() {
+	GameObjectID getGlobalID() {
 		return globalID;
 	}
 };

@@ -5,7 +5,7 @@ PhysicsObject::PhysicsObject()
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
 	velocity(vec3()), position(vec3()),
-	boundingBox(new AABB({ vec3() }))
+	boundingBox(new AABB(std::make_shared<vertexVector>()))
 {
 }
 

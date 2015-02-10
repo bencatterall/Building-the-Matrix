@@ -96,10 +96,10 @@
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
     <ClInclude Include="CommonMinimal.hpp" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\CommonMinimal.hpp" />
     <ClInclude Include="src\Display.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\GameObject.hpp" />

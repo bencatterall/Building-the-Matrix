@@ -3,7 +3,7 @@
 #include "LocationComponent.hpp"
 #include "RenderableComponent.hpp"
 #include "JSON/UpdateManager.hpp"
-
+#include "Physics\PhysicsObject.hpp"
 
 GameObject::GameObject(bool renderable) : renderable(renderable) {
 	//Get a GUID from the ObjectManager

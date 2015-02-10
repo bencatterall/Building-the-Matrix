@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <mutex> //std::mutex, std::lock_guard
+#include <vector>
 
 ///
 /// 
@@ -14,12 +15,17 @@ class ObjectManager {
 	///
 	/// Map of GameObject IDs to GameObjects 
 	///
-	std::map<int, std::shared_ptr<GameObject>> gameObjects;
+	std::map<GameObjectID, std::shared_ptr<GameObject>> gameObjects;
+
+	///
+	/// Cache of gameObjectIDs
+	///
+	std::vector<GameObjectID> gameObjectIDs;
 
 	///
 	/// The ID of the next object to be loaded
 	///
-	static int nextID;
+	static GameObjectID nextID;
 	static std::mutex objManagerIndexMutex;
 
 public:
@@ -65,6 +71,13 @@ public:
 	/// Remove an object from the object manager
 	///
 	bool removeObject(GameObjectID id);
+
+	/// 
+	/// Return a list of all object IDs we are managing
+	///
+	const std::vector<GameObjectID> getObjects() {
+		return gameObjectIDs;
+	}
 };
 
 #endif
