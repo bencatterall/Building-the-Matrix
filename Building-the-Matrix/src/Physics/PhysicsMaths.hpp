@@ -2,7 +2,6 @@
 #define PHYSICS_MATHS_H
 
 #include <algorithm>
-#include "../Common.hpp"
 
 #define GRAVITY 9.81
 

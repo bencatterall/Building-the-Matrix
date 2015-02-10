@@ -1,6 +1,9 @@
 #include "AABB.hpp"
+#include "../Common.hpp"
+#include "../ObjectManager.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
+
 
 namespace PhysicsMaths{
 	// Simple first order approximation to motion given U, A, T.
@@ -55,14 +58,15 @@ namespace PhysicsMaths{
 		return true;
 	}
 
-	void handleCollision(PhysicsObject a, PhysicsObject b){
-		// TODO: Transform these to world space
+	void handleCollision(GameObjectID aID, GameObjectID bID){
+		ObjectManager objMan = ObjectManager::getInstance();
 		// TODO: Requires handling of complex collision
-		AABB aAABB = a.getLocalAABB();
-		AABB bAABB = b.getLocalAABB();
+		vec3 aCen = objMan.getObject(aID)->getPhysicsComponent()->getLocalAABB();
+		vec3 bCen = objMan.getObject(bID)->getPhysicsComponent()->getLocalAABB();
+		// TODO: Transform these to world space
 
 		// Calculate relative velocity and position
-		vec3 sDiff = a.getLocalAABB().getCen() - b.getLocalAABB().getCen();
+		vec3 sDiff = aCen - bCen;
 		vec3 sDiffNormal = glm::normalize(sDiff);
 		vec3 vDiff = a.getV() - b.getV();
 
