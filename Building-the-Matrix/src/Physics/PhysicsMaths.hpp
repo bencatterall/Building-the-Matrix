@@ -2,6 +2,7 @@
 #define PHYSICS_MATHS_H
 
 #include <algorithm>
+#include <glm/vec3.hpp>
 
 #define GRAVITY 9.81
 

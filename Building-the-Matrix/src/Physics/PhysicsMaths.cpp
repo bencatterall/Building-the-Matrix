@@ -61,8 +61,11 @@ namespace PhysicsMaths{
 	void handleCollision(GameObjectID aID, GameObjectID bID){
 		ObjectManager objMan = ObjectManager::getInstance();
 		// TODO: Requires handling of complex collision
-		vec3 aCen = objMan.getObject(aID)->getPhysicsComponent()->getLocalAABB();
-		vec3 bCen = objMan.getObject(bID)->getPhysicsComponent()->getLocalAABB();
+
+		PhysicsObject a = *objMan.getObject(aID)->getPhysicsComponent();
+		PhysicsObject b = *objMan.getObject(bID)->getPhysicsComponent();
+		vec3 aCen = a.getLocalAABB().getCen();
+		vec3 bCen = b.getLocalAABB().getCen();
 		// TODO: Transform these to world space
 
 		// Calculate relative velocity and position
