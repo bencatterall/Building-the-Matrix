@@ -1,12 +1,26 @@
 #include "AABB.hpp"
 #include "PhysicsObject.hpp"
+#include "../LocationComponent.hpp"
+#include "../RenderableComponent.hpp"
 
-PhysicsObject::PhysicsObject()
+
+PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> location)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
 	velocity(vec3()), position(vec3()),
 	boundingBox(new AABB(std::make_shared<vertexVector>()))
 {
+	location = location;
+}
+
+PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
+	: mass(1), inverseMass(1),
+	restitution(1), vertices(vertices),
+	velocity(vec3()), position(vec3()),
+	boundingBox(new AABB(std::make_shared<vertexVector>()))
+{
+	location = locationComp;
+	boundingBox = new AABB(rendComp->getVertexData());
 }
 
 PhysicsObject::PhysicsObject(vertexVector vertices)
@@ -63,7 +77,7 @@ float PhysicsObject::getRest() const{
 }
 
 void PhysicsObject::setX(vec3 &newPos){
-	position = vec3(newPos);
+	location->setPosition(newPos);
 }
 
 void PhysicsObject::setV(vec3 &newVelocity){
@@ -75,7 +89,7 @@ void PhysicsObject::setA(vec3 &newAcc){
 }
 
 const vec3 PhysicsObject::getX() const{
-	return position;
+	return location->getPosition;
 }
 
 const vec3 PhysicsObject::getV() const{

@@ -6,6 +6,8 @@
 #include <vector>
 
 class AABB;
+class LocationComponent;
+class RenderableComponent;
 
 using glm::vec3;
 
@@ -15,7 +17,8 @@ typedef glm::quat Quaternion;
 class PhysicsObject
 {
 public:
-	PhysicsObject();
+	PhysicsObject(std::shared_ptr<LocationComponent>);
+	PhysicsObject(std::shared_ptr<LocationComponent>, std::shared_ptr<RenderableComponent>);
 	PhysicsObject(vertexVector);
 	PhysicsObject(vertexVector, vec3, float, float);
 	PhysicsObject(vertexVector, vec3, vec3, float, float);
@@ -48,6 +51,7 @@ private:
 	float friction;	// Co-efficient of linear friction
 	float airRes;	// Co-efficient of quadratic drag
 	vec3 position;	// Centre position
+	std::shared_ptr<LocationComponent> location;
 	vec3 velocity;	// Velocity
 	vec3 acc;		// Acceleration
 
