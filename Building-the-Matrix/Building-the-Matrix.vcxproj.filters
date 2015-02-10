@@ -119,6 +119,18 @@
     <ClInclude Include="src\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObject.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ObjectManager.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LocationComponent.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImageLoader.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Texture.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -146,16 +158,10 @@
     <ClInclude Include="src\Physics\Simulator.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\ObjectManager.hpp">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\LocationComponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImageLoader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameObject.hpp">
+    <ClInclude Include="CommonMinimal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CommonMinimal.hpp">
@@ -171,5 +177,10 @@
     </None>
     <None Include="src\Building-the-Matrix.vcxproj.filters" />
     <None Include="src\Building-the-Matrix.vcxproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Building-the-Matrix.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

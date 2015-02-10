@@ -95,6 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
+    <ClInclude Include="CommonMinimal.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
@@ -119,6 +121,9 @@
     <None Include="default_shader.vs" />
     <None Include="src\Building-the-Matrix.vcxproj" />
     <None Include="src\Building-the-Matrix.vcxproj.filters" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Building-the-Matrix.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
