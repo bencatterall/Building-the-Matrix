@@ -7,7 +7,6 @@
 using glm::vec3;
 
 typedef std::vector<vec3> vertexVector;
-typedef int GameObjectID;
 
 
 class AABB

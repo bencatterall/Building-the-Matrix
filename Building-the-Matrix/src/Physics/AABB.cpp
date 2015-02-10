@@ -1,5 +1,7 @@
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
+#include "../ObjectManager.hpp"
+#include "../RenderableComponent.hpp"
 
 AABB::AABB(const vec3 * vertices, int size)
 {
@@ -36,15 +38,14 @@ AABB::AABB(const vertexVector vertices){
 	// TODO Implement me!
 }
 
-#ifdef GAME_MANAGER_H
-AABB::AABB(const GameObjectID gID){
+AABB::AABB(const GameObjectID gID)
+{
 	ObjectManager objMan = ObjectManager::getInstance();
-	GameObject = objMan.getobj(gID);
-	const vec3 *vertices = GameObject.getLocalCoOrds();
-	const int vertexCount = GameObject.getVertexCount();
+	GameObject gameObj = *(objMan.getObject(gID));
+	const vec3 *vertices = gameObj.getRenderableComponent()->getVertexData();
+	const int vertexCount = gameObj.getRenderableComponent()->getVertexDataSize();
 	AABB(vertices, vertexCount); // TODO Check if this is valid
 }
-#endif
 
 // Destructor not needed.
 AABB::~AABB()
@@ -88,6 +89,7 @@ inline bool getBit(char c, char bit){
 std::shared_ptr<vertexVector> AABB::getFullBox() const{
 	std::shared_ptr<vertexVector> fullBoxPtr = std::make_shared<vertexVector>();
 	fullBoxPtr->resize(8);
+
 	// Fill in each vertex
 	for (char i = 0; i < 8; i++){
 		fullBoxPtr->emplace_back(
