@@ -158,9 +158,6 @@
     <ClInclude Include="src\Physics\Simulator.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CommonMinimal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
