@@ -14,12 +14,12 @@ class ObjectManager {
 	///
 	/// Map of GameObject IDs to GameObjects 
 	///
-	std::map<int, std::shared_ptr<GameObject>> gameObjects;
+	std::map<GameObjectID, std::shared_ptr<GameObject>> gameObjects;
 
 	///
 	/// The ID of the next object to be loaded
 	///
-	static int nextID;
+	static GameObjectID nextID;
 	static std::mutex objManagerIndexMutex;
 
 public:
