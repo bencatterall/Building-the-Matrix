@@ -41,6 +41,10 @@ public:
 	void convertQuaternionToMatrix(const float* quat, float* mat);
 	void run(void);
 
+	///
+	/// Call code to begin the render sequence
+	///
+	void render(void);
 	//To be overridden
 
 	///

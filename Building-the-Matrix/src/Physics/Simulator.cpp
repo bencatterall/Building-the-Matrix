@@ -6,10 +6,10 @@
 
 #define THRESHOLD 0.02f
 
-Simulator::Simulator()
+Simulator::Simulator() :
+	accumulator(0)
 {
-	ObjectManager::getInstance();
-	accumulator = 0;
+
 }
 
 
@@ -17,20 +17,20 @@ Simulator::~Simulator()
 {
 }
 
-Simulator & Simulator::getInstance() {
+Simulator& Simulator::getInstance() {
 	static Simulator instance;
 	return instance;
 }
 
 void Simulator::tick(float timestep){
-	ObjectManager objMan = ObjectManager::getInstance();
+	ObjectManager& objMan = ObjectManager::getInstance();
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
 		std::vector<GameObjectID> gameObjects = objMan.getObjects();
 
 		// Step by THRESHOLD
-		for (int i = 0; i < gameObjects.size(); i++)
+		for (size_t i = 0; i < gameObjects.size(); i++)
 		{
 			std::shared_ptr<GameObject> gameObj = objMan.getObject(gameObjects.at(i));
 			PhysicsObject physObj = *gameObj->getPhysicsComponent();

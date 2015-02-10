@@ -28,6 +28,8 @@ class ObjectManager {
 	static GameObjectID nextID;
 	static std::mutex objManagerIndexMutex;
 
+	~ObjectManager() {}
+
 public:
 
 	static ObjectManager& getInstance() {

@@ -59,7 +59,7 @@ namespace PhysicsMaths{
 	}
 
 	void handleCollision(GameObjectID aID, GameObjectID bID){
-		ObjectManager objMan = ObjectManager::getInstance();
+		ObjectManager& objMan = ObjectManager::getInstance();
 		// TODO: Requires handling of complex collision
 
 		PhysicsObject a = *objMan.getObject(aID)->getPhysicsComponent();

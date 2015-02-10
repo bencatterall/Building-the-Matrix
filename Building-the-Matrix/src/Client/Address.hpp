@@ -12,6 +12,7 @@ private:
 public:
 	Address(unsigned int a, unsigned int b, unsigned int c, unsigned int d, unsigned short port);
 	Address(unsigned int address, unsigned short port);
+	Address::Address(std::string ipAddr, unsigned short port);
 	Address();
 	~Address();
 	unsigned int getAddress() const;
