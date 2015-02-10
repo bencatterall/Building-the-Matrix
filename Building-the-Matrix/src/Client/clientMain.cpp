@@ -16,6 +16,12 @@ bool cont;
 Address server;
 Socket mySocket;
 
+bool receive() {
+	return true;
+}
+
+
+/*
 //receives server updates from the server
 void receive() {
 	while (cont) {
@@ -34,7 +40,7 @@ void receive() {
 void send() {
 
 }
-
+*/
 //keeps this client running
 /*
 int main(int argc, char **argv) {

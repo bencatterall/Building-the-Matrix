@@ -57,14 +57,7 @@ bool Socket::openSocket(int addr, unsigned short port) {
 	}
 
 	//set socket to be non-blocking - we want to send/receive messages in real-time
-	#if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-		int nonBlocking = 1;
-		if (fcntl((this->socketHandle), F_SETFL, O_NONBLOCK, nonBlocking) == -1) {
-			std::cerr << "failed to set socket to non-blocking\n";
-			return false;
-		}
-
-	#elif PLATFORM == PLATFORM_WINDOWS
+	#if PLATFORM == PLATFORM_WINDOWS
 		DWORD nonBlocking = 1;
 		if (ioctlsocket((this->socketHandle), FIONBIO, &nonBlocking) != 0) {
 			std::cerr << "failed to set socket to non-blocking\n";
@@ -72,11 +65,6 @@ bool Socket::openSocket(int addr, unsigned short port) {
 		}
 	#endif
 
-	return true;
-}
-
-//TODO check how to do this
-bool Socket::isOpen() const{
 	return true;
 }
 
@@ -95,20 +83,15 @@ bool Socket::sendSingle(const Address &dest, const char *data, int size) {
 	return true;
 }
 
-//TODO implement
-bool Socket::broadcast(const Address *dest, const void *data, int size){
-	return true;
-}
-
 int Socket::receive(Address &sender, char *data, int size){
-#if PLATFORM == PLATFORM_WINDOWS
-	typedef int socklen_t;
-#endif
+	#if PLATFORM == PLATFORM_WINDOWS
+		typedef int socklen_t;
+	#endif
 
 	sockaddr_in from;
 	socklen_t fromLength = sizeof(from);
 
-	//get next message from server socket's buffer
+	//get next message from socket's buffer
 	int bytes = recvfrom(this->socketHandle, data, size, 0, (sockaddr*)&from, &fromLength);
 	sender = Address(from.sin_addr.s_addr, from.sin_port);
 
@@ -116,11 +99,11 @@ int Socket::receive(Address &sender, char *data, int size){
 }
 
 void Socket::closeSocket() {
-#if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-	close(this->socketHandle);
-#elif PLATFORM == PLATFORM_WINDOWS
-	closesocket(this->socketHandle);
-#endif
+	#if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+		close(this->socketHandle);
+	#elif PLATFORM == PLATFORM_WINDOWS
+		closesocket(this->socketHandle);
+	#endif
 }
 
 short Socket::getHandle() {
