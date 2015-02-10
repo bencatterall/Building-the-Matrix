@@ -1,5 +1,6 @@
 #include "AABB.hpp"
 #include "PhysicsObject.hpp"
+#include "PhysicsMaths.hpp"
 #include "../LocationComponent.hpp"
 #include "../RenderableComponent.hpp"
 
@@ -8,7 +9,7 @@ PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> location)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
 	velocity(vec3()), position(vec3()),
-	boundingBox(new AABB(std::make_shared<vertexVector>()))
+	boundingBox(new AABB(vertexVector()))
 {
 	location = location;
 }
@@ -17,10 +18,10 @@ PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, st
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
 	velocity(vec3()), position(vec3()),
-	boundingBox(new AABB(std::make_shared<vertexVector>()))
+	boundingBox(new AABB(vertexVector()))
 {
 	location = locationComp;
-	boundingBox = new AABB(rendComp->getVertexData());
+	boundingBox = new AABB(PhysicsMaths::convertGLfloatToVec3(rendComp->getVertexData()));
 }
 
 PhysicsObject::PhysicsObject(vertexVector vertices)
@@ -54,7 +55,7 @@ PhysicsObject::~PhysicsObject()
 }
 
 const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
-	vertexVector boundBox = *(boundingBox->getFullBox());
+	vertexVector boundBox = boundingBox->getFullBox();
 	// TODO: Transform from local to world space
 	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(boundBox);
 	return worldBox;
@@ -89,7 +90,7 @@ void PhysicsObject::setA(vec3 &newAcc){
 }
 
 const vec3 PhysicsObject::getX() const{
-	return location->getPosition;
+	return location->getPosition();
 }
 
 const vec3 PhysicsObject::getV() const{

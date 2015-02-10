@@ -107,4 +107,16 @@ namespace PhysicsMaths{
 		physObj.setX(UATtoS(physObj.getV(), physObj.getA(), timestep));
 		physObj.setV(UATtoV(physObj.getV(), physObj.getA(), timestep));
 	}
+
+
+
+	std::vector<glm::vec3> convertGLfloatToVec3(std::vector<GLfloat> data) {
+		std::vector<glm::vec3> newData;
+
+		for (size_t i = 0; i < data.size(); i+=3) {
+			newData.push_back(glm::vec3(data.at(i), data.at(i + 1), data.at(i + 2)));
+		}
+
+		return newData;
+	}
 }
