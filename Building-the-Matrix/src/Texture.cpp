@@ -20,6 +20,7 @@ Texture::Texture(std::string filename) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		return;
 	}
+
 	//Copy data across
 	//TODO: Stop all this copying
 	this->width = width;
