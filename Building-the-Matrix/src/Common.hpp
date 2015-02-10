@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
+
 #include <Windows.h>
+#include "CommonMinimal.hpp"
 #include "..\Dependencies\glew\glew.h"
 #include "..\Dependencies\GLFW\glfw3.h"
 
