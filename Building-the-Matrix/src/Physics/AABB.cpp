@@ -43,6 +43,7 @@ AABB::AABB(const vertexVector vertices){
 	// TODO Implement me!
 }
 
+#ifdef FIX
 AABB::AABB(const GameObjectID gID)
 {
 	ObjectManager objMan = ObjectManager::getInstance();
@@ -51,6 +52,8 @@ AABB::AABB(const GameObjectID gID)
 	const int vertexCount = gameObj.getRenderableComponent()->getVertexDataSize();
 	AABB(vertices, vertexCount); // TODO Check if this is valid
 }
+#endif
+
 
 // Destructor not needed.
 AABB::~AABB()
