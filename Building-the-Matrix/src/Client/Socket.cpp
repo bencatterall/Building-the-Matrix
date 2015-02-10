@@ -109,5 +109,3 @@ void Socket::closeSocket() {
 short Socket::getHandle() {
 	return this->socketHandle;
 }
-
-
