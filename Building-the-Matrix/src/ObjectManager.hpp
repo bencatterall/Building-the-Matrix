@@ -37,7 +37,7 @@ public:
 	/// Thread-safe
 	/// An ID of 0 is invalid
 	///
-	static int getNextID() {
+	static GameObjectID getNextID() {
 		int index = 0;
 		try {
 			std::lock_guard<std::mutex> lock(objManagerIndexMutex);
@@ -59,12 +59,12 @@ public:
 	///
 	/// Get an object by its ID
 	///
-	std::shared_ptr<GameObject> getObject(int id);
+	std::shared_ptr<GameObject> getObject(GameObjectID id);
 
 	///
 	/// Remove an object from the object manager
 	///
-	bool removeObject(int id);
+	bool removeObject(GameObjectID id);
 };
 
 #endif

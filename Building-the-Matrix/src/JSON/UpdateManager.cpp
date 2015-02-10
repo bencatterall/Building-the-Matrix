@@ -1,18 +1,23 @@
 
+#include "../Common.hpp"
 #include "../GameObject.hpp"
 #include "../ObjectManager.hpp"
 #include "../LocationComponent.hpp"
-
+#include "../ObjectManager.hpp"
 #include "UpdateManager.hpp"
 
 int UpdateManager::nextID = 1;
 std::mutex UpdateManager::updManagerIndexMutex;
 
-void UpdateManager::registerObject(GameObject* gameObject) {
-	gameObject->setGlobalID();
+void UpdateManager::registerObject(GameObjectID gameObjectID, GameObjectGlobalID globalID) {
+	ObjectManager objManager = ObjectManager::getInstance();
+	std::shared_ptr<GameObject> gameObject = objManager.getObject(gameObjectID);
+	gameObject->setGlobalID(globalID);
 }
 
-StringBuffer UpdateManager::SerializeServer(GameObject* gameObject) {
+StringBuffer UpdateManager::SerializeServer(GameObjectID gameObjectID) {
+	ObjectManager objManager = ObjectManager::getInstance();
+	std::shared_ptr<GameObject> gameObject = objManager.getObject(gameObjectID);
 	const char* json = "{\"ObjectID\":null,\"LocationComponent\":null}";	//Handling LocationComponent???
 	Document d;
 	d.Parse(json);

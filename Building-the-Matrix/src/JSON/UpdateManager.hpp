@@ -58,30 +58,11 @@ public:
 		return instance;
 	}
 
-	///
-	/// Get the next available Globall Unique ID (GUID) for the new object
-	/// Thread-safe
-	/// An ID of 0 is invalid
-	///
-	static int getNextID() {
-		int index = 0;
-		try {
-			std::lock_guard<std::mutex> lock(updManagerIndexMutex);
-			index = nextID++;
-		}
-		catch (...) {
-#ifdef DEBUG
-			std::cerr << "ERROR: In generating object ID" << std::endl;
-#endif
-		}
-		return index;
-	}
-
 	//Set the global ID of a GameObject
-	void registerObject(GameObject* gameObject);
+	void registerObject(GameObjectID gameObjectID, GameObjectGlobalID globalID);
 	
 	//Serializes a game object to send its updated position to the client
-	StringBuffer SerializeServer(GameObject* gameObject);
+	StringBuffer SerializeServer(GameObjectID gameObjectID);
 
 	//Deserialize game inputs received from the client
 	void DeserializeServer(const char* jsonStr);

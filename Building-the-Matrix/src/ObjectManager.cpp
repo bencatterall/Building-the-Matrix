@@ -13,7 +13,7 @@ bool ObjectManager::addObject(std::shared_ptr<GameObject> gameObject){
 }
 
 
-std::shared_ptr<GameObject> ObjectManager::getObject(int id){
+std::shared_ptr<GameObject> ObjectManager::getObject(GameObjectID id){
 	//Find the object in the map
 	auto search = gameObjects.find(id);
 	if(search != gameObjects.end()) {
@@ -27,7 +27,7 @@ std::shared_ptr<GameObject> ObjectManager::getObject(int id){
 }
 
 
-bool ObjectManager::removeObject(int id) {
+bool ObjectManager::removeObject(GameObjectID id) {
 	//Find it and then remove it
 	auto search = gameObjects.find(id);
 	if(search != gameObjects.end()) {

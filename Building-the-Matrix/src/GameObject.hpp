@@ -9,11 +9,16 @@
 
 class GameObject {
 
+	///
+	/// Global ID of this object as held by the server
+	///
 	int globalID = 0;
+
 	///
 	///Unique ID used to refer to the object
 	///
 	int ID = 0;
+
 	bool renderable = false;
 	std::shared_ptr<RenderableComponent> renderableComponent;
 	std::shared_ptr<LocationComponent> locationComponent;
@@ -28,8 +33,8 @@ public:
 	bool isRenderable() { return renderable; }
 	int getID() { return ID;  }
 
-	int setGlobalID() {
-		this->globalID = UpdateManager::getNextID();
+	int setGlobalID(int globalID) {
+		this->globalID = globalID;
 	}
 	int getGlobalID() {
 		return globalID;
