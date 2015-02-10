@@ -7,15 +7,15 @@
 #include <string>
 
 class Texture {
-	unsigned char* pixelData = nullptr;
-	int pixelDataSize = 0;
+	std::vector<unsigned char> pixelData;
+
 	GLuint textureID = 0;
 	int width = 0;
 	int height = 0;
 public:
 	Texture(std::string filename);
 
-	unsigned char* getData() {
+	std::vector<unsigned char> getData() {
 		return pixelData;
 	}
 

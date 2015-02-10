@@ -296,26 +296,37 @@ Display::~Display() {
 
 void Display::run() {
 
-	//Create a client
+	//Create objects
 	Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 	Simulator& simulator = Simulator::getInstance();
 
+
+	float dt = 0.0f;
+
 	//game loop
 	while (!glfwWindowShouldClose(window)) {
 
-		//networking get updates
+		//networking get updates;
+		//client.receive();
 
 		//update manager service updates
+		//updateManager.processUpdates()
 
 		//some form of prediction
 
+
 		//handle user input
+		//pollInput();
+
 
 		//physics tick 
+		//TODO calculate dt per frame
+		//simulator.tick(dt);
 
 		//send updates to server
+		//client.send(); // maybe called by updatemanager
 
 		//render game
 		render();
