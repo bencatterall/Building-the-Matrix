@@ -5,6 +5,7 @@
 */
 
 #include "Address.hpp"
+#include <sstream>
 
 //Create Address from IP given in a.b.c.d format and port
 Address::Address(unsigned int a, unsigned int b, unsigned int c, unsigned int d, unsigned short port){
@@ -36,9 +37,14 @@ unsigned short Address::getPort() const{
 	return (this->port);
 }
 
-unsigned int Address::getHBOAddress() const {
-	//to implement - return in format a.b.c.d
-	return 1;
+std::string Address::getHBOAddress() const {
+	int a = 0xFF & (this->address);
+	int b = (0xFF00 & (this->address)) >> 8;
+	int c = (0xFF0000 & (this->address)) >> 16;
+	int d = (0xFF000000 & (this->address)) >> 24;
+	std::stringstream ss;
+	ss << a << '.' << b << '.' << c << '.' << d;
+	return ss.str();
 }
 
 unsigned short Address::getHBOPort() const {

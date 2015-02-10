@@ -2,6 +2,7 @@
 #define ADDRESS_H
 
 #include <winsock2.h>
+#include <string>
 
 class Address {
 private:
@@ -14,7 +15,7 @@ public:
 	Address();
 	~Address();
 	unsigned int getAddress() const;
-	unsigned int getHBOAddress() const;
+	std::string getHBOAddress() const;
 	unsigned short getPort() const;
 	unsigned short getHBOPort() const;
 };
