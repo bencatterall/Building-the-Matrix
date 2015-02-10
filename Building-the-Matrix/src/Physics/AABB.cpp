@@ -1,32 +1,39 @@
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
+#include "../ObjectManager.hpp"
+#include "../RenderableComponent.hpp"
 
-AABB::AABB(const vec3 * vertices, int size)
+
+AABB::AABB(const std::shared_ptr<vertexVector> vertices)
 {
-	assert(size > 0);
-	max = min = vertices[0];
-	for (int i = 1; i < size; i++){
+	min = max = glm::vec3();
+	if (vertices->size() == 0) {
+		return;
+	}
+
+	max = min = vertices->at(0);
+	for (size_t i = 1; i < vertices->size(); i++){
 		// Piecewise: vertex > max
-		glm::bvec3 bVLT = glm::greaterThan(vertices[i], max);
+		glm::bvec3 bVLT = glm::greaterThan(vertices->at(i), max);
 		// Piecewise: vertex < min
-		glm::bvec3 bVMT = glm::lessThan(vertices[i], min);
+		glm::bvec3 bVMT = glm::lessThan(vertices->at(i), min);
 		if (bVLT.x){
-			max.x = vertices[i].x;
+			max.x = vertices->at(i).x;
 		}
 		else if (bVMT.x){
-			min.x = vertices[i].x;
+			min.x = vertices->at(i).x;
 		}
 		if (bVLT.y){
-			max.y = vertices[i].y;
+			max.y = vertices->at(i).y;
 		}
 		else if (bVMT.y){
-			min.y = vertices[i].y;
+			min.y = vertices->at(i).y;
 		}
 		if (bVLT.z){
-			max.z = vertices[i].z;
+			max.z = vertices->at(i).z;
 		}
 		else if (bVMT.z){
-			min.z = vertices[i].z;
+			min.z = vertices->at(i).z;
 		}
 	}
 }
@@ -36,15 +43,17 @@ AABB::AABB(const vertexVector vertices){
 	// TODO Implement me!
 }
 
-#ifdef GAME_MANAGER_H
-AABB::AABB(const GameObjectID gID){
+#ifdef FIX
+AABB::AABB(const GameObjectID gID)
+{
 	ObjectManager objMan = ObjectManager::getInstance();
-	GameObject = objMan.getobj(gID);
-	const vec3 *vertices = GameObject.getLocalCoOrds();
-	const int vertexCount = GameObject.getVertexCount();
+	GameObject gameObj = *(objMan.getObject(gID));
+	const vec3 *vertices = gameObj.getRenderableComponent()->getVertexData();
+	const int vertexCount = gameObj.getRenderableComponent()->getVertexDataSize();
 	AABB(vertices, vertexCount); // TODO Check if this is valid
 }
 #endif
+
 
 // Destructor not needed.
 AABB::~AABB()
@@ -88,6 +97,7 @@ inline bool getBit(char c, char bit){
 std::shared_ptr<vertexVector> AABB::getFullBox() const{
 	std::shared_ptr<vertexVector> fullBoxPtr = std::make_shared<vertexVector>();
 	fullBoxPtr->resize(8);
+
 	// Fill in each vertex
 	for (char i = 0; i < 8; i++){
 		fullBoxPtr->emplace_back(

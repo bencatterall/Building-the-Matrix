@@ -158,6 +158,12 @@
     <ClInclude Include="src\Physics\Simulator.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="CommonMinimal.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CommonMinimal.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="default_shader.vs">
@@ -168,5 +174,10 @@
     </None>
     <None Include="src\Building-the-Matrix.vcxproj.filters" />
     <None Include="src\Building-the-Matrix.vcxproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Building-the-Matrix.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

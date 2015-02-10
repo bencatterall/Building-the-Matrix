@@ -7,13 +7,12 @@
 using glm::vec3;
 
 typedef std::vector<vec3> vertexVector;
-typedef int GameObjectID;
 
 
 class AABB
 {
 public:
-	AABB(const vec3 *, int);
+	AABB(const std::shared_ptr<vertexVector>);
 	AABB(const vertexVector);
 	AABB(const GameObjectID);
 	virtual ~AABB();
