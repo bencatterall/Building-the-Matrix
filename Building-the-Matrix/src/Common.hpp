@@ -44,8 +44,6 @@ using namespace std;
 
 //Enable tests
 //#define TEST
-typedef int GameObjectID;
-typedef int GameObjectGlobalID;
 
 //TODO: Remove this hack
 extern ovrHmd hmd;
