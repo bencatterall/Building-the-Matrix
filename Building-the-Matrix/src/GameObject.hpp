@@ -2,10 +2,11 @@
 #define GAME_OBJECT_H
 
 #include "Common.hpp"
-#include "LocationComponent.hpp"
-#include "RenderableComponent.hpp"
 #include "JSON/UpdateManager.hpp"
 #include <memory>
+
+class LocationComponent;
+class RenderableComponent;
 
 class GameObject {
 

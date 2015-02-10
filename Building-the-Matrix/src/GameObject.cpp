@@ -1,6 +1,9 @@
 #include "GameObject.hpp"
 #include "ObjectManager.hpp"
 #include "LocationComponent.hpp"
+#include "RenderableComponent.hpp"
+
+
 GameObject::GameObject(bool renderable) : renderable(renderable) {
 	//Get a GUID from the ObjectManager
 	this->ID = ObjectManager::getNextID();
