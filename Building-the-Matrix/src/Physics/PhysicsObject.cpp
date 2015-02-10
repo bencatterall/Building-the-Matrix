@@ -1,6 +1,14 @@
 #include "AABB.hpp"
 #include "PhysicsObject.hpp"
 
+PhysicsObject::PhysicsObject()
+	: mass(1), inverseMass(1),
+	restitution(1), vertices(vertices),
+	velocity(vec3()), position(vec3()),
+	boundingBox(new AABB({ vec3() }))
+{
+}
+
 PhysicsObject::PhysicsObject(vertexVector vertices)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),

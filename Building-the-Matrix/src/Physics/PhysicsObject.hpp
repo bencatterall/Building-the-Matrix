@@ -15,6 +15,7 @@ typedef glm::quat Quaternion;
 class PhysicsObject
 {
 public:
+	PhysicsObject();
 	PhysicsObject(vertexVector);
 	PhysicsObject(vertexVector, vec3, float, float);
 	PhysicsObject(vertexVector, vec3, vec3, float, float);
