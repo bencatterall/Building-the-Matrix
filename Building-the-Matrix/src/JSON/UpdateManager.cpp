@@ -5,26 +5,23 @@
 
 #include "UpdateManager.hpp"
 
-void UpdateManager::addObject(GameObject gameObject) {
-	//auto ret = gameObjects.insert(std::pair< int, GameObject >(gameObject->getGlobalID(), gameObject));
+int UpdateManager::nextID = 1;
+std::mutex UpdateManager::updManagerIndexMutex;
+
+void UpdateManager::registerObject(GameObject* gameObject) {
+	gameObject->setGlobalID();
 }
 
-/*
-GameObject UpdateManager::findObject(int id) {
-	return 
-}
-*/
-void UpdateManager::removeObject(int id) {
-
-}
-
-StringBuffer UpdateManager::Serialize(GameObject gameObject) {
+StringBuffer UpdateManager::SerializeServer(GameObject* gameObject) {
 	const char* json = "{\"ObjectID\":null,\"LocationComponent\":null}";	//Handling LocationComponent???
 	Document d;
 	d.Parse(json);
 
 	Value& s1 = d["ObjectID"];
-	//s1.SetInt(gameObject.globalID);
+	s1.SetInt(gameObject->getGlobalID());
+
+	Value& s2 = d["LocationComponent"];
+
 
 	StringBuffer buffer;
 	Writer<StringBuffer> writer(buffer);
@@ -33,7 +30,7 @@ StringBuffer UpdateManager::Serialize(GameObject gameObject) {
 	return buffer;
 }
 
-void /*(GameInput?)*/ UpdateManager::Deserialize(const char* jsonStr) {
+void /*(GameInput?)*/ UpdateManager::DeserializeServer(const char* jsonStr) {
 
 	Document d;
 	d.Parse(jsonStr);
@@ -56,3 +53,34 @@ void /*(GameInput?)*/ UpdateManager::Deserialize(const char* jsonStr) {
 	//Construct GameInput object to pass to Physics?
 
 }
+
+/*
+StringBuffer UpdateManager::SerializeClient(GameInput* gameInput) {
+	const char* json = "{\"ObjectID\":null,\"InputMatrix\":null}";
+	Document d;
+	d.Parse(json);
+
+	Value& s1 = d["ObjectID"];
+	s1.SetInt(gameObject->getGlobalID());
+
+	Value& s2 = d["LocationComponent"];
+
+	StringBuffer buffer;
+	Writer<StringBuffer> writer(buffer);
+	d.Accept(writer);
+
+	return buffer;
+}
+
+void UpdateManager::DeserializeClient(const char* jsonStr) {
+
+	Document d;
+	d.Parse(jsonStr);
+
+	Value& s1 = d["ObjectID"];
+	int objID = s1.GetInt();
+
+	Value& s2 = d["LocationComponent"];
+
+}
+*/

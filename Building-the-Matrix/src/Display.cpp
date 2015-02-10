@@ -364,7 +364,7 @@ void Display::run() {
 		glUseProgram(0);
 
 		//For debugging purposes
-		assert(glGetError() == GL_NO_ERROR);
+		//assert(glGetError() == GL_NO_ERROR);
 
 		glfwPollEvents();
 

@@ -4,9 +4,12 @@
 #include "Common.hpp"
 #include "LocationComponent.hpp"
 #include "RenderableComponent.hpp"
+#include "JSON/UpdateManager.hpp"
 #include <memory>
 
 class GameObject {
+
+	int globalID = 0;
 	///
 	///Unique ID used to refer to the object
 	///
@@ -24,6 +27,13 @@ public:
 	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
 	bool isRenderable() { return renderable; }
 	int getID() { return ID;  }
+
+	int setGlobalID() {
+		this->globalID = UpdateManager::getNextID();
+	}
+	int getGlobalID() {
+		return globalID;
+	}
 };
 
 

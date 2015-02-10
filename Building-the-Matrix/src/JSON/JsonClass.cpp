@@ -16,6 +16,8 @@ object is the root of the tree, its children are the field identifiers, and the 
 of those are the field values. Each JSON value is stored in a type Value, which has the
 functions required for getting or setting field values.
 
+This class is an example of using RapidJSON for serialising classes: not necessary for the project and can be deleted whenever.
+
 */
 
 using namespace rapidjson;
