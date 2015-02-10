@@ -18,7 +18,6 @@ private:
 	void processCollisions();
 
 	static Simulator instance;
-	//ObjectManager & objMan;
 	float accumulator;
 };
 

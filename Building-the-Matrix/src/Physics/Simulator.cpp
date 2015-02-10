@@ -4,11 +4,11 @@
 #include "..\ObjectManager.hpp"
 #include "..\GameObject.hpp"
 
-#define THRESHOLD 0.01f
+#define THRESHOLD 0.02f
 
 Simulator::Simulator()
 {
-	//objMan = ObjectManager::getInstance();
+	ObjectManager::getInstance();
 	accumulator = 0;
 }
 
@@ -23,20 +23,22 @@ Simulator & Simulator::getInstance() {
 }
 
 void Simulator::tick(float timestep){
-	/*accumulator += timestep;
+	ObjectManager objMan = ObjectManager::getInstance();
+	accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
+		std::vector<GameObjectID> gameObjects = objMan.getObjects();
 
 		// Step by THRESHOLD
-		for (int i = 0; i < objMan.objectCount(); i++)
+		for (int i = 0; i < gameObjects.size(); i++)
 		{
-			std::shared_ptr<GameObject> gameObj = objMan.getObject(i);
-			PhysicsObject physObj = gameObj->getPhysicsComponent();
+			std::shared_ptr<GameObject> gameObj = objMan.getObject(gameObjects.at(i));
+			PhysicsObject physObj = *gameObj->getPhysicsComponent();
 			PhysicsMaths::stepObject(physObj, THRESHOLD);
 		}
 
 		processCollisions();
-	}*/
+	}
 }
 
 void Simulator::processCollisions(){
