@@ -2,6 +2,7 @@
 #include "ObjectManager.hpp"
 #include "LocationComponent.hpp"
 #include "RenderableComponent.hpp"
+#include "JSON/UpdateManager.hpp"
 
 
 GameObject::GameObject(bool renderable) : renderable(renderable) {
@@ -11,10 +12,11 @@ GameObject::GameObject(bool renderable) : renderable(renderable) {
 	if (renderable) {
 		this->renderableComponent = std::make_shared<RenderableComponent>();
 		this->locationComponent = std::make_shared<LocationComponent>();
+		this->physicsObject = std::make_shared<PhysicsObject>();
 	}
 }
 
-GameObject::GameObject() : GameObject(false) {
+GameObject::GameObject() : GameObject(true) {
 
 }
 

@@ -2,27 +2,28 @@
 #define GAME_OBJECT_H
 
 #include "Common.hpp"
-#include "JSON/UpdateManager.hpp"
 #include <memory>
 
 class LocationComponent;
 class RenderableComponent;
+class PhysicsObject;
 
 class GameObject {
 
 	///
 	/// Global ID of this object as held by the server
 	///
-	int globalID = 0;
+	GameObjectGlobalID globalID = 0;
 
 	///
 	///Unique ID used to refer to the object
 	///
-	int ID = 0;
+	GameObjectID ID = 0;
 
-	bool renderable = false;
+	bool renderable;
 	std::shared_ptr<RenderableComponent> renderableComponent;
 	std::shared_ptr<LocationComponent> locationComponent;
+	std::shared_ptr<PhysicsObject> physicsObject;
 public:
 	///Objects are renderable by default
 	GameObject();
@@ -31,6 +32,8 @@ public:
 
 	std::shared_ptr<LocationComponent> getLocationComponent() { return locationComponent;  }
 	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
+	std::shared_ptr<PhysicsObject> getPhysicsComponent() { return physicsObject; }
+
 	bool isRenderable() { return renderable; }
 	int getID() { return ID;  }
 
