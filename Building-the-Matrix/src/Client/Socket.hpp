@@ -8,6 +8,11 @@
 #endif
 #if PLATFORM == PLATFORM_WINDOWS
 #pragma comment( lib, "wsock32.lib" )
+#elif PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
 
 class Socket {
