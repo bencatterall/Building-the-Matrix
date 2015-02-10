@@ -2,6 +2,6 @@
 #define COMMON_MINIMAL_H
 
 typedef int GameObjectID;
-typedef int GameObjectGlobalID
+typedef int GameObjectGlobalID;
 
 #endif
