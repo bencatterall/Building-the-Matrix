@@ -5,6 +5,9 @@
 */
 
 #include "Client.hpp"
+#include <thread>
+#include <chrono>
+#include <iostream>
 
 //binds client to a socket and stores address of the server and its own Socket
 Client::Client(Address client, Address server) {
@@ -12,11 +15,42 @@ Client::Client(Address client, Address server) {
 	//TODO: what to do if this fails?
 	(this->socket).openSocket(client.getAddress(),client.getPort());
 	this->server = server;
+	bool confirmed = false;
+	//TODO: add a timeout?
+	//login to server
+	char data[] = "LOGIN";
+	if (!(this->send(data))) {
+		std::cerr << "Failed to send message";
+		std::exit(EXIT_FAILURE);
+	}
+	while (!confirmed) {
+		//resend login request if server doesn't reply within a second
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		Address sender;
+		unsigned char buffer[256];
+		int bytes_read = this->receive((char *)buffer);
+		if (bytes_read >= 0) {
+			std::string recmessage((char *)buffer);
+			std::cout << "Client received message: " << recmessage << "\n";
+			confirmed = true;
+		}
+		else {
+			if (!(this->send(data))) {
+				std::cerr << "Failed to send message";
+				//std::exit(EXIT_FAILURE);
+			}
+		}
+	}
 }
 
 //on client deletion, cleans up used resources
 Client::~Client() {
 	(this->socket).~Socket();
+	const char data[] = "LOGOUT";
+	if (!(this->send((char *)data))) {
+		std::cerr << "Failed to send message";
+		//std::exit(EXIT_FAILURE);
+	}
 }
 
 //attempts to send the bytestream given as an argument, and returns true if succesful
