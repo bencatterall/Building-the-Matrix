@@ -21,6 +21,23 @@ Address::Address(unsigned int address, unsigned short port){
 	(this->port) = port;
 }
 
+Address::Address(std::string ipAddr, unsigned short port) {
+
+	//convert a string to a network byte-order array
+	//TODO: Put in it's own function
+	size_t pos = 0;
+	int acc = 0;
+	int IPValues[4];
+	while ((pos = ipAddr.find('.')) != std::string::npos) {
+		IPValues[acc] = atoi((ipAddr.substr(0, pos)).c_str());
+		ipAddr = ipAddr.substr(pos + 1, (ipAddr.length() - (pos + 1)));
+		acc++;
+	}
+	IPValues[3] = atoi(ipAddr.c_str());
+
+	Address(IPValues[0], IPValues[1], IPValues[2], IPValues[3], port);
+}
+
 //empty constructor
 Address::Address(){}
 

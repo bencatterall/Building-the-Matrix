@@ -45,6 +45,8 @@ Client::Client(Address client, Address server) {
 
 //on client deletion, cleans up used resources
 Client::~Client() {
+	//KATIE: Can remove
+	//implicitly called on class destruction
 	(this->socket).~Socket();
 	const char data[] = "LOGOUT";
 	if (!(this->send((char *)data))) {

@@ -1,4 +1,9 @@
+#include "Client\Client.hpp"
 #include "Display.hpp"
+#include "ObjectManager.hpp"
+#include "JSON\UpdateManager.hpp"
+#include "Physics\Simulator.hpp"
+
 #include <conio.h>
 #include <memory>
 #include <glm/gtc/type_ptr.hpp>
@@ -291,84 +296,121 @@ Display::~Display() {
 
 void Display::run() {
 
+	//Create objects
+	Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
+	UpdateManager& updateManager = UpdateManager::getInstance();
+	ObjectManager& objectManager = ObjectManager::getInstance();
+	Simulator& simulator = Simulator::getInstance();
+
+
+	float dt = 0.0f;
+
+	//game loop
 	while (!glfwWindowShouldClose(window)) {
 
-		//Start a frame
-		ovrFrameTiming hmdFrameTiming = ovrHmd_BeginFrame(hmd, 0);
-		
-		//Bind in the frame buffer for the HMD
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
+		//networking get updates;
+		//client.receive();
 
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
+		//update manager service updates
+		//updateManager.processUpdates()
 
-		ovrPosef headPose[2];
-		//For each eye
-		for (int eyeIndex = 0; eyeIndex < 2; eyeIndex++) {
-			//The current eye, use this not just assume left then right as this can
-			//improve performance
-			ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
-
-			//View port transform
-			//we draw in the left half of framebuffer for left eye view and in the right
-			//for the right eye
-			glViewport(eye == ovrEye_Left ? 0 : frameBufferWidth / 2,
-				0,
-				frameBufferWidth / 2,
-				frameBufferHeight);
-
-			//Projection matrix
-			//OVR matrices are the transpose of what OpenGL wants so we need to load the transpose.
-			Matrix4f proj = ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 1000.0f, true);
-			glm::mat4 projectionMatrixPreTrans = glm::make_mat4(proj.M[0]);
-			glm::mat4 projectionMatrix = glm::transpose(projectionMatrixPreTrans);
-
-			//View matrix
-			//position of eyes
-			headPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
-			glm::mat4 modelView = glm::mat4(1.0f);
-
-			// Inter-pupil Distance in meters, need to translate the camera by this distance
-			modelView = glm::translate(modelView, 
-				glm::vec3(eyeRenderDesc[eye].HmdToEyeViewOffset.x,
-				eyeRenderDesc[eye].HmdToEyeViewOffset.y,
-				eyeRenderDesc[eye].HmdToEyeViewOffset.z));
-	
-			//orientation of the headset
-			//multiply the view matrix by this rotation
-			const float orientationQuat[4] = {
-				headPose[eye].Orientation.x,
-				headPose[eye].Orientation.y,
-				headPose[eye].Orientation.z,
-				headPose[eye].Orientation.w };
-
-			float orientationMatrix[16];
-			convertQuaternionToMatrix(orientationQuat, orientationMatrix);
-			modelView = glm::make_mat4(orientationMatrix) * modelView;
-
-			//Move camera to eye level
-			modelView = glm::translate(modelView, glm::vec3(0.0f, -ovrHmd_GetFloat(hmd, OVR_KEY_EYE_HEIGHT, 1.65f),0.0f));
-
-			//RENDER
-			renderScene(modelView, projectionMatrix);
-		}
-		//revert to drawing to display
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		//Let the Rift handle lens distortion, chromatic abberation et.c
-		ovrHmd_EndFrame(hmd, headPose, &frameBufferOvrTexture[0].Texture);
-
-		//Fix sdk renderer bug, uses shader but doesn't restore bindings
-		glUseProgram(0);
-
-		//For debugging purposes
-		//assert(glGetError() == GL_NO_ERROR);
-
-		glfwPollEvents();
+		//some form of prediction
 
 
-		//Don't need to swap buffers, handled by the SDK
+		//handle user input
+		//pollInput();
+
+
+		//physics tick 
+		//TODO calculate dt per frame
+		//simulator.tick(dt);
+
+		//send updates to server
+		//client.send(); // maybe called by updatemanager
+
+		//render game
+		render();
 	}
+}
+
+void Display::render() {
+
+	//Start a frame
+	ovrFrameTiming hmdFrameTiming = ovrHmd_BeginFrame(hmd, 0);
+		
+	//Bind in the frame buffer for the HMD
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
+
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	ovrPosef headPose[2];
+	//For each eye
+	for (int eyeIndex = 0; eyeIndex < 2; eyeIndex++) {
+		//The current eye, use this not just assume left then right as this can
+		//improve performance
+		ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
+
+		//View port transform
+		//we draw in the left half of framebuffer for left eye view and in the right
+		//for the right eye
+		glViewport(eye == ovrEye_Left ? 0 : frameBufferWidth / 2,
+			0,
+			frameBufferWidth / 2,
+			frameBufferHeight);
+
+		//Projection matrix
+		//OVR matrices are the transpose of what OpenGL wants so we need to load the transpose.
+		Matrix4f proj = ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 1000.0f, true);
+		glm::mat4 projectionMatrixPreTrans = glm::make_mat4(proj.M[0]);
+		glm::mat4 projectionMatrix = glm::transpose(projectionMatrixPreTrans);
+
+		//View matrix
+		//position of eyes
+		headPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
+		glm::mat4 modelView = glm::mat4(1.0f);
+
+		// Inter-pupil Distance in meters, need to translate the camera by this distance
+		modelView = glm::translate(modelView, 
+			glm::vec3(eyeRenderDesc[eye].HmdToEyeViewOffset.x,
+			eyeRenderDesc[eye].HmdToEyeViewOffset.y,
+			eyeRenderDesc[eye].HmdToEyeViewOffset.z));
+	
+		//orientation of the headset
+		//multiply the view matrix by this rotation
+		const float orientationQuat[4] = {
+			headPose[eye].Orientation.x,
+			headPose[eye].Orientation.y,
+			headPose[eye].Orientation.z,
+			headPose[eye].Orientation.w };
+
+		float orientationMatrix[16];
+		convertQuaternionToMatrix(orientationQuat, orientationMatrix);
+		modelView = glm::make_mat4(orientationMatrix) * modelView;
+
+		//Move camera to eye level
+		modelView = glm::translate(modelView, glm::vec3(0.0f, -ovrHmd_GetFloat(hmd, OVR_KEY_EYE_HEIGHT, 1.65f),0.0f));
+
+		//RENDER
+		renderScene(modelView, projectionMatrix);
+	}
+	//revert to drawing to display
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//Let the Rift handle lens distortion, chromatic abberation et.c
+	ovrHmd_EndFrame(hmd, headPose, &frameBufferOvrTexture[0].Texture);
+
+	//Fix sdk renderer bug, uses shader but doesn't restore bindings
+	glUseProgram(0);
+
+	//For debugging purposes
+	//assert(glGetError() == GL_NO_ERROR);
+
+	glfwPollEvents();
+
+
+	//Don't need to swap buffers, handled by the SDK
+
 }

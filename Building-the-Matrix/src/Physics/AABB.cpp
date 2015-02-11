@@ -4,43 +4,38 @@
 #include "../RenderableComponent.hpp"
 
 
-AABB::AABB(const std::shared_ptr<vertexVector> vertices)
+AABB::AABB(const vertexVector vertices)
 {
 	min = max = glm::vec3();
-	if (vertices->size() == 0) {
+	if (vertices.size() == 0) {
 		return;
 	}
 
-	max = min = vertices->at(0);
-	for (size_t i = 1; i < vertices->size(); i++){
+	max = min = vertices.at(0);
+	for (size_t i = 1; i < vertices.size(); i++){
 		// Piecewise: vertex > max
-		glm::bvec3 bVLT = glm::greaterThan(vertices->at(i), max);
+		glm::bvec3 bVLT = glm::greaterThan(vertices.at(i), max);
 		// Piecewise: vertex < min
-		glm::bvec3 bVMT = glm::lessThan(vertices->at(i), min);
+		glm::bvec3 bVMT = glm::lessThan(vertices.at(i), min);
 		if (bVLT.x){
-			max.x = vertices->at(i).x;
+			max.x = vertices.at(i).x;
 		}
 		else if (bVMT.x){
-			min.x = vertices->at(i).x;
+			min.x = vertices.at(i).x;
 		}
 		if (bVLT.y){
-			max.y = vertices->at(i).y;
+			max.y = vertices.at(i).y;
 		}
 		else if (bVMT.y){
-			min.y = vertices->at(i).y;
+			min.y = vertices.at(i).y;
 		}
 		if (bVLT.z){
-			max.z = vertices->at(i).z;
+			max.z = vertices.at(i).z;
 		}
 		else if (bVMT.z){
-			min.z = vertices->at(i).z;
+			min.z = vertices.at(i).z;
 		}
 	}
-}
-
-// More sensible constructor - uses vec3 for array
-AABB::AABB(const vertexVector vertices){
-	// TODO Implement me!
 }
 
 #ifdef FIX
@@ -94,17 +89,17 @@ inline bool getBit(char c, char bit){
 
 // Returns a length 8 vec3 containing
 // each corner of the AABB explicitly
-std::shared_ptr<vertexVector> AABB::getFullBox() const{
-	std::shared_ptr<vertexVector> fullBoxPtr = std::make_shared<vertexVector>();
-	fullBoxPtr->resize(8);
+vertexVector AABB::getFullBox() const{
+	vertexVector fullBox;
+	fullBox.resize(8);
 
 	// Fill in each vertex
 	for (char i = 0; i < 8; i++){
-		fullBoxPtr->emplace_back(
+		fullBox.emplace_back(
 			getBit(i, 0) ? min.x : max.x,
 			getBit(i, 1) ? min.y : max.y,
 			getBit(i, 2) ? min.z : max.z
 			);
 	}
-	return fullBoxPtr;
+	return fullBox;
 }

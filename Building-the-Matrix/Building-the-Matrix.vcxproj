@@ -73,6 +73,7 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\LodePNG\lodepng.cpp" />
     <ClCompile Include="src\Client\Address.cpp" />
+    <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Client\clientMain.cpp" />
     <ClCompile Include="src\Client\Socket.cpp" />
     <ClCompile Include="src\Display.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
     <ClInclude Include="CommonMinimal.hpp" />
     <ClInclude Include="src\Client\Address.hpp" />
+    <ClInclude Include="src\Client\Client.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\CommonMinimal.hpp" />

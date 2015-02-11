@@ -12,7 +12,6 @@ typedef std::vector<vec3> vertexVector;
 class AABB
 {
 public:
-	AABB(const std::shared_ptr<vertexVector>);
 	AABB(const vertexVector);
 	AABB(const GameObjectID);
 	virtual ~AABB();
@@ -25,7 +24,7 @@ public:
 	float getZSpan() const;
 
 	bool intersects(const AABB &) const;
-	std::shared_ptr<vertexVector> getFullBox() const;
+	vertexVector getFullBox() const;
 
 protected:
 

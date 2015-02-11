@@ -51,6 +51,7 @@ class UpdateManager {
 	static int nextID;
 	static std::mutex updManagerIndexMutex;
 
+	~UpdateManager() {}
 public:
 
 	static UpdateManager& getInstance() {

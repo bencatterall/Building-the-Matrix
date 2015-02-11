@@ -1,8 +1,10 @@
 #ifndef PHYSICS_MATHS_H
 #define PHYSICS_MATHS_H
+#include "../Common.hpp"
 
 #include <algorithm>
 #include <glm/vec3.hpp>
+#include <vector>
 
 #define GRAVITY 9.81
 
@@ -25,6 +27,8 @@ namespace PhysicsMaths
 
 	void handleCollision(PhysicsObject &, PhysicsObject &);
 	void stepObject(PhysicsObject, float);
+
+	std::vector<glm::vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
 };
 
 #endif

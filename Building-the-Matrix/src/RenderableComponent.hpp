@@ -4,7 +4,7 @@
 #include "shader.hpp"
 #include "Texture.hpp"
 #include <memory>
-
+#include <vector>
 
 ///
 /// This class holds all the referrences to the data needed to render
@@ -28,17 +28,12 @@ class RenderableComponent {
 	///
 	/// The texture for this object
 	///
-	Texture* texture = nullptr;
+	std::shared_ptr<Texture> texture;
 
 	///
 	/// The buffer holding the vertex data
 	///
-	GLfloat* vertexData = nullptr;
-
-	///
-	/// The size of the vertex data in bytes
-	///
-	size_t vertexDataSize = 0;
+	std::vector<GLfloat> vertexData;
 
 	///
 	/// The number of vertices to render
@@ -48,22 +43,12 @@ class RenderableComponent {
 	///
 	/// The buffer holding the texture coordinate data
 	///
-	GLfloat* textureCoordsData = nullptr;
-
-	///
-	/// The size of the texture coordinate buffer in bytes
-	///
-	size_t textureCoordsDataSize = 0;
+	std::vector<GLfloat> textureCoordsData ;
 
 	///
 	/// The buffer holding the colour coordinate data
 	///
-	GLfloat* colourData = nullptr;
-
-	///
-	/// The size of the colour buffer in bytes
-	///
-	size_t colourDataSize = 0;
+	std::vector<GLfloat> colourData;
 
 	///
 	/// The vertex buffer object identifier for the vertex buffer
@@ -123,9 +108,9 @@ public:
 	///
 	void setModelviewMatrix(glm::mat4 newModelviewMatrix) { modelviewMatrix = newModelviewMatrix; }
 
-	void setTexture(Texture* texture) { this->texture = texture; }
+	void setTexture(std::shared_ptr<Texture> texture) { this->texture = texture; }
 
-	Texture* getTexture() { return texture; }
+	std::shared_ptr<Texture> getTexture() { return texture; }
 
 	///
 	/// Bind the shader program to the Opengl pipeline to use it for rendering
@@ -160,57 +145,54 @@ public:
 	///
 	/// Get a pointer to the vertex data
 	///
-	GLfloat* getVertexData() { return vertexData; }
+	std::vector<GLfloat> getVertexData() { return vertexData; }
 
 	///
 	/// Get the size of the vertex data
 	///
-	size_t getVertexDataSize() { return vertexDataSize; }
+	size_t getVertexDataSize() { return vertexData.size(); }
 
 	///
 	/// Set the vertex data to use for this component.
 	/// @param new_vertex_data The new data to use for ther vertices of this object
-	/// @param the size of the data in GLfloats
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
 	///
-	void setVertexData(GLfloat* newVertexData, size_t dataSize, bool isDynamic);
+	void setVertexData(std::vector<GLfloat> newVertexData, bool isDynamic);
 
 	///
 	/// Get a pointer to the colour data
 	///
-	GLfloat* getColourData() { return colourData; }
+	std::vector<GLfloat> getColourData() { return colourData; }
 
 	///
 	/// Get the size of the colour data
 	///
-	size_t getColourDataSize() { return colourDataSize; }
+	size_t getColourDataSize() { return colourData.size(); }
 
 	///
 	/// Set the colour data to use for this component.
 	/// @param newColourData The new data to use for the per-vertex colours of this object
-	/// @param the size of the data in GLfloats
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
 	///
-	void setColourData(GLfloat* newColourData, size_t dataSize, bool isDynamic);
+	void setColourData(std::vector<GLfloat> newColourData, bool isDynamic);
 
 
 	///
-	/// Get a pointer to the texture coordinate data
+	/// Get a vector of the texture coordinate data
 	///
-	GLfloat* getTextureCoordsData() { return textureCoordsData; }
+	std::vector<GLfloat> getTextureCoordsData() { return textureCoordsData; }
 
 	///
 	/// Set the texture coordinate data to use for this component
 	/// @param new_texture_data The new data to use for ther tehadxture coordinates of this object
-	/// @param data_size The size of the data in GLfloats
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static
 	///
-	void setTextureCoordsData(GLfloat* newTextureData, size_t dataSize, bool isDynamic);
+	void setTextureCoordsData(std::vector<GLfloat> newTextureData, bool isDynamic);
 
 	///
 	/// Get the texture coords data size
 	///
-	size_t getTextureCoordsDataSize() { return textureCoordsDataSize; }
+	size_t getTextureCoordsDataSize() { return textureCoordsData.size(); }
 
 	///
 	/// Bind the texture objects
@@ -237,7 +219,7 @@ public:
 	/// @param size the size of the data to put into the buffer in bytes
 	/// @param data the data to put into the buffer
 	///
-	void updateTextureBuffer(GLintptr offset, size_t size, GLfloat* data);
+	void updateTextureBuffer(GLintptr offset, std::vector<GLfloat> data);
 
 	///
 	/// Update the vertex buffer
@@ -245,7 +227,7 @@ public:
 	/// @param size the size of the data to put into the buffer in bytes
 	/// @param data the data to put into the buffer
 	///
-	void updateVertexBuffer(GLintptr offset, size_t size, GLfloat* data);
+	void updateVertexBuffer(GLintptr offset, std::vector<GLfloat> data);
 
 	///
 	/// Update the colour buffer
@@ -253,6 +235,6 @@ public:
 	/// @param size the size of the data to put into the buffer in bytes
 	/// @param data the data to put into the buffer
 	///
-	void updateColourBuffer(GLintptr offset, size_t size, GLfloat* data);
+	void updateColourBuffer(GLintptr offset, std::vector<GLfloat> data);
 };
 #endif

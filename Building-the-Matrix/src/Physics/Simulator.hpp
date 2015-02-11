@@ -6,7 +6,7 @@ class ObjectManager;
 class Simulator
 {
 public:
-	Simulator & getInstance();
+	static Simulator & getInstance();
 	void tick(float);
 
 protected:
@@ -14,7 +14,6 @@ protected:
 private:
 	Simulator();
 	~Simulator();
-
 	void processCollisions();
 
 	static Simulator instance;

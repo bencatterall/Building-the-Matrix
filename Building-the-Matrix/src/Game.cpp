@@ -166,21 +166,21 @@ void Game::init() {
 		1.0f, 1.0f, 
 		1.0f, 1.0f, 
 	};
-	Texture* texture = new Texture("resources/textures/grass.png");
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>("resources/textures/grass.png");
 
 
+	std::vector<GLfloat> cubeVertexData;
+	std::vector<GLfloat> cubeColourData;
+	std::vector<GLfloat> cubeTextureCoordsData;
 
-	GLfloat* cubeVertexData = new GLfloat[sizeof(cubeData) / sizeof(GLfloat)];
-	GLfloat* cubeColourData = new GLfloat[sizeof(cubeColours) / sizeof(GLfloat)];
-	GLfloat* cubeTextureCoordsData = new GLfloat[sizeof(cubeTextureCoords) / sizeof(GLfloat)];
 	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
-		*(cubeVertexData + i) = 10.0f*cubeData[i];
+		cubeVertexData.push_back(10.0f*cubeData[i]);
 	}
 	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
-		*(cubeColourData + i) = cubeColours[i];
+		cubeColourData.push_back(cubeColours[i]);
 	}
 	for (size_t i = 0; i < sizeof(cubeTextureCoords) / sizeof(GLfloat); ++i) {
-		*(cubeTextureCoordsData + i) = cubeTextureCoords[i];
+		cubeTextureCoordsData.push_back(cubeTextureCoords[i]);
 	}
 
 	for (int i = 0; i < numCubes; ++i) {
@@ -192,10 +192,10 @@ void Game::init() {
 
 		cubes[i]->setShader(shader);
 		cubes[i]->setTexture(texture);
-		cubes[i]->setVertexData(cubeVertexData, sizeof(cubeData) / sizeof(GLfloat), false);
+		cubes[i]->setVertexData(cubeVertexData, false);
 		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
-		cubes[i]->setColourData(cubeColourData, sizeof(cubeColours) / sizeof(GLfloat), false);
-		cubes[i]->setTextureCoordsData(cubeTextureCoordsData, sizeof(cubeTextureCoords) / sizeof(GLfloat), false);
+		cubes[i]->setColourData(cubeColourData,false);
+		cubes[i]->setTextureCoordsData(cubeTextureCoordsData, false);
 	}
 }
 

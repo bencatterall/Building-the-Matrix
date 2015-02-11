@@ -26,9 +26,11 @@
 *.exe
 *.out
 *.app
+ServerMain
 
 #Visual studio
 *.suo
 *.sdf0
 *.tlog
 *.log
+Building-the-Matrix.opensdf

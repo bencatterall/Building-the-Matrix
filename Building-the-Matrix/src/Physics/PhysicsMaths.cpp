@@ -1,6 +1,8 @@
-#include "AABB.hpp"
 #include "../Common.hpp"
+#include "../GameObject.hpp"
 #include "../ObjectManager.hpp"
+#include "../RenderableComponent.hpp"
+#include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
 
@@ -59,19 +61,26 @@ namespace PhysicsMaths{
 	}
 
 	void handleCollision(GameObjectID aID, GameObjectID bID){
-		ObjectManager objMan = ObjectManager::getInstance();
-		// TODO: Requires handling of complex collision
 
-		PhysicsObject a = *objMan.getObject(aID)->getPhysicsComponent();
-		PhysicsObject b = *objMan.getObject(bID)->getPhysicsComponent();
-		vec3 aCen = a.getLocalAABB().getCen();
-		vec3 bCen = b.getLocalAABB().getCen();
-		// TODO: Transform these to world space
+		// TODO: Requires handling of complex collision
+		ObjectManager& objMan = ObjectManager::getInstance();
+		GameObject objA = *objMan.getObject(aID);
+		GameObject objB = *objMan.getObject(bID);
+		PhysicsObject physA = *objA.getPhysicsComponent();
+		PhysicsObject physB = *objB.getPhysicsComponent();
+		vec3 aCen = physA.getLocalAABB().getCen();
+		vec3 bCen = physB.getLocalAABB().getCen();
+		
+		// Transform these to world space
+		glm::mat4 matA = objA.getRenderableComponent()->getProjectionMatrix();
+		glm::mat4 matB = objB.getRenderableComponent()->getProjectionMatrix();
+		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 0));
+		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 0));
 
 		// Calculate relative velocity and position
 		vec3 sDiff = aCen - bCen;
 		vec3 sDiffNormal = glm::normalize(sDiff);
-		vec3 vDiff = a.getV() - b.getV();
+		vec3 vDiff = physA.getV() - physB.getV();
 
 		// Calculate relative velocity along normal direction
 		float velDelAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
@@ -81,21 +90,33 @@ namespace PhysicsMaths{
 			return;
 
 		// Choose minimal restitution
-		float e = std::min(a.getRest(), b.getRest());
+		float e = std::min(physA.getRest(), physB.getRest());
 
 		// Calculate impulse vec3
 		float j = -(1 + e) * velDelAlongCollisionNormal;
-		j = j / (a.getInvMass() + b.getInvMass());
+		j = j / (physA.getInvMass() + physB.getInvMass());
 		vec3 impulse = j * sDiffNormal;
 
 		// Apply impulse in an amount proportional to its mass proportion.
-		float mass_sum = (a.getMass() + b.getMass());
-		a.setV(a.getV() - impulse * a.getMass() / mass_sum);
-		b.setV(b.getV() + impulse * b.getMass() / mass_sum);
+		float mass_sum = (physA.getMass() + physB.getMass());
+		physA.setV(physA.getV() - impulse * physA.getMass() / mass_sum);
+		physB.setV(physB.getV() + impulse * physB.getMass() / mass_sum);
 	}
 
 	void PhysicsMaths::stepObject(PhysicsObject physObj, float timestep){
 		physObj.setX(UATtoS(physObj.getV(), physObj.getA(), timestep));
 		physObj.setV(UATtoV(physObj.getV(), physObj.getA(), timestep));
+	}
+
+
+
+	std::vector<glm::vec3> convertGLfloatToVec3(std::vector<GLfloat> data) {
+		std::vector<glm::vec3> newData;
+
+		for (size_t i = 0; i < data.size(); i+=3) {
+			newData.push_back(glm::vec3(data.at(i), data.at(i + 1), data.at(i + 2)));
+		}
+
+		return newData;
 	}
 }
