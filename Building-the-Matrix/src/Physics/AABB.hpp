@@ -24,7 +24,7 @@ public:
 	float getZSpan() const;
 
 	bool intersects(const AABB &) const;
-	vertexVector getFullBox() const;
+	std::shared_ptr <vertexVector> getFullBox() const;
 
 protected:
 
