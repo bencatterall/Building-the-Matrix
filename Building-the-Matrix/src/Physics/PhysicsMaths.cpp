@@ -1,4 +1,3 @@
-#include "../Common.hpp"
 #include "../GameObject.hpp"
 #include "../ObjectManager.hpp"
 #include "../RenderableComponent.hpp"
@@ -9,12 +8,12 @@
 
 namespace PhysicsMaths{
 	// Simple first order approximation to motion given U, A, T.
-	float PhysicsMaths::UATtoS(float U, float A, float T){
+	float UATtoS(float U, float A, float T){
 		return (U + (A * T) * 0.5f) * T;
 	}
 
 	// Simple first order approximation to motion given U, A, T.
-	float PhysicsMaths::UATtoV(float U, float A, float T){
+	float UATtoV(float U, float A, float T){
 		return U + (A * T);
 	}
 
@@ -26,7 +25,7 @@ namespace PhysicsMaths{
 	}
 
 	// Simple first order approximation to motion given U, A, T.
-	vec3 PhysicsMaths::UATtoV(const vec3 U, const vec3 A, float T){
+	vec3 UATtoV(const vec3 U, const vec3 A, float T){
 		return U + (A * T);
 	}
 
@@ -103,7 +102,7 @@ namespace PhysicsMaths{
 		physB.setV(physB.getV() + impulse * physB.getMass() / mass_sum);
 	}
 
-	void PhysicsMaths::stepObject(PhysicsObject physObj, float timestep){
+	void stepObject(PhysicsObject physObj, float timestep){
 		physObj.setX(UATtoS(physObj.getV(), physObj.getA(), timestep));
 		physObj.setV(UATtoV(physObj.getV(), physObj.getA(), timestep));
 	}
@@ -119,4 +118,17 @@ namespace PhysicsMaths{
 
 		return newData;
 	}
+
+	const glm::vec3 translateVertex(const glm::mat4x4 matrix, const vec3 vector){
+		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 0));
+	}
+
+	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 matrix, const std::shared_ptr<vertexVector> vertices) {
+		std::shared_ptr<vertexVector> result = std::make_shared<vertexVector>(*vertices);
+		for (size_t i = 0; i < result->size(); i++){
+			result->assign(i, translateVertex(matrix, result->at(i)));
+		}
+		return result;
+	}
+
 }

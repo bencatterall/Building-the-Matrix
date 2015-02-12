@@ -1,10 +1,13 @@
 #ifndef PHYSICS_MATHS_H
 #define PHYSICS_MATHS_H
-#include "../Common.hpp"
 
 #include <algorithm>
 #include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 #include <vector>
+#include <memory>
+
+#include "../Common.hpp"
 
 #define GRAVITY 9.81
 
@@ -13,6 +16,7 @@ using glm::vec3;
 class AABB;
 class PhysicsObject;
 
+typedef std::vector<vec3> vertexVector;
 
 namespace PhysicsMaths
 {
@@ -28,7 +32,9 @@ namespace PhysicsMaths
 	void handleCollision(PhysicsObject &, PhysicsObject &);
 	void stepObject(PhysicsObject, float);
 
-	std::vector<glm::vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
+	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
+	const vec3 translateVertex(const glm::mat4x4, const vec3);
+	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
 };
 
 #endif
