@@ -44,7 +44,7 @@ protected:
 private:
 	// Will need some more information later
 	vertexVector vertices;
-	AABB *boundingBox;
+	std::shared_ptr<AABB> boundingBox;
 	float restitution; // Co-efficent of restitution
 	float mass;		// Mass of Object, with 0 representing +inf
 	float inverseMass; // Precomputed value of (1/mass)
@@ -52,6 +52,7 @@ private:
 	float airRes;	// Co-efficient of quadratic drag
 	vec3 position;	// Centre position
 	std::shared_ptr<LocationComponent> location;
+	std::shared_ptr<RenderableComponent> rendComp;
 	vec3 velocity;	// Velocity
 	vec3 acc;		// Acceleration
 
