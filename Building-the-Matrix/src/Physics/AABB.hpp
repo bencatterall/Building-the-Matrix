@@ -1,8 +1,11 @@
 #ifndef AABB_H
 #define AABB_H
-#include "../Common.hpp"
+
+#include <glm/vec3.hpp>
 #include <memory>
 #include <vector>
+
+#include "../CommonMinimal.hpp"
 
 using glm::vec3;
 
@@ -24,7 +27,7 @@ public:
 	float getZSpan() const;
 
 	bool intersects(const AABB &) const;
-	vertexVector getFullBox() const;
+	std::shared_ptr <vertexVector> getFullBox() const;
 
 protected:
 

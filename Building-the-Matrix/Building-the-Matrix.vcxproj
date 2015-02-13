@@ -96,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
-    <ClInclude Include="CommonMinimal.hpp" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Client.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />

@@ -18,12 +18,7 @@
 
 //Include GLM
 
-//We need this define for glm 0.9.6.1, it appears that 32-bit msvc++ compiling is broken
-//when not passed by reference
-//
-//see below for the issue on git.
-//https://github.com/g-truc/glm/issues/283
-#define GLM_FORCE_PURE
+//GLM Fix now present in Minimal file.
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -32,7 +27,6 @@
 #include <glm/vec3.hpp>
 #include <glm/vector_relational.hpp>
 
-#include <iostream>
 #include <iostream>
 
 using namespace OVR;

@@ -1,3 +1,4 @@
+#include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
 #include "Simulator.hpp"
@@ -9,7 +10,6 @@
 Simulator::Simulator() :
 	accumulator(0)
 {
-
 }
 
 
@@ -42,5 +42,22 @@ void Simulator::tick(float timestep){
 }
 
 void Simulator::processCollisions(){
+	ObjectManager& objMan = ObjectManager::getInstance();
+	std::vector<GameObjectID> gameObjects = objMan.getObjects();
+
+	// O(n^2) collision check
+	for (size_t i = 0; i < gameObjects.size(); i++)
+	{
+		std::shared_ptr<GameObject> gameObj = objMan.getObject(gameObjects.at(i));
+		PhysicsObject currentObj = *gameObj->getPhysicsComponent();
+		for (size_t j = i; j < gameObjects.size(); j++)
+		{
+			std::shared_ptr<GameObject> gameObj2 = objMan.getObject(gameObjects.at(j));
+			PhysicsObject checkObj = *gameObj2->getPhysicsComponent();
+			if (PhysicsMaths::simpleCollision(currentObj, checkObj)){
+				PhysicsMaths::handleCollision(gameObjects.at(i), gameObjects.at(j));
+			}
+		}
+	}
 
 }

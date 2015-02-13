@@ -1,15 +1,15 @@
+#include "../LocationComponent.hpp"
+#include "../RenderableComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
-#include "../LocationComponent.hpp"
-#include "../RenderableComponent.hpp"
 
 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> location)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
 	velocity(vec3()), position(vec3()),
-	boundingBox(new AABB(vertexVector()))
+	boundingBox(std::make_shared<AABB>(vertexVector()))
 {
 	location = location;
 }
@@ -17,13 +17,13 @@ PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> location)
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
-	velocity(vec3()), position(vec3()),
-	boundingBox(new AABB(vertexVector()))
+	velocity(vec3()), position(vec3())
 {
 	location = locationComp;
-	boundingBox = new AABB(PhysicsMaths::convertGLfloatToVec3(rendComp->getVertexData()));
+	boundingBox = std::make_shared<AABB>(PhysicsMaths::convertGLfloatToVec3(rendComp->getVertexData()));
 }
 
+#ifdef Refactor
 PhysicsObject::PhysicsObject(vertexVector vertices)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
@@ -47,20 +47,22 @@ PhysicsObject::PhysicsObject(vertexVector vertices, vec3 pos, vec3 velocity, flo
 	position(pos)
 {
 }
+#endif
 
-// Destructor
 PhysicsObject::~PhysicsObject()
 {
-	delete boundingBox;
 }
 
 const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
-	vertexVector boundBox = boundingBox->getFullBox();
-	// TODO: Transform from local to world space
-	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(boundBox);
+	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(
+		rendComp->getProjectionMatrix(), boundingBox->getFullBox()
+		);
+
+	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(worldSpace);
 	return worldBox;
 }
 
+// TODO: Refactor me
 const AABB PhysicsObject::getLocalAABB() const {
 	return *boundingBox;
 }
