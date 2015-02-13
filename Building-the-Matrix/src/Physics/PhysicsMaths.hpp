@@ -27,9 +27,9 @@ namespace PhysicsMaths
 	vec3 UATtoV(const vec3, const vec3, float);
 
 	bool simpleCollision(const AABB &, const AABB &);
-	bool simpleCollision(const PhysicsObject &, PhysicsObject &);
+	bool simpleCollision(const PhysicsObject, const PhysicsObject);
 
-	void handleCollision(PhysicsObject &, PhysicsObject &);
+	void handleCollision(GameObjectID, GameObjectID);
 	void stepObject(PhysicsObject, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
