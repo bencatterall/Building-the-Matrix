@@ -22,7 +22,6 @@ Address::Address(unsigned int address, unsigned short port){
 }
 
 Address::Address(std::string ipAddr, unsigned short port) {
-
 	//convert a string to a network byte-order array
 	//TODO: Put in it's own function
 	size_t pos = 0;
@@ -34,8 +33,8 @@ Address::Address(std::string ipAddr, unsigned short port) {
 		acc++;
 	}
 	IPValues[3] = atoi(ipAddr.c_str());
-
-	Address(IPValues[0], IPValues[1], IPValues[2], IPValues[3], port);
+	(this->address) = htonl((IPValues[0] << 24) | (IPValues[1] << 16) | (IPValues[2] << 8) | IPValues[3]);
+	(this->port) = htons(port);
 }
 
 //empty constructor

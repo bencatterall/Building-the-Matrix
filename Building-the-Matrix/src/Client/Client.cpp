@@ -9,20 +9,22 @@
 #include <chrono>
 #include <iostream>
 
-//binds client to a socket and stores address of the server and its own Socket
+//binds client to a socket and stores address of the server and its own Socket. An int is thrown if something goes wrong
 Client::Client(Address client, Address server) {
 	this->socket = Socket();
-	//TODO: what to do if this fails?
-	(this->socket).openSocket(client.getAddress(),client.getPort());
+	if (!(this->socket).openSocket(client.getAddress(), client.getPort())) {
+		throw int(1);
+	}
 	this->server = server;
+	/* will add back in when we're accessing the server
 	bool confirmed = false;
-	//TODO: add a timeout?
-	//login to server
+	int attempts = 0;
 	char data[] = "LOGIN";
 	if (!(this->send(data))) {
 		std::cerr << "Failed to send message";
-		std::exit(EXIT_FAILURE);
+		throw int(3);
 	}
+	attempts++;
 	while (!confirmed) {
 		//resend login request if server doesn't reply within a second
 		std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -35,23 +37,24 @@ Client::Client(Address client, Address server) {
 			confirmed = true;
 		}
 		else {
+			if (attempts == 5) {
+				throw int(2);
+			}
 			if (!(this->send(data))) {
 				std::cerr << "Failed to send message";
-				//std::exit(EXIT_FAILURE);
+				throw int(3);
 			}
+			attempts++;
 		}
 	}
+	*/
 }
 
 //on client deletion, cleans up used resources
 Client::~Client() {
-	//KATIE: Can remove
-	//implicitly called on class destruction
-	(this->socket).~Socket();
 	const char data[] = "LOGOUT";
 	if (!(this->send((char *)data))) {
 		std::cerr << "Failed to send message";
-		//std::exit(EXIT_FAILURE);
 	}
 }
 

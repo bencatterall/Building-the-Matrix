@@ -6,16 +6,63 @@
 
 #include "Address.hpp"
 #include "Socket.hpp"
+#include "SafeMap.hpp"
+#include "SafeQueue.hpp"
+#include "CommonMinimal.hpp"
 #include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
 #include <chrono>
 
-std::vector<Address> clients;
-Socket mySocket;
+SafeMap<GameObjectGlobalID, GameObject> objects;
+SafeQueue<Update> pendingUpdates;
 bool cont;
 
+void reader() {
+	while (cont) {
+		try {
+			pendingUpdates.popFromFront();
+		}
+		catch (int& i) {
+			//ignore for now
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+
+}
+
+void writerAdd() {
+	while (cont) {
+		//int r = std::rand() % 10;
+		Update u = Update();
+		pendingUpdates.pushToEnd(u);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+}
+
+void writerDelete() {
+	while (cont) {
+		int r = std::rand() % 10;
+		objects.deleteEntry(r);
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+	}
+}
+
+int main(int argc, char **argv) {
+	cont = true;
+	std::thread snap(reader);
+	std::thread writer1(writerAdd);
+	//std::thread writer2(writerDelete);
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	cont = false;
+	snap.join();
+	writer1.join();
+	//writer2.join();
+	if (std::cin.get() == '\n') {}
+}
+
+/*
 //runs continuously to deal with packets received
 void receive() {
 	while (cont) {
@@ -147,3 +194,5 @@ int main(int argc, char **argv) {
 	}
 	mySocket.~Socket();
 }
+
+*/

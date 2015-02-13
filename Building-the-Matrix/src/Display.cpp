@@ -297,7 +297,12 @@ Display::~Display() {
 void Display::run() {
 
 	//Create objects
-	Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
+	try {
+		Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
+	}
+	catch (int &i){
+		std::cout << "instantiating client connection to server failed";
+	}
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 	Simulator& simulator = Simulator::getInstance();
