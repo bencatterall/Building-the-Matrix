@@ -1,3 +1,6 @@
+// TODO: Figure out why I am required for RenderableComponent
+#include "../CommonMinimal.hpp"
+
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "../ObjectManager.hpp"
