@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "../GameObject.hpp"
 #include "../ObjectManager.hpp"
 #include "../RenderableComponent.hpp"
