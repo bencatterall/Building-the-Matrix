@@ -1,12 +1,12 @@
 #ifndef PHYSICS_MATHS_H
 #define PHYSICS_MATHS_H
 
+#include "../Common.hpp"
+
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <vector>
 #include <memory>
-
-#include "../Common.hpp"
 
 #define GRAVITY 9.81
 

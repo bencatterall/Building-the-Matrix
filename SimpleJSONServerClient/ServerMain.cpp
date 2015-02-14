@@ -24,7 +24,7 @@ void reader() {
 		try {
 			pendingUpdates.popFromFront();
 		}
-		catch (int& i) {
+		catch (...) {
 			//ignore for now
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
