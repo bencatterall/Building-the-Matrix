@@ -1,4 +1,6 @@
 #include <Catch\catch.hpp>
+#include "../src/CommonMinimal.hpp"
+
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <memory>
@@ -11,7 +13,7 @@
 #include "PhysicsMaths.hpp"
 
 using glm::vec3;
-
+#ifdef TEST
 TEST_CASE("Testing Physics", "[physics]"){
 	
 	SECTION("Linear Motion"){
@@ -42,3 +44,4 @@ TEST_CASE("Testing Physics", "[physics]"){
 		;
 	}
 }
+#endif

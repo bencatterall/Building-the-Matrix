@@ -19,7 +19,6 @@
 //Include GLM
 
 //GLM Fix now present in Minimal file.
-
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/mat4x4.hpp>

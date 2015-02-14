@@ -3,9 +3,12 @@
 #include "ObjectManager.hpp"
 #include "JSON\UpdateManager.hpp"
 #include "Physics\Simulator.hpp"
+#include "../src/CommonMinimal.hpp"
 
 #include <conio.h>
 #include <memory>
+
+
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 ovrHmd hmd;
@@ -300,7 +303,7 @@ void Display::run() {
 	try {
 		Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
 	}
-	catch (int &i){
+	catch (...){
 		std::cout << "instantiating client connection to server failed";
 	}
 	UpdateManager& updateManager = UpdateManager::getInstance();
