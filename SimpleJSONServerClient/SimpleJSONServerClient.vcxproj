@@ -66,10 +66,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Address.hpp" />
+    <ClInclude Include="Message.hpp" />
+    <ClInclude Include="SafeMap.hpp" />
+    <ClInclude Include="SafeQueue.hpp" />
+    <ClInclude Include="Sender.hpp" />
+    <ClInclude Include="Server.h" />
+    <ClInclude Include="Server.hpp" />
+    <ClInclude Include="ServerMain.h" />
     <ClInclude Include="Socket.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Address.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="SafeMap.cpp" />
+    <ClCompile Include="SafeQueue.cpp" />
+    <ClCompile Include="Sender.cpp" />
+    <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="ServerMain.cpp" />
   </ItemGroup>
