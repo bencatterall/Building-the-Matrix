@@ -1,7 +1,6 @@
 #ifndef PHYSICS_MATHS_H
 #define PHYSICS_MATHS_H
 
-#include <algorithm>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <vector>
