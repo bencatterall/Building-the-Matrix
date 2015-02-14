@@ -88,6 +88,7 @@
     <ClCompile Include="src\Physics\AABB.cpp" />
     <ClCompile Include="src\Physics\PhysicsMaths.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
+    <ClCompile Include="src\Physics\PhysicsTest.cpp" />
     <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
     <ClCompile Include="src\shader.cpp" />
