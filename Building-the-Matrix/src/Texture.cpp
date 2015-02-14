@@ -1,4 +1,5 @@
 #include "Texture.hpp"
+#include <iostream>
 
 Texture::Texture(std::string filename) {
 	ImageLoader imgLoader;

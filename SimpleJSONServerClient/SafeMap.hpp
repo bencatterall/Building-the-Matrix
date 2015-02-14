@@ -1,6 +1,7 @@
 #include <map>
 #include <mutex>
 #include "CommonMinimal.hpp"
+class GameObject;
 
 class GameObject {
 	public:

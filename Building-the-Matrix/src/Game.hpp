@@ -4,8 +4,8 @@
 #include "Common.hpp"
 #include "Display.hpp"
 class Game : public Display {
-	int numCubes = 1;
-	RenderableComponent* cubes[1];
+	int numCubes = 100;
+	RenderableComponent* cubes[100];
 public:
 	void init();
 	//To be overridden

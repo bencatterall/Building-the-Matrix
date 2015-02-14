@@ -1,5 +1,8 @@
 #include "shader.hpp"
+#include <iostream>
 #include <string>
+
+using namespace std;
 
 Shader::Shader(const std::string programName) :
 	Shader(programName + ".vs", programName + ".fs")

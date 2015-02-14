@@ -1,5 +1,7 @@
 #include <memory>
+#include <iostream>
 #include <ostream>
+
 
 #include "shader.hpp"
 #include "RenderableComponent.hpp"

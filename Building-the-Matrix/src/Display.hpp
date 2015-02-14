@@ -1,7 +1,25 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
+#include <iostream>
+
 #include "Common.hpp"
 #include "RenderableComponent.hpp"
+
+
+//We need access to the native window handle so we need some native functions
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#include "..\Dependencies\GLFW\glfw3native.h"
+
+#define OVR_OS_WIN32
+#include "OVR_CAPI.h"
+#include "OVR_CAPI_GL.h"
+#include "Kernel\OVR_Math.h"
+
+using namespace OVR;
+//TODO: Remove this hack
+extern ovrHmd hmd;
+
 class Display {
 	ovrFrameTiming frameTiming;
 	ovrEyeRenderDesc eyeRenderDesc[2];

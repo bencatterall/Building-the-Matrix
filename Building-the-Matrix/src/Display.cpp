@@ -6,12 +6,15 @@
 #include "../src/CommonMinimal.hpp"
 
 #include <conio.h>
+#include <iostream>
 #include <memory>
 
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 ovrHmd hmd;
+
+using namespace std;
 
 Display::Display() {
 	init();

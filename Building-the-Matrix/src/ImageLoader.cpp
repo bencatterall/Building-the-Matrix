@@ -1,6 +1,7 @@
 #include "ImageLoader.hpp"
 #include "../Dependencies/LodePNG/lodepng.hpp"
 
+#include <iostream>
 #include <string>
 #include <vector>
 
