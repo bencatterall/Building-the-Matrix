@@ -7,13 +7,13 @@
 #include "RenderableComponent.hpp"
 
 RenderableComponent::RenderableComponent() {
-	//Generate the vertex buffers
+	//Generate the buffers
 	glGenBuffers(1, &vboVertexId);
 	glGenBuffers(1, &vboTextureId);
 	glGenBuffers(1, &vboColourId);
 } 
 RenderableComponent::~RenderableComponent() {
-	//Delete the vertex buffers
+	//Delete the buffers
 	glDeleteBuffers(1, &vboVertexId);
 	glDeleteBuffers(1, &vboTextureId);
 	glDeleteBuffers(1, &vboColourId);
@@ -21,89 +21,19 @@ RenderableComponent::~RenderableComponent() {
 void RenderableComponent::setVertexData(std::vector<GLfloat> newVertexData, bool isDynamic) {;
 	this->vertexData = newVertexData;
 
-	//Get current shader
-	GLint id;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
-
-	//Bind our shader
-	bindShader();
-
-	//Set up buffer usage
-	GLenum usage = GL_STATIC_DRAW;
-	if (isDynamic)
-		usage = GL_DYNAMIC_DRAW;
-
-	if (vertexData.size() > 0) {
-		//Pass in data to the buffer buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->vboVertexId);
-		glBufferData(GL_ARRAY_BUFFER, this->vertexData.size()  * sizeof(GLfloat), &this->vertexData[0], usage);
-	}
-	else {
-		//Pass in data to the buffer buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->vboVertexId);
-		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, usage);
-	}
-	//Restore previous program
-	glUseProgram(id);
+	setBufferData(vboVertexId, this->vertexData, isDynamic);
 }
 
 void RenderableComponent::setTextureCoordsData(std::vector<GLfloat> newTextureData, bool isDynamic) {
 	this->textureCoordsData = newTextureData;
 
-	//Get current shader
-	GLint id;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
-
-	//Bind our shader
-	bindShader();
-
-	//Set up buffer usage
-	GLenum usage = GL_STATIC_DRAW;
-	if (isDynamic)
-		usage = GL_DYNAMIC_DRAW;
-
-	if (textureCoordsData.size() > 0) {
-		//Pass in data to the buffer buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
-		glBufferData(GL_ARRAY_BUFFER, this->textureCoordsData.size() * sizeof(GLfloat), &this->textureCoordsData[0], usage);
-	}
-	else {
-		//Pass in data to the buffer buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
-		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, usage);
-	}
-	//Release shader
-	glUseProgram(id);
+	setBufferData(vboTextureId, this->textureCoordsData, isDynamic);
 }
 
 void RenderableComponent::setColourData(std::vector<GLfloat>newColourData, bool isDynamic) {
 	this->colourData = newColourData;
 
-	//Get current shader
-	GLint id;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
-
-	//Bind our shader
-	bindShader();
-
-	//Set up buffer usage
-	GLenum usage = GL_STATIC_DRAW;
-	if (isDynamic)
-		usage = GL_DYNAMIC_DRAW;
-
-	if (colourData.size() > 0) {
-		//Pass in data to the buffer buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->vboColourId);
-		glBufferData(GL_ARRAY_BUFFER, this->colourData.size() * sizeof(GLfloat), &this->colourData[0], usage);
-	}
-	else {
-		//Pass in data to the buffer buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->vboColourId);
-		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, usage);
-	}
-
-	//Release shader
-	glUseProgram(id);
+	setBufferData(vboColourId, this->colourData, isDynamic);
 }
 void RenderableComponent::bindVBOs() {
 	//Bind the vertex data buffer
@@ -150,51 +80,52 @@ void RenderableComponent::releaseShader() {
 	glUseProgram(0);
 }
 void RenderableComponent::updateVertexBuffer(GLintptr offset, std::vector<GLfloat> data) {
-	//Get current shader
-	GLint id;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
-
-	//Bind our shader
-	bindShader();
-	glBindBuffer(GL_ARRAY_BUFFER, this->vboVertexId);
-
-	//Update the buffer
-	if (data.size() > 0) {
-		glBufferSubData(GL_ARRAY_BUFFER, offset, data.size(), &data[0]);
-	}
-	else {
-		glBufferSubData(GL_ARRAY_BUFFER, offset, 0, nullptr);
-	}
-	//Release shader
-	glUseProgram(id);
+	updateSubBuffer(vboVertexId, offset, data);
 }
 void RenderableComponent::updateTextureBuffer(GLintptr offset, std::vector<GLfloat> data) {
+	updateSubBuffer(vboTextureId, offset, data);
+}
+void RenderableComponent::updateColourBuffer(GLintptr offset, std::vector<GLfloat> data) {
+	updateSubBuffer(vboColourId, offset, data);
+}
+
+void RenderableComponent::setBufferData(GLint bufferID, std::vector<GLfloat> data, bool isDynamic) {
+
 	//Get current shader
 	GLint id;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
 
 	//Bind our shader
 	bindShader();
-	glBindBuffer(GL_ARRAY_BUFFER, vboTextureId);
 
-	//Update the buffer
+	//Set up buffer usage
+	GLenum usage = GL_STATIC_DRAW;
+	if (isDynamic)
+		usage = GL_DYNAMIC_DRAW;
+
 	if (data.size() > 0) {
-		glBufferSubData(GL_ARRAY_BUFFER, offset, data.size(), &data[0]);
+		//Pass in data to the buffer buffer
+		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(GLfloat), &data[0], usage);
 	}
 	else {
-		glBufferSubData(GL_ARRAY_BUFFER, offset, 0, nullptr);
+		//Pass in data to the buffer buffer
+		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, usage);
 	}
+
 	//Release shader
 	glUseProgram(id);
 }
-void RenderableComponent::updateColourBuffer(GLintptr offset, std::vector<GLfloat> data) {
+
+void RenderableComponent::updateSubBuffer(GLint bufferID, GLintptr offset, std::vector<GLfloat> data) {
 	//Get current shader
 	GLint id;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
 
 	//Bind our shader
 	bindShader();
-	glBindBuffer(GL_ARRAY_BUFFER, vboColourId);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 
 	//Update the buffer
 	//Update the buffer
@@ -207,4 +138,13 @@ void RenderableComponent::updateColourBuffer(GLintptr offset, std::vector<GLfloa
 
 	//Release shader
 	glUseProgram(id);
+}
+
+void setIndexData(std::vector<GLfloat> newIndexData, bool isDynamic) {
+
+}
+
+
+void updateIndexBuffer(GLintptr offset, std::vector<GLfloat> data) {
+
 }

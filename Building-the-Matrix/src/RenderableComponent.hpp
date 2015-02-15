@@ -36,6 +36,11 @@ class RenderableComponent {
 	std::vector<GLfloat> vertexData;
 
 	///
+	/// The indices buffer
+	///
+	std::vector<GLfloat> indexData;
+
+	///
 	/// The number of vertices to render
 	///
 	GLsizei numVerticesRender = 0;
@@ -80,6 +85,10 @@ class RenderableComponent {
 	/// the current modelview matrix
 	///
 	glm::mat4 modelviewMatrix = glm::mat4(1.0);
+
+
+	void setBufferData(GLint bufferID, std::vector<GLfloat> data, bool isDynamic);
+	void updateSubBuffer(GLint bufferID, GLintptr offset, std::vector<GLfloat> data);
 
 public:
 	RenderableComponent();
@@ -160,6 +169,23 @@ public:
 	void setVertexData(std::vector<GLfloat> newVertexData, bool isDynamic);
 
 	///
+	/// Get a pointer to the index data
+	///
+	std::vector<GLfloat> getIndexData() { return indexData; }
+
+	///
+	/// Get the size of the vertex data
+	///
+	size_t getIndexDataSize() { return indexData.size(); }
+
+	///
+	/// Set the index data to use for this component.
+	/// @param new_index_data The new data to use for ther indices of this object
+	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
+	///
+	void setIndexData(std::vector<GLfloat> newIndexData, bool isDynamic);
+
+	///
 	/// Get a pointer to the colour data
 	///
 	std::vector<GLfloat> getColourData() { return colourData; }
@@ -236,5 +262,13 @@ public:
 	/// @param data the data to put into the buffer
 	///
 	void updateColourBuffer(GLintptr offset, std::vector<GLfloat> data);
+
+	///
+	/// Update the indices buffer
+	/// @param offset the byte offset into the buffer
+	/// @param size the size of the data to put into the buffer in bytes
+	/// @param data the data to put into the buffer
+	///
+	void updateIndexBuffer(GLintptr offset, std::vector<GLfloat> data);
 };
 #endif

@@ -10,6 +10,7 @@
 #include <time.h>
 #include "SimplexNoise.hpp"
 void Game::init() {
+	
 	cubes = new Cube[numCubes];
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>("resources/textures/grass.png");
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
@@ -52,9 +53,19 @@ void Game::init() {
 					exit(0);
 
 				++i;
+
+				//DEBUG
+				if (i >= numCubes)
+					break;
 			}
-		}
+			//DEBUG
+			if (i >= numCubes)
+				break;
+		}			//DEBUG
+		if (i >= numCubes)
+			break;
 	}
+	
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {

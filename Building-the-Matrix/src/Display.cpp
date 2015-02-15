@@ -325,7 +325,7 @@ void Display::run() {
 		numFrames++;
 		if (currentTime - lastTime >= 1.0) {
 			//If at least one second passed
-			printf("FPS: %f, %f ms/frame\n", numFrames, 1000.0 / double(numFrames));
+			std::cout << "FPS: " << numFrames << ". " << (1000.0 / (double)numFrames) << " ms/frame\n" << std::endl;
 			numFrames = 0;
 			lastTime += 1.0;
 		}
