@@ -1,4 +1,4 @@
-#include "../src/CommonMinimal.hpp"
+#include "../src/Common.hpp"
 
 #ifdef TEST
 #ifdef TEST_PHYSICS

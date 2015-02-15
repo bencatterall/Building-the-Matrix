@@ -179,9 +179,6 @@
     <ClInclude Include="src\Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CommonMinimal.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Display.hpp">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>

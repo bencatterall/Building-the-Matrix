@@ -3,7 +3,7 @@
 #include "ObjectManager.hpp"
 #include "JSON\UpdateManager.hpp"
 #include "Physics\Simulator.hpp"
-#include "../src/CommonMinimal.hpp"
+#include "../src/Common.hpp"
 
 #include <conio.h>
 #include <iostream>

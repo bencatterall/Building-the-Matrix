@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "Texture.hpp"
-#include "../src/CommonMinimal.hpp"
+#include "../src/Common.hpp"
 #include "LocationComponent.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>

@@ -105,7 +105,6 @@
     <ClInclude Include="src\Client\Client.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
-    <ClInclude Include="src\CommonMinimal.hpp" />
     <ClInclude Include="src\Cube.hpp" />
     <ClInclude Include="src\Display.hpp" />
     <ClInclude Include="src\Game.hpp" />

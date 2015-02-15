@@ -14,7 +14,7 @@
 * attribution is appreciated.
 *
 */
-
+#include <glm/mat4x4.hpp>
 #include "Common.hpp"
 #include "SimplexNoise.hpp"
 SimplexNoise::SimplexNoise() {
