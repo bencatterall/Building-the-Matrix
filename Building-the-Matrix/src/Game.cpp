@@ -1,215 +1,76 @@
 #include "Game.hpp"
 #include "Texture.hpp"
 #include "../src/CommonMinimal.hpp"
-
+#include "LocationComponent.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <algorithm>
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
-
+#include "SimplexNoise.hpp"
 void Game::init() {
-
-
-	///
-	/// Test data 
-	///
-
-	/**
-	 * The vertices are needed in a counter-clockwise facing orientation
-	 *   6 --- 7
-	 *  /|    /|
-	 * 2 --- 3 |
-	 * | 4 --|-5
-	 * |/    |/
-	 * 0 --- 1
-	 *
-	 *Faces:
-	 *
-	 *
-	 * 2---3
-	 * |   |
-	 * |   |
-	 * 0---1
-	 * is then
-	 *
-	 * 2---3
-	 * |  /
-	 * | /
-	 * 0
-	 * 0-3-2
-	 *     3
-	 *   / |
-	 *  /  |
-	 * 0 --1
-	 * 0-1-3
-	 */
-	GLfloat cubeData[] = {
-		-1.0f, -1.0f, -1.0f, // triangle 1 : begin
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f, // triangle 1 : end
-		1.0f, 1.0f, -1.0f, // triangle 2 : begin
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f, // triangle 2 : end
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-
-		1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f
-	};
-
-	GLfloat cubeColours[] = {
-		1.0f, 1.0f, 1.0f, 1.0f,// triangle 1 : begin
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f, // triangle 1 : end
-		1.0f, 1.0f, 0.5f, 1.0f, // triangle 2 : begin
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f, // triangle 2 : end
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-
-		1.0f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 0.5f, 1.0f,
-		0.5f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 0.5f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f
-	};
-	
-	GLfloat cubeTextureCoords[] = {
-		1.0f, 1.0f,// triangle 1 : begin
-		0.5f, 1.0f, 
-		1.0f, 0.5f, // triangle 1 : end
-		1.0f, 1.0f, // triangle 2 : begin
-		1.0f, 1.0f, 
-		1.0f, 1.0f, // triangle 2 : end
-		1.0f, 0.5f, 
-		1.0f, 1.0f,
-		1.0f, 1.0f, 
-
-		1.0f, 1.0f, 
-		0.5f, 1.0f, 
-		1.0f, 1.0f, 
-
-		0.5f, 1.0f, 
-		0.5f, 1.0f,
-		0.5f, 1.0f, 
-		0.5f, 1.0f, 
-		0.5f, 1.0f, 
-		0.5f, 1.0f, 
-		0.5f, 1.0f,
-		1.0f, 1.0f, 
-		1.0f, 1.0f, 
-		1.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 1.0f, 
-		1.0f, 1.0f,
-		0.5f, 1.0f, 
-		1.0f, 0.5f, 
-		1.0f, 0.5f, 
-		1.0f, 1.0f, 
-		1.0f, 0.5f, 
-		1.0f, 1.0f,
-		1.0f, 1.0f,
-		0.5f, 0.5f, 
-		1.0f, 1.0f, 
-		1.0f, 1.0f, 
-		1.0f, 1.0f, 
-	};
+	/*
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>("resources/textures/grass.png");
 
+	float xPosCenter = 0.0f, yPosCenter = -10.0f, zPosCenter = -50.0f;
+	//NOTE: Cube[] is 1000 in header, need to update
+	int xLength = 6, yLength = 6, zLength = 6;
+	SimplexNoise noiseGenerator;
+	//Build up our world
+	int i = 0;
+	for (int x = -xLength / 2; x < xLength/2; ++x) {
+		for (int z = -zLength / 2; z < zLength/2; ++z) {
+			for (int y = -yLength / 2; y < yLength/2; ++y) {
+				std::shared_ptr<RenderableComponent> renderableComponent = cubes[i].getRenderableComponent();
+				std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
 
-	std::vector<GLfloat> cubeVertexData;
-	std::vector<GLfloat> cubeColourData;
-	std::vector<GLfloat> cubeTextureCoordsData;
+				std::shared_ptr<LocationComponent> locationComponent = cubes[i].getLocationComponent();
+				double noise = noiseGenerator.noise(x, y, z);
+				if (noise > 0.4) {
+					cubes[i].setVisible(false);
+					continue;
+				}
+				float sf = 8.0f;
+				float xPos = sf*(x) + xPosCenter;
+				float yPos = sf*(y) + yPosCenter;
+				float zPos = sf*(z) + zPosCenter;
 
-	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
-		cubeVertexData.push_back(10.0f*cubeData[i]);
+				locationComponent->setPosition(glm::vec3(xPos, yPos, zPos));
+
+				if (!shader->isLoaded())
+					exit(0);
+
+				renderableComponent->setShader(shader);
+				renderableComponent->setTexture(texture);
+				renderableComponent->setVertexData(cubes[i].cubeVertexData, false);
+				renderableComponent->setNumVerticesRender(36);
+				renderableComponent->setColourData(cubes[i].cubeColourData, false);
+				renderableComponent->setTextureCoordsData(cubes[i].cubeTextureCoordsData, false);
+				++i;
+			}
+		}
 	}
-	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
-		cubeColourData.push_back(cubeColours[i]);
-	}
-	for (size_t i = 0; i < sizeof(cubeTextureCoords) / sizeof(GLfloat); ++i) {
-		cubeTextureCoordsData.push_back(cubeTextureCoords[i]);
-	}
-
-	for (int i = 0; i < numCubes; ++i) {
-		cubes[i] = new RenderableComponent();
-		std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
-
-		if (!shader->isLoaded())
-			exit(0);
-
-		cubes[i]->setShader(shader);
-		cubes[i]->setTexture(texture);
-		cubes[i]->setVertexData(cubeVertexData, false);
-		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
-		cubes[i]->setColourData(cubeColourData,false);
-		cubes[i]->setTextureCoordsData(cubeTextureCoordsData, false);
-	}
+	*/
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
-	
-	for (int i = 0; i < numCubes; ++i) {
-		float xPos = 0.0f, yPos = -10.0f, zPos = -50.0f;
+	//Move camera to the position of the player
+	float xPos = 0.0f, yPos = -10.0f, zPos = -50.0f;
+	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
 
-		//Move camera to the position of the player
-		modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
+	//per cube
+	for (int i = 0; i < numCubes; ++i) {
+		if (!(cubes[i].isVisible() && cubes[i].isRenderable()))
+			continue;
+
+		std::shared_ptr<LocationComponent> locationComponent = cubes[i].getLocationComponent();
+		glm::vec3 pos = locationComponent->getPosition();
+
+		modelViewMatrix = glm::translate(baseModelViewMatrix, glm::vec3(pos.x, pos.y, pos.z));
 
 		//Get the renderable component and bind in the shader
-		RenderableComponent* renderableComponent = cubes[i];
+		std::shared_ptr<RenderableComponent> renderableComponent = cubes[i].getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
 
 		if (!objectShader)

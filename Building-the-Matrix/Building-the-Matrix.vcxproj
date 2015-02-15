@@ -76,6 +76,7 @@
     <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Client\clientMain.cpp" />
     <ClCompile Include="src\Client\Socket.cpp" />
+    <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\Display.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
@@ -92,7 +93,9 @@
     <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\SimplexNoise.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\World.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +105,7 @@
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\CommonMinimal.hpp" />
+    <ClInclude Include="src\Cube.hpp" />
     <ClInclude Include="src\Display.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\GameObject.hpp" />
@@ -115,7 +119,9 @@
     <ClInclude Include="src\Physics\Simulator.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />
     <ClInclude Include="src\shader.hpp" />
+    <ClInclude Include="src\SimplexNoise.hpp" />
     <ClInclude Include="src\Texture.hpp" />
+    <ClInclude Include="src\World.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="default_shader.fs" />
