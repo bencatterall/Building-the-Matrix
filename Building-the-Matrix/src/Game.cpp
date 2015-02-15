@@ -112,9 +112,15 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		//Bind textures
 		renderableComponent->bindTextures();
 
-		//draw arrays
-		//TODO add switch to allow index drawing
-		glDrawArrays(GL_TRIANGLES, 0, renderableComponent->getNumVerticesRender());
+		//If we need to use our index buffer
+		if (renderableComponent->usesIndexedVBO()) {
+
+		}
+		else{
+			//draw arrays
+			//TODO add switch to allow index drawing
+			glDrawArrays(GL_TRIANGLES, 0, renderableComponent->getNumVerticesRender());
+		}
 
 		//Release vertex, textures and shaders
 		renderableComponent->releaseTextures();

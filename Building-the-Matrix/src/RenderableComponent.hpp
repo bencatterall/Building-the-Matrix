@@ -71,6 +71,15 @@ class RenderableComponent {
 	GLuint vboColourId = 0;
 
 	///
+	/// The index buffer object identifier for the index buffer
+	///
+	GLuint vboIndexId = 0;
+
+
+	bool useIndexedVBO = false;
+
+
+	///
 	/// The shader used to render this component. This is a pointer because more than
 	/// one RenderableComponent can have the same shader
 	///
@@ -87,8 +96,8 @@ class RenderableComponent {
 	glm::mat4 modelviewMatrix = glm::mat4(1.0);
 
 
-	void setBufferData(GLint bufferID, std::vector<GLfloat> data, bool isDynamic);
-	void updateSubBuffer(GLint bufferID, GLintptr offset, std::vector<GLfloat> data);
+	void setBufferData(GLint bufferID, GLenum bufferType, std::vector<GLfloat> data, bool isDynamic);
+	void updateSubBuffer(GLint bufferID, GLenum bufferType, GLintptr offset, std::vector<GLfloat> data);
 
 public:
 	RenderableComponent();
@@ -120,6 +129,8 @@ public:
 	void setTexture(std::shared_ptr<Texture> texture) { this->texture = texture; }
 
 	std::shared_ptr<Texture> getTexture() { return texture; }
+
+	bool usesIndexedVBO() { return useIndexedVBO; }
 
 	///
 	/// Bind the shader program to the Opengl pipeline to use it for rendering
