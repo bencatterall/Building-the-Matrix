@@ -5,8 +5,8 @@
 #include "Cube.hpp"
 #include "Display.hpp"
 class Game : public Display {
-	int numCubes = 6*6*6;
-	Cube cubes[1000];
+	int numCubes = 50*50*50;
+	Cube* cubes;
 public:
 	void init();
 	//To be overridden

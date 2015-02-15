@@ -10,27 +10,37 @@
 #include <time.h>
 #include "SimplexNoise.hpp"
 void Game::init() {
-	/*
+	cubes = new Cube[numCubes];
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>("resources/textures/grass.png");
+	std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
+	std::shared_ptr<RenderableComponent> renderableComponent = std::make_shared<RenderableComponent>();
+	renderableComponent->setShader(shader);
+	renderableComponent->setTexture(texture);
+	renderableComponent->setVertexData(cubes[0].cubeVertexData, false);
+	renderableComponent->setNumVerticesRender(36);
+	renderableComponent->setColourData(cubes[0].cubeColourData, false);
+	renderableComponent->setTextureCoordsData(cubes[0].cubeTextureCoordsData, false);
 
-	float xPosCenter = 0.0f, yPosCenter = -10.0f, zPosCenter = -50.0f;
+	for (int i = 0; i < numCubes; i++)
+		cubes[i].setRenderableComponent(renderableComponent);
+
+	float xPosCenter = 0.0f, yPosCenter = -10.0f, zPosCenter = -200.0f;
 	//NOTE: Cube[] is 1000 in header, need to update
-	int xLength = 6, yLength = 6, zLength = 6;
+	int xLength = 50, yLength = 50, zLength = 50;
 	SimplexNoise noiseGenerator;
 	//Build up our world
 	int i = 0;
 	for (int x = -xLength / 2; x < xLength/2; ++x) {
 		for (int z = -zLength / 2; z < zLength/2; ++z) {
 			for (int y = -yLength / 2; y < yLength/2; ++y) {
-				std::shared_ptr<RenderableComponent> renderableComponent = cubes[i].getRenderableComponent();
-				std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
-
+				
 				std::shared_ptr<LocationComponent> locationComponent = cubes[i].getLocationComponent();
 				double noise = noiseGenerator.noise(x, y, z);
 				if (noise > 0.4) {
 					cubes[i].setVisible(false);
 					continue;
 				}
+				//todo optmise, only draw if visible
 				float sf = 8.0f;
 				float xPos = sf*(x) + xPosCenter;
 				float yPos = sf*(y) + yPosCenter;
@@ -41,22 +51,15 @@ void Game::init() {
 				if (!shader->isLoaded())
 					exit(0);
 
-				renderableComponent->setShader(shader);
-				renderableComponent->setTexture(texture);
-				renderableComponent->setVertexData(cubes[i].cubeVertexData, false);
-				renderableComponent->setNumVerticesRender(36);
-				renderableComponent->setColourData(cubes[i].cubeColourData, false);
-				renderableComponent->setTextureCoordsData(cubes[i].cubeTextureCoordsData, false);
 				++i;
 			}
 		}
 	}
-	*/
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 	//Move camera to the position of the player
-	float xPos = 0.0f, yPos = -10.0f, zPos = -50.0f;
+	float xPos = 0.0f, yPos = -10.0f, zPos = -200.0f;
 	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
 
 	//per cube

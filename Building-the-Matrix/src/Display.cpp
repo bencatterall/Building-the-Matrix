@@ -315,9 +315,20 @@ void Display::run() {
 
 
 	float dt = 0.0f;
-
+	double lastTime = glfwGetTime();
+	int numFrames = 0;
 	//game loop
 	while (!glfwWindowShouldClose(window)) {
+
+		//Time to draw a frame, averaged over one second
+		double currentTime = glfwGetTime();
+		numFrames++;
+		if (currentTime - lastTime >= 1.0) {
+			//If at least one second passed
+			printf("FPS: %f, %f ms/frame\n", numFrames, 1000.0 / double(numFrames));
+			numFrames = 0;
+			lastTime += 1.0;
+		}
 
 		//networking get updates;
 		//client.receive();

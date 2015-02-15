@@ -33,6 +33,7 @@ public:
 
 	std::shared_ptr<LocationComponent> getLocationComponent() { return locationComponent;  }
 	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
+	void setRenderableComponent(std::shared_ptr<RenderableComponent> renderComp) { renderableComponent = renderComp; }
 	std::shared_ptr<PhysicsObject> getPhysicsComponent() { return physicsObject; }
 
 	bool isRenderable() { return renderable; }
