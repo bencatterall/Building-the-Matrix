@@ -89,13 +89,14 @@
     <ClCompile Include="src\Physics\AABB.cpp" />
     <ClCompile Include="src\Physics\PhysicsMaths.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
-    <ClCompile Include="src\Physics\PhysicsTest.cpp" />
     <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="tests\Catch.cpp" />
+    <ClCompile Include="tests\PhysicsTest.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
   </ItemGroup>
   <ItemGroup>

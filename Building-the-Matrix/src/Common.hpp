@@ -15,11 +15,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vector_relational.hpp>
 
-
 //Enable debug mode
 #define DEBUG
-
-//Enable tests
-//#define TEST
 
 #endif

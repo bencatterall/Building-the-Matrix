@@ -8,6 +8,11 @@
 //https://github.com/g-truc/glm/issues/283
 #define GLM_FORCE_PURE
 
+//Enable tests
+//#define TEST
+//#define TEST_GRAPHICS
+//#define TEST_PHYSICS
+
 typedef int GameObjectID;
 typedef int GameObjectGlobalID;
 

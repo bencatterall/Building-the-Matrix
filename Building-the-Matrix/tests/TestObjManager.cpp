@@ -1,12 +1,12 @@
-#include "../src/Common.hpp"
-#ifdef TEST
+#include "../src/CommonMinimal.hpp"
+
+#ifdef TEST_GRAPHICS
 
 #include <memory>
 
+#include "../src/Common.hpp"
 #include "../src/ObjectManager.hpp"
 #include "../src/GameObject.hpp"
-#define CATCH_CONFIG_MAIN
-#include "../Dependencies/Catch/catch.hpp"
 
 ///
 /// See https://github.com/philsquared/Catch/blob/master/docs/tutorial.md 
