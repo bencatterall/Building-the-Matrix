@@ -11,7 +11,8 @@
 #include <iostream>
 #include <memory>
 #include <glm/gtx/transform.hpp>
-
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 Chunk::Chunk()
 	: Chunk(0.0, 0.0, 0.0)
 {

@@ -1,7 +1,7 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "../CommonMinimal.hpp"
+#include "../Common.hpp"
 #include <glm/vec3.hpp>
 #include <memory>
 #include <vector>

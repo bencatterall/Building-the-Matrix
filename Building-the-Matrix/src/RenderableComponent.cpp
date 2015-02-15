@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ostream>
 
+#include "Common.hpp"
 #include "shader.hpp"
 #include "RenderableComponent.hpp"
 
@@ -71,6 +72,7 @@ void RenderableComponent::bindVBOs() {
 	//TODO: Check this is ok
 	glUniform1i(glGetUniformLocation(shader->getProgram(), "s_texture"), 0);
 }
+
 void RenderableComponent::bindTextures() {
 	glActiveTexture(GL_TEXTURE0);
 	//Bind tiles texture

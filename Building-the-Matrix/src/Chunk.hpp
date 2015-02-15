@@ -3,6 +3,8 @@
 
 #include "Common.hpp"
 #include "GameObject.hpp"
+
+#include <glm/glm.hpp>
 #include <vector>
 
 #define CHUNK_SIZE_X 10

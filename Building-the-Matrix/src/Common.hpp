@@ -1,25 +1,34 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include "CommonMinimal.hpp"
 #include <Windows.h>
 #include "..\Dependencies\glew\glew.h"
 #include "..\Dependencies\GLFW\glfw3.h"
 
-//Include GLM
-//GLM Fix now present in Minimal file.
+// GLM Fixes
+// We need this define for glm 0.9.6.1, it appears that 32-bit msvc++ compiling is broken
+// when not passed by reference
+//
+// see below for the issue on git.
+// https://github.com/g-truc/glm/issues/283
+#define GLM_FORCE_PURE
 #define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vector_relational.hpp>
 
+// Enable tests
+//#define TEST
+//#define TEST_GRAPHICS
+//#define TEST_PHYSICS
 
-//Enable debug mode
+// Enable debug mode
 #define DEBUG
 
-//Enable tests
-//#define TEST
+typedef int GameObjectID;
+typedef int GameObjectGlobalID;
 
 #endif
+
+
+
+
+
+
