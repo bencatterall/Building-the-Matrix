@@ -72,6 +72,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\LodePNG\lodepng.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\Client\Address.cpp" />
     <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Client\clientMain.cpp" />
@@ -100,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
+    <ClInclude Include="src\Chunk.hpp" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Client.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />

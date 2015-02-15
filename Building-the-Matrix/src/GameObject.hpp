@@ -22,6 +22,7 @@ class GameObject {
 
 	bool visible;
 	bool renderable;
+protected:
 	std::shared_ptr<RenderableComponent> renderableComponent;
 	std::shared_ptr<LocationComponent> locationComponent;
 	std::shared_ptr<PhysicsObject> physicsObject;

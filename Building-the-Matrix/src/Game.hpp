@@ -2,11 +2,11 @@
 #define GAME_H
 
 #include "Common.hpp"
-#include "Cube.hpp"
+#include "Chunk.hpp"
 #include "Display.hpp"
 class Game : public Display {
-	int numCubes = 10; // 50 * 50 * 50;
-	Cube* cubes;
+	int numChunks = 1;
+	Chunk* chunks;
 public:
 	void init();
 	//To be overridden

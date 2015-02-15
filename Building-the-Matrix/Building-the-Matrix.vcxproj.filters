@@ -138,6 +138,9 @@
     <ClCompile Include="src\World.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chunk.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp">
@@ -207,6 +210,9 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\World.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chunk.hpp">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

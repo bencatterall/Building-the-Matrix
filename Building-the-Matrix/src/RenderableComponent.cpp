@@ -2,7 +2,6 @@
 #include <iostream>
 #include <ostream>
 
-
 #include "shader.hpp"
 #include "RenderableComponent.hpp"
 
@@ -63,10 +62,11 @@ void RenderableComponent::bindVBOs() {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
 	glVertexAttribPointer(2 /* VERTEX_TEXCOORD0_INDX */, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-	if (usesIndexedVBO) {
+	if (useIndexedVBO) {
 		//Bind the index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboIndexId);
 	}
+
 	//set sampler texture to unit 0
 	//TODO: Check this is ok
 	glUniform1i(glGetUniformLocation(shader->getProgram(), "s_texture"), 0);
