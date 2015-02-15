@@ -126,7 +126,13 @@ void RenderableComponent::setBufferData(GLint bufferID, GLenum bufferType, std::
 
 	if (data.size() > 0) {
 		//Pass in data to the buffer buffer
-		glBufferData(bufferType, data.size() * sizeof(GLfloat), &data[0], usage);
+		if (bufferType == GL_ELEMENT_ARRAY_BUFFER) {
+			glBufferData(bufferType, data.size() * sizeof(GLuint), &data[0], usage);
+		}
+		else {
+			glBufferData(bufferType, data.size() * sizeof(GLfloat), &data[0], usage);
+		}
+
 	}
 	else {
 		//Pass in data to the buffer buffer
@@ -149,7 +155,12 @@ void RenderableComponent::updateSubBuffer(GLint bufferID, GLenum bufferType, GLi
 	//Update the buffer
 	//Update the buffer
 	if (data.size() > 0) {
-		glBufferSubData(bufferType, offset, data.size(), &data[0]);
+		if (bufferType == GL_ELEMENT_ARRAY_BUFFER) {
+			glBufferSubData(bufferType, offset, data.size() * sizeof(GLuint), &data[0]);
+		}
+		else {
+			glBufferSubData(bufferType, offset, data.size() * sizeof(GLfloat), &data[0]);
+		}
 	}
 	else {
 		glBufferSubData(bufferType, offset, 0, nullptr);
