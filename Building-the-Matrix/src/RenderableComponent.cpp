@@ -63,7 +63,7 @@ void RenderableComponent::bindVBOs() {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
 	glVertexAttribPointer(2 /* VERTEX_TEXCOORD0_INDX */, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-	if (usesIndexedVBO) {
+	if (usesIndexedVBO()) {
 		//Bind the index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboIndexId);
 	}
