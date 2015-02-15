@@ -114,11 +114,15 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 
 		//If we need to use our index buffer
 		if (renderableComponent->usesIndexedVBO()) {
-
+			//TODO: Consider using unsigned short rather than unsigned short for memory conservation
+			glDrawElements(
+				GL_TRIANGLES,
+				renderableComponent->getIndexDataSize(),
+				GL_UNSIGNED_INT,
+				nullptr);
 		}
 		else{
 			//draw arrays
-			//TODO add switch to allow index drawing
 			glDrawArrays(GL_TRIANGLES, 0, renderableComponent->getNumVerticesRender());
 		}
 
