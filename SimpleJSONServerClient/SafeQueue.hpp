@@ -1,11 +1,11 @@
+#ifndef SAFEQUEUE_H
+#define SAFEQUEUE_H
+
 #include <queue>
 #include <mutex>
-
-class Update {
-	public:
-		GameObjectGlobalID getObjectID();
-		GameObject getEditedObject();
-};
+#include "GameObject.hpp"
+#include "CommonMinimal.hpp"
+#include "Update.hpp"
 
 template<class C>
 class SafeQueue {
@@ -15,6 +15,8 @@ private:
 public:
 	SafeQueue();
 	~SafeQueue();
+	SafeQueue(const SafeQueue& map); //don't want compiler generating this function as mutexes are uncopyable
 	C popFromFront();
 	void pushToEnd(C update);
 };
+#endif

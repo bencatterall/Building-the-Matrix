@@ -20,21 +20,26 @@ class GameObject {
 	///
 	GameObjectID ID = 0;
 
+	bool visible;
 	bool renderable;
+protected:
 	std::shared_ptr<RenderableComponent> renderableComponent;
 	std::shared_ptr<LocationComponent> locationComponent;
 	std::shared_ptr<PhysicsObject> physicsObject;
 public:
 	///Objects are renderable by default
 	GameObject();
-	GameObject(bool renderable);
+	GameObject(bool renderable, bool visible);
 	~GameObject();
 
 	std::shared_ptr<LocationComponent> getLocationComponent() { return locationComponent;  }
 	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
+	void setRenderableComponent(std::shared_ptr<RenderableComponent> renderComp) { renderableComponent = renderComp; }
 	std::shared_ptr<PhysicsObject> getPhysicsComponent() { return physicsObject; }
 
 	bool isRenderable() { return renderable; }
+	bool isVisible() { return visible; }
+	void setVisible(bool visible) { this->visible = visible; }
 	GameObjectID getID() { return ID; }
 
 	void setGlobalID(GameObjectID globalID) {

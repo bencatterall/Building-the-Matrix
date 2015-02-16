@@ -1,9 +1,14 @@
 #include "Sender.hpp"
 #include <iostream>
 
-Sender::Sender(Socket s) {
-	(this->serverSocket) = s;
+Sender::Sender() {
 	(this->cont) = true;
+}
+
+Sender::~Sender() {}
+
+void Sender::setSocket(Socket s) {
+	(this->serverSocket) = s;
 }
 
 void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message) {

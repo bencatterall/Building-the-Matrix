@@ -2,16 +2,16 @@
 
 Message::Message(Address client, std::map<GameObjectGlobalID, GameObject> message) {
 	 //TODO: turn map into a json string
-	 std::string s = "JSON UPDATE EXAMPLE";
+	 char *s = "JSON UPDATE EXAMPLE";
 	 (this->client) = client;
-	 (this->message) = (s.c_str);
+	 (this->message) = s;
 }
 
 Message::Message(Address client, std::string event) {
 	//TODO: make an ACK message in JSON depending on what event happened e.g. a user logged out
 	std::string s = "JSON EVENT EXAMPLE";
 	(this->client) = client;
-	(this->message) = (s.c_str);
+	(this->message) = "example";
 }
 
 Address Message::getClient() {
@@ -24,4 +24,5 @@ char* Message::getMessage() {
 
 std::map<GameObjectGlobalID, GameObject> Message::parseMessage() {
 	//TODO: parse JSON data from the client's message and calculate updates to return accordingly
+	return std::map<GameObjectGlobalID, GameObject>();
 }

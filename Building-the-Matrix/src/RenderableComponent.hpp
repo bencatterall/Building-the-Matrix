@@ -3,8 +3,10 @@
 #include "Common.hpp"
 #include "shader.hpp"
 #include "Texture.hpp"
+#include <glm/mat4x4.hpp>
 #include <memory>
 #include <vector>
+
 
 ///
 /// This class holds all the referrences to the data needed to render
@@ -34,6 +36,11 @@ class RenderableComponent {
 	/// The buffer holding the vertex data
 	///
 	std::vector<GLfloat> vertexData;
+
+	///
+	/// The indices buffer
+	///
+	std::vector<GLfloat> indexData;
 
 	///
 	/// The number of vertices to render
@@ -66,6 +73,15 @@ class RenderableComponent {
 	GLuint vboColourId = 0;
 
 	///
+	/// The index buffer object identifier for the index buffer
+	///
+	GLuint vboIndexId = 0;
+
+
+	bool useIndexedVBO = false;
+
+
+	///
 	/// The shader used to render this component. This is a pointer because more than
 	/// one RenderableComponent can have the same shader
 	///
@@ -80,6 +96,10 @@ class RenderableComponent {
 	/// the current modelview matrix
 	///
 	glm::mat4 modelviewMatrix = glm::mat4(1.0);
+
+
+	void setBufferData(GLint bufferID, GLenum bufferType, std::vector<GLfloat> data, bool isDynamic);
+	void updateSubBuffer(GLint bufferID, GLenum bufferType, GLintptr offset, std::vector<GLfloat> data);
 
 public:
 	RenderableComponent();
@@ -111,6 +131,8 @@ public:
 	void setTexture(std::shared_ptr<Texture> texture) { this->texture = texture; }
 
 	std::shared_ptr<Texture> getTexture() { return texture; }
+
+	bool usesIndexedVBO() { return useIndexedVBO; }
 
 	///
 	/// Bind the shader program to the Opengl pipeline to use it for rendering
@@ -158,6 +180,23 @@ public:
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
 	///
 	void setVertexData(std::vector<GLfloat> newVertexData, bool isDynamic);
+
+	///
+	/// Get a pointer to the index data
+	///
+	std::vector<GLfloat> getIndexData() { return indexData; }
+
+	///
+	/// Get the size of the vertex data
+	///
+	size_t getIndexDataSize() { return indexData.size(); }
+
+	///
+	/// Set the index data to use for this component.
+	/// @param new_index_data The new data to use for ther indices of this object
+	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static geometry
+	///
+	void setIndexData(std::vector<GLfloat> newIndexData, bool isDynamic);
 
 	///
 	/// Get a pointer to the colour data
@@ -236,5 +275,13 @@ public:
 	/// @param data the data to put into the buffer
 	///
 	void updateColourBuffer(GLintptr offset, std::vector<GLfloat> data);
+
+	///
+	/// Update the indices buffer
+	/// @param offset the byte offset into the buffer
+	/// @param size the size of the data to put into the buffer in bytes
+	/// @param data the data to put into the buffer
+	///
+	void updateIndexBuffer(GLintptr offset, std::vector<GLfloat> data);
 };
 #endif

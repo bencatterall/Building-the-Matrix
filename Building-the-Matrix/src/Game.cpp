@@ -1,214 +1,39 @@
+#include "Chunk.hpp"
 #include "Game.hpp"
 #include "Texture.hpp"
-
+#include "../src/Common.hpp"
+#include "LocationComponent.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <algorithm>
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
+#include "SimplexNoise.hpp"
 
 void Game::init() {
+	//Sahil: You can comment this out
+	chunks = new Chunk[numChunks];
 
-
-	///
-	/// Test data 
-	///
-
-	/**
-	 * The vertices are needed in a counter-clockwise facing orientation
-	 *   6 --- 7
-	 *  /|    /|
-	 * 2 --- 3 |
-	 * | 4 --|-5
-	 * |/    |/
-	 * 0 --- 1
-	 *
-	 *Faces:
-	 *
-	 *
-	 * 2---3
-	 * |   |
-	 * |   |
-	 * 0---1
-	 * is then
-	 *
-	 * 2---3
-	 * |  /
-	 * | /
-	 * 0
-	 * 0-3-2
-	 *     3
-	 *   / |
-	 *  /  |
-	 * 0 --1
-	 * 0-1-3
-	 */
-	GLfloat cubeData[] = {
-		-1.0f, -1.0f, -1.0f, // triangle 1 : begin
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f, // triangle 1 : end
-		1.0f, 1.0f, -1.0f, // triangle 2 : begin
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f, // triangle 2 : end
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-
-		1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f
-	};
-
-	GLfloat cubeColours[] = {
-		1.0f, 1.0f, 1.0f, 1.0f,// triangle 1 : begin
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f, // triangle 1 : end
-		1.0f, 1.0f, 0.5f, 1.0f, // triangle 2 : begin
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f, // triangle 2 : end
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-
-		1.0f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		0.5f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 0.5f, 1.0f,
-		0.5f, 0.5f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 0.5f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f
-	};
-	
-	GLfloat cubeTextureCoords[] = {
-		1.0f, 1.0f,// triangle 1 : begin
-		0.5f, 1.0f, 
-		1.0f, 0.5f, // triangle 1 : end
-		1.0f, 1.0f, // triangle 2 : begin
-		1.0f, 1.0f, 
-		1.0f, 1.0f, // triangle 2 : end
-		1.0f, 0.5f, 
-		1.0f, 1.0f,
-		1.0f, 1.0f, 
-
-		1.0f, 1.0f, 
-		0.5f, 1.0f, 
-		1.0f, 1.0f, 
-
-		0.5f, 1.0f, 
-		0.5f, 1.0f,
-		0.5f, 1.0f, 
-		0.5f, 1.0f, 
-		0.5f, 1.0f, 
-		0.5f, 1.0f, 
-		0.5f, 1.0f,
-		1.0f, 1.0f, 
-		1.0f, 1.0f, 
-		1.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 1.0f, 
-		1.0f, 1.0f,
-		0.5f, 1.0f, 
-		1.0f, 0.5f, 
-		1.0f, 0.5f, 
-		1.0f, 1.0f, 
-		1.0f, 0.5f, 
-		1.0f, 1.0f,
-		1.0f, 1.0f,
-		0.5f, 0.5f, 
-		1.0f, 1.0f, 
-		1.0f, 1.0f, 
-		1.0f, 1.0f, 
-	};
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>("resources/textures/grass.png");
-
-
-	std::vector<GLfloat> cubeVertexData;
-	std::vector<GLfloat> cubeColourData;
-	std::vector<GLfloat> cubeTextureCoordsData;
-
-	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
-		cubeVertexData.push_back(10.0f*cubeData[i]);
-	}
-	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
-		cubeColourData.push_back(cubeColours[i]);
-	}
-	for (size_t i = 0; i < sizeof(cubeTextureCoords) / sizeof(GLfloat); ++i) {
-		cubeTextureCoordsData.push_back(cubeTextureCoords[i]);
-	}
-
-	for (int i = 0; i < numCubes; ++i) {
-		cubes[i] = new RenderableComponent();
-		std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
-
-		if (!shader->isLoaded())
-			exit(0);
-
-		cubes[i]->setShader(shader);
-		cubes[i]->setTexture(texture);
-		cubes[i]->setVertexData(cubeVertexData, false);
-		cubes[i]->setNumVerticesRender((sizeof(cubeData) / sizeof(GLfloat)) / 3);
-		cubes[i]->setColourData(cubeColourData,false);
-		cubes[i]->setTextureCoordsData(cubeTextureCoordsData, false);
-	}
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
-	
-	for (int i = 0; i < numCubes; ++i) {
-		float xPos = 0.0f, yPos = -10.0f, zPos = -50.0f;
+	//Move camera to the position of the player
+	float xPos = 0.0f, yPos = -10.0f, zPos = -300.0f;
+	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
 
-		//Move camera to the position of the player
-		modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
+	//per cube
+	for (int i = 0; i < numChunks; ++i) {
+		if (!(chunks[i].isVisible() && chunks[i].isRenderable()))
+			continue;
+
+		std::shared_ptr<LocationComponent> locationComponent = chunks[i].getLocationComponent();
+		glm::vec3 pos = locationComponent->getPosition();
+
+		modelViewMatrix = glm::translate(baseModelViewMatrix, glm::vec3(pos.x, pos.y, pos.z));
 
 		//Get the renderable component and bind in the shader
-		RenderableComponent* renderableComponent = cubes[i];
+		std::shared_ptr<RenderableComponent> renderableComponent = chunks[i].getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
 
 		if (!objectShader)
@@ -236,9 +61,19 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		//Bind textures
 		renderableComponent->bindTextures();
 
-		//draw arrays
-		//TODO add switch to allow index drawing
-		glDrawArrays(GL_TRIANGLES, 0, renderableComponent->getNumVerticesRender());
+		//If we need to use our index buffer
+		if (renderableComponent->usesIndexedVBO()) {
+			//TODO: Consider using unsigned short rather than unsigned short for memory conservation
+			glDrawElements(
+				GL_TRIANGLES,
+				renderableComponent->getIndexDataSize(),
+				GL_UNSIGNED_INT,
+				nullptr);
+		}
+		else{
+			//draw arrays
+			glDrawArrays(GL_TRIANGLES, 0, renderableComponent->getNumVerticesRender());
+		}
 
 		//Release vertex, textures and shaders
 		renderableComponent->releaseTextures();

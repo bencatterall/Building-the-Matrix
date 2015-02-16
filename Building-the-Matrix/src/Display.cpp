@@ -3,18 +3,25 @@
 #include "ObjectManager.hpp"
 #include "JSON\UpdateManager.hpp"
 #include "Physics\Simulator.hpp"
+#include "../src/Common.hpp"
 
 #include <conio.h>
+#include <iostream>
 #include <memory>
+
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <freeglut/glut.h>
 ovrHmd hmd;
 
+using namespace std;
+
+
+void processSpecialKeys(int key, int x, int y);
 Display::Display() {
 	init();
 }
 void Display::init() {
-
 	//Initialise the OVR and create a HMD
 	ovr_Initialize();
 	hmd = ovrHmd_Create(0);
@@ -75,6 +82,11 @@ void Display::init() {
 
 			width = resolutionW;
 			height = resolutionH;
+		}
+		else {
+			//TODO: Test on other machines
+			width = hmd->Resolution.w;
+			height = hmd->Resolution.h;
 		}
 
 		//prevent resizing of the HMD by the window manager if it's much larger than the normal monitor
@@ -172,6 +184,10 @@ void Display::init() {
 		std::cout << " NO" << std::endl;
 #endif
 	}
+
+	//Init glut's user input listener
+	glutSpecialFunc(processSpecialKeys);
+
 }
 
 ///Test function
@@ -295,12 +311,12 @@ Display::~Display() {
 
 
 void Display::run() {
-
+	Client client;
 	//Create objects
 	try {
-		Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
+		client = Client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
 	}
-	catch (int &i){
+	catch (...){
 		std::cout << "instantiating client connection to server failed";
 	}
 	UpdateManager& updateManager = UpdateManager::getInstance();
@@ -309,9 +325,20 @@ void Display::run() {
 
 
 	float dt = 0.0f;
-
+	double lastTime = glfwGetTime();
+	int numFrames = 0;
 	//game loop
 	while (!glfwWindowShouldClose(window)) {
+
+		//Time to draw a frame, averaged over one second
+		double currentTime = glfwGetTime();
+		numFrames++;
+		if (currentTime - lastTime >= 1.0) {
+			//If at least one second passed
+			std::cout << "FPS: " << numFrames << ". " << (1000.0 / (double)numFrames) << " ms/frame\n" << std::endl;
+			numFrames = 0;
+			lastTime += 1.0;
+		}
 
 		//networking get updates;
 		//client.receive();
@@ -324,6 +351,7 @@ void Display::run() {
 
 		//handle user input
 		//pollInput();
+		
 
 
 		//physics tick 
@@ -419,3 +447,21 @@ void Display::render() {
 	//Don't need to swap buffers, handled by the SDK
 
 }
+
+void processSpecialKeys(int key, int x, int y) {
+	switch (key) {
+		case GLUT_KEY_LEFT:
+			//sen
+			break;
+		case GLUT_KEY_RIGHT:
+			 
+			break;
+		case GLUT_KEY_UP:
+
+			break;
+		case GLUT_KEY_DOWN:
+
+			break;
+	}
+}
+

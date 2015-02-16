@@ -24,7 +24,7 @@ void reader() {
 		try {
 			pendingUpdates.popFromFront();
 		}
-		catch (int& i) {
+		catch (...) {
 			//ignore for now
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -48,7 +48,7 @@ void writerDelete() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(5));
 	}
 }
-
+/*
 int main(int argc, char **argv) {
 	cont = true;
 	std::thread snap(reader);
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 	writer1.join();
 	//writer2.join();
 	if (std::cin.get() == '\n') {}
-}
+} */
 
 /*
 //runs continuously to deal with packets received

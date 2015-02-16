@@ -1,11 +1,12 @@
 #ifndef AABB_H
 #define AABB_H
 
+#include "../Common.hpp"
 #include <glm/vec3.hpp>
 #include <memory>
 #include <vector>
 
-#include "../CommonMinimal.hpp"
+
 
 using glm::vec3;
 

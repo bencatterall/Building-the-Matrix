@@ -5,7 +5,8 @@
 #include "JSON/UpdateManager.hpp"
 #include "Physics\PhysicsObject.hpp"
 
-GameObject::GameObject(bool renderable) : renderable(renderable) {
+GameObject::GameObject(bool renderable, bool visible) :
+	renderable(renderable), visible(visible) {
 	//Get a GUID from the ObjectManager
 	this->ID = ObjectManager::getNextID();
 
@@ -16,7 +17,8 @@ GameObject::GameObject(bool renderable) : renderable(renderable) {
 	}
 }
 
-GameObject::GameObject() : GameObject(true) {
+GameObject::GameObject() : 
+	GameObject(true, true) {
 
 }
 

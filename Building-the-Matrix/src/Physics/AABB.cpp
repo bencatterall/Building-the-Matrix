@@ -1,11 +1,11 @@
-// TODO: Figure out why I am required for RenderableComponent
-#include "../CommonMinimal.hpp"
+#include "../Common.hpp"
 
-#include "AABB.hpp"
-#include "PhysicsMaths.hpp"
+#include <glm/vector_relational.hpp>
+
 #include "../ObjectManager.hpp"
 #include "../RenderableComponent.hpp"
-
+#include "AABB.hpp"
+#include "PhysicsMaths.hpp"
 
 AABB::AABB(const vertexVector vertices)
 {
