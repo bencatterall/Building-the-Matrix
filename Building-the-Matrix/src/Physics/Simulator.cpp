@@ -54,7 +54,7 @@ void Simulator::processCollisions(){
 		{
 			std::shared_ptr<GameObject> gameObj2 = objMan.getObject(gameObjects.at(j));
 			PhysicsObject checkObj = *gameObj2->getPhysicsComponent();
-			if (PhysicsMaths::simpleCollision(currentObj, checkObj)){
+			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObjects.at(i), gameObjects.at(j))){
 				PhysicsMaths::handleCollision(gameObjects.at(i), gameObjects.at(j));
 			}
 		}

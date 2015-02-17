@@ -114,7 +114,24 @@ namespace PhysicsMaths{
 
 	void stepObject(PhysicsObject physObj, float timestep){
 		physObj.setX(UATtoS(physObj.getV(), physObj.getA(), timestep));
-		physObj.setV(UATtoV(physObj.getV(), physObj.getA(), timestep));
+		vec3 newV = UATtoV(physObj.getV(), physObj.getA(), timestep);
+		vec3 acc = physObj.getA();
+		float newVLength = glm::length(newV);
+		if (glm::dot(acc, newV) > 0){
+			acc = acc - (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * newV;
+			if (glm::dot(acc, newV) < 0){
+				physObj.setA(vec3());
+			}
+			else{
+				physObj.setA(acc);
+			}
+		}
+		else{
+			if (glm::dot(acc, newV) < 0){
+				physObj.setA(vec3());
+			}
+		}
+		physObj.setV(newV);
 	}
 
 

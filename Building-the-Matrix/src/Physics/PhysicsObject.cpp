@@ -102,3 +102,11 @@ const vec3 PhysicsObject::getV() const{
 const vec3 PhysicsObject::getA() const{
 	return acc;
 }
+
+float PhysicsObject::getLinDrag() const{
+	return friction;
+}
+
+float PhysicsObject::getQuadDrag() const{
+	return airRes;
+}

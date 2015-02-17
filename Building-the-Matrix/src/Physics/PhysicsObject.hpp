@@ -39,6 +39,8 @@ public:
 	float getMass() const;
 	float getInvMass() const;
 	float getRest() const;
+	float getQuadDrag() const;
+	float getLinDrag() const;
 
 	// TODO: Move me to cpp once implemented
 	vec3 getOrientation() const{
