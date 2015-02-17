@@ -116,9 +116,11 @@ namespace PhysicsMaths{
 		physObj.setX(UATtoS(physObj.getV(), physObj.getA(), timestep));
 		vec3 newV = UATtoV(physObj.getV(), physObj.getA(), timestep);
 		vec3 acc = physObj.getA();
+		// Drag calculations
 		float newVLength = glm::length(newV);
+		// If we are speeding up
 		if (glm::dot(acc, newV) > 0){
-			acc = acc - (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * newV;
+			acc = acc - (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * 1.0f * newV;
 			if (glm::dot(acc, newV) < 0){
 				physObj.setA(vec3());
 			}
@@ -127,7 +129,9 @@ namespace PhysicsMaths{
 			}
 		}
 		else{
+			// If we are slowing down
 			if (glm::dot(acc, newV) < 0){
+				acc = acc + (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * 1.0f * newV;
 				physObj.setA(vec3());
 			}
 		}
@@ -244,13 +248,17 @@ namespace PhysicsMaths{
 	// TODO: Make into generic spin function
 	void turnLeft(const GameObjectID id){
 		GameObject obj = *ObjectManager::getInstance().getObject(id);
-		PhysicsObject phys = *obj.getPhysicsComponent();
-		vec3 dir = phys.getOrientation();
-		Quaternion q = Quaternion(0.02f, 0, 1, 0);
-		Quaternion d = Quaternion(0, dir.x, dir.y, dir.z);
-		Quaternion out = q*d;
-		vec3 left = vec3(out.x, out.y, out.z);
-		phys.setV(left);
-		phys.setOrientation(glm::normalize(left));
+		std::shared_ptr<PhysicsObject> phys = obj.getPhysicsComponent();
+		turnObject(phys, Quaternion(0.02f, 0, 1, 0), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, Quaternion(0.02f, 0, 1, 0), &PhysicsObject::getV, &PhysicsObject::setV);
+
+	}
+
+	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
+		vec3 dir = (*phys.*getter)();
+		Quaternion oldVector = Quaternion(0, dir.x, dir.y, dir.z);
+		Quaternion out = rotator*oldVector;
+		vec3 updated = vec3(out.x, out.y, out.z);
+		(*phys.*setter)(updated);
 	}
 }

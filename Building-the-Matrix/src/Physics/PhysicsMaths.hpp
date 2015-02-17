@@ -3,8 +3,7 @@
 
 #include "../Common.hpp"
 
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <vector>
 #include <memory>
 
@@ -16,6 +15,7 @@ class AABB;
 class PhysicsObject;
 
 typedef std::vector<vec3> vertexVector;
+typedef glm::quat Quaternion;
 
 namespace PhysicsMaths
 {
@@ -42,6 +42,7 @@ namespace PhysicsMaths
 	void reversePlayer(const GameObjectID);
 
 	void turnLeft(const GameObjectID);
+	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 };
 
 #endif
