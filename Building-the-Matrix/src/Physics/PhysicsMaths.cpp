@@ -150,7 +150,32 @@ namespace PhysicsMaths{
 		float speed = glm::length(dir);
 		vec3 A = phys.getA();
 		// TODO: Consider further mechanisms for determining power
+		// TODO: Adjust arbitrary constant according to playtesting
 		phys.setA(A + glm::normalize(dir)*(5-speed));
 	}
+
+	void reversePlayer(const GameObjectID id){
+		GameObject obj = *ObjectManager::getInstance().getObject(id);
+		PhysicsObject phys = *obj.getPhysicsComponent();
+		vec3 dir = phys.getOrientation();
+		float speed = glm::length(dir);
+		vec3 A = phys.getA();
+		// TODO: Adjust arbitrary constant according to playtesting
+		phys.setA(A + glm::normalize(dir)*(-2-speed));
+	}
+
+	// TODO: Make into generic spin function
+	void turnLeft(const GameObjectID id){
+		GameObject obj = *ObjectManager::getInstance().getObject(id);
+		PhysicsObject phys = *obj.getPhysicsComponent();
+		vec3 dir = phys.getOrientation();
+		Quaternion q = Quaternion(0.02f, 0, 1, 0);
+		Quaternion d = Quaternion(0, dir.x, dir.y, dir.z);
+		Quaternion out = q*d;
+		vec3 left = vec3(out.x, out.y, out.z);
+		phys.setV(left);
+		phys.setOrientation(glm::normalize(left));
+	}
+
 
 }
