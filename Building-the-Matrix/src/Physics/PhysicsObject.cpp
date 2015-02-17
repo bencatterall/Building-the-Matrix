@@ -5,49 +5,15 @@
 #include "PhysicsMaths.hpp"
 
 
-PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> location)
-	: mass(1), inverseMass(1),
-	restitution(1), vertices(vertices),
-	velocity(vec3()), position(vec3()),
-	boundingBox(std::make_shared<AABB>(vertexVector()))
-{
-	location = location;
-}
-
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
 	: mass(1), inverseMass(1),
 	restitution(1), vertices(vertices),
 	velocity(vec3()), position(vec3())
 {
-	location = locationComp;
+	this->location = locationComp;
+	this->rendComp = rendComp;
 	boundingBox = std::make_shared<AABB>(PhysicsMaths::convertGLfloatToVec3(rendComp->getVertexData()));
 }
-
-#ifdef Refactor
-PhysicsObject::PhysicsObject(vertexVector vertices)
-	: mass(1), inverseMass(1),
-	restitution(1), vertices(vertices),
-	boundingBox(new AABB(vertices)), velocity(vec3()),
-	position(vec3())
-{
-}
-
-PhysicsObject::PhysicsObject(vertexVector vertices, vec3 pos, float mass, float rest)
-	: mass(mass), inverseMass(mass ? 1 / mass : 0),
-	restitution(rest), vertices(vertices),
-	boundingBox(new AABB(vertices)), velocity(vec3()),
-	position(vec3())
-{
-}
-
-PhysicsObject::PhysicsObject(vertexVector vertices, vec3 pos, vec3 velocity, float mass, float rest)
-	: mass(mass), inverseMass(mass ? 1 / mass : 0),
-	restitution(rest), vertices(vertices),
-	boundingBox(new AABB(vertices)), velocity(velocity),
-	position(pos)
-{
-}
-#endif
 
 PhysicsObject::~PhysicsObject()
 {
@@ -109,4 +75,12 @@ float PhysicsObject::getLinDrag() const{
 
 float PhysicsObject::getQuadDrag() const{
 	return airRes;
+}
+
+const vec3 PhysicsObject::getOrientation() const{
+	return orientation;
+}
+
+void PhysicsObject::setOrientation(vec3 & v){
+	orientation = glm::normalize(v);
 }
