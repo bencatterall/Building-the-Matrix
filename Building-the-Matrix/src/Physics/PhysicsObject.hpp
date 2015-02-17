@@ -44,6 +44,9 @@ public:
 	vec3 getOrientation() const{
 		return orientation;
 	}
+	void setOrientation(const vec3 & v){
+		orientation = v;
+	}
 
 
 protected:
