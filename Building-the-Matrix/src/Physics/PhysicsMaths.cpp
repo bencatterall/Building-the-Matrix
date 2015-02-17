@@ -72,8 +72,6 @@ namespace PhysicsMaths{
 	}
 
 	void handleCollision(GameObjectID aID, GameObjectID bID){
-
-		// TODO: Requires handling of complex collision
 		ObjectManager& objMan = ObjectManager::getInstance();
 		GameObject objA = *objMan.getObject(aID);
 		GameObject objB = *objMan.getObject(bID);
@@ -153,4 +151,65 @@ namespace PhysicsMaths{
 		phys.setA(A + glm::normalize(dir)*(5-speed));
 	}
 
+	bool complexCollision(const GameObjectID a, const GameObjectID b){
+		ObjectManager & obj = ObjectManager::getInstance();
+		std::shared_ptr<PhysicsObject> aObj = obj.getObject(a)->getPhysicsComponent();
+		std::shared_ptr<PhysicsObject> bObj = obj.getObject(b)->getPhysicsComponent();
+		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
+		std::shared_ptr<vertexVector> bBox = bObj->getLocalAABB().getFullBox();
+		std::shared_ptr<vertexVector> aBoxWorld = translateVertexVector(obj.getObject(a)->getRenderableComponent()->getProjectionMatrix(), aBox);
+		std::shared_ptr<vertexVector> bBoxWorld = translateVertexVector(obj.getObject(b)->getRenderableComponent()->getProjectionMatrix(), bBox);
+		
+		// Generate planes to check to see if they are seperated by that plane
+		for (size_t i = 0; i < 3; i++){
+			// Generate the normals of each plane
+			if (sat(glm::normalize(aBoxWorld->at(0) - aBoxWorld->at(1 << i)), aObj, bObj, aBoxWorld, bBoxWorld)){
+				// If they are separated, the objects don't collide
+				return false;
+			}
+			// Generate the planes of each face
+			for (size_t j = 0; j < 3; j++){
+				vec3 vec = glm::cross(glm::normalize(aBoxWorld->at(0) - aBoxWorld->at(1 << i)), glm::normalize(bBoxWorld->at(0) - bBoxWorld->at(1 << j)));
+				if (sat(vec, aObj, bObj, aBoxWorld, bBoxWorld)){
+					return false;
+				}
+			}
+			if (sat(glm::normalize(bBoxWorld->at(0) - bBoxWorld->at(1 << i)), aObj, bObj, aBoxWorld, bBoxWorld)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// Return true if the plane specified by the vec3 parts the two PhysicsObjects
+	// Verbosely: If there exists a(n arbitrary) plane which has normal v 
+	// which separates the two objects, return true
+	bool sat(const vec3 & v, std::shared_ptr<PhysicsObject> physA, std::shared_ptr<PhysicsObject> physB, std::shared_ptr<vertexVector> aBoxWorld, std::shared_ptr<vertexVector> bBoxWorld){
+		// Note the projection of a onto b is (a.b/b.b)b -> which can be simplifiedto test only a.b
+		float maxA, maxB, minA, minB;
+		float a = glm::dot(v, aBoxWorld->at(0));
+		float b = glm::dot(v, bBoxWorld->at(0));
+		minA = a;
+		maxA = a;
+		minB = b;
+		maxB = b;
+		for (size_t i = 1; i < 8; i++){
+			a = glm::dot(v, aBoxWorld->at(i));
+			if (a > maxA){
+				maxA = a;
+			}
+			else if (a < minA){
+				minA = a;
+			}
+			b = glm::dot(v, bBoxWorld->at(i));
+			if (b > maxA){
+				maxB = b;
+			}
+			else if (b < minA){
+				minB = b;
+			}
+		}
+		// If the projections onto the axis don't overlap
+		return (maxA < minB || maxB < minA);
+	}
 }
