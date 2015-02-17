@@ -450,18 +450,20 @@ void Display::render() {
 
 void processSpecialKeys(int key, int x, int y) {
 	switch (key) {
-		case GLUT_KEY_LEFT:
-			//sen
-			break;
-		case GLUT_KEY_RIGHT:
-			 
-			break;
 		case GLUT_KEY_UP:
 
 			break;
 		case GLUT_KEY_DOWN:
 
 			break;
+		case GLUT_KEY_LEFT:
+			
+			break;
+		case GLUT_KEY_RIGHT:
+			 
+			break;
+
+		
 	}
 }
 
