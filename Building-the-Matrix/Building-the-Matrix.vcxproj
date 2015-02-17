@@ -76,7 +76,6 @@
     <ClCompile Include="src\Client\Address.cpp" />
     <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Client\clientMain.cpp" />
-    <ClCompile Include="src\Client\MessageConstants.cpp" />
     <ClCompile Include="src\Client\Socket.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\Display.cpp" />
@@ -106,7 +105,6 @@
     <ClInclude Include="src\Chunk.hpp" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Client.hpp" />
-    <ClInclude Include="src\Client\MessageConstants.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\Cube.hpp" />

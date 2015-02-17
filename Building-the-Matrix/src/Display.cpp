@@ -311,6 +311,7 @@ Display::~Display() {
 
 
 void Display::run() {
+#ifdef MESSAGE_CONSTANTS_H
 	Client client;
 	//Create objects
 	try {
@@ -319,6 +320,7 @@ void Display::run() {
 	catch (...){
 		std::cout << "instantiating client connection to server failed";
 	}
+#endif
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 	Simulator& simulator = Simulator::getInstance();

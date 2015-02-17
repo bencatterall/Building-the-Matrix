@@ -1,3 +1,4 @@
+#ifdef MESSAGE_CONSTANTS_H
 #ifndef CLIENT_H
 #define CLIENT_H
 
@@ -24,4 +25,4 @@ public:
 };
 
 #endif
-
+#endif

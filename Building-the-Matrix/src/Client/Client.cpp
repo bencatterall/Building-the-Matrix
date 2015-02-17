@@ -1,3 +1,4 @@
+#ifdef MESSAGE_CONSTANTS_H
 /**
 	Client.cpp
 	Purpose: For game loop to access sending/receiving messages facilities
@@ -57,3 +58,4 @@ int Client::receive(char *data) {
 	int bytes_read = (this->socket).receive(sender, (char *)data, sizeof(data));
 	return bytes_read;
 }
+#endif
