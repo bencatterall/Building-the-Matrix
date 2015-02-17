@@ -47,15 +47,22 @@ bool Client::sendLogout() {
 }
 
 //attempts to send the bytestream given as an argument, and returns true if succesful
-bool Client::send(char *data) {
+bool Client::send(const char *data) {
 	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
 }
 
 //returns number of bytes read from packet in the buffer - if this function returns < 0 it means there was no packet to read
 //else it gives the number of bytes that were received
-int Client::receive(char *data) {
+int Client::receive(const char *data) {
 	Address sender;
 	int bytes_read = (this->socket).receive(sender, (char *)data, sizeof(data));
+	if (bytes_read) {
+		time_last_updated = std::chrono::system_clock::now();
+	}
 	return bytes_read;
 }
 #endif
+
+std::chrono::time_point<std::chrono::system_clock> Client::getTimeLastUpdated() const {
+	return time_last_updated;
+}
