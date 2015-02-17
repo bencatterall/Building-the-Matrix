@@ -34,6 +34,16 @@ namespace PhysicsMaths{
 	// Tests for global-axis aligned bounding box collision.
 	// @param a,b - the two PhysicsObject items to check with
 	// @return true if they collide
+	bool simpleCollision(const GameObjectID a, const GameObjectID b){
+		ObjectManager & obj = ObjectManager::getInstance();
+		GameObject aObj = *obj.getObject(a);
+		GameObject bObj = *obj.getObject(b);
+		return simpleCollision(*aObj.getPhysicsComponent(), *bObj.getPhysicsComponent());
+	}
+
+	// Tests for global-axis aligned bounding box collision.
+	// @param a,b - the two PhysicsObject items to check with
+	// @return true if they collide
 	bool simpleCollision(const PhysicsObject a, const PhysicsObject b){
 		return simpleCollision(*a.getWorldAABB(), *b.getWorldAABB());
 	}
