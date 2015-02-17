@@ -9,18 +9,19 @@
 #include <iostream>
 #include <memory>
 
-
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <freeglut/glut.h>
 ovrHmd hmd;
 
 using namespace std;
 
+
+void processSpecialKeys(int key, int x, int y);
 Display::Display() {
 	init();
 }
 void Display::init() {
-
 	//Initialise the OVR and create a HMD
 	ovr_Initialize();
 	hmd = ovrHmd_Create(0);
@@ -82,6 +83,11 @@ void Display::init() {
 			width = resolutionW;
 			height = resolutionH;
 		}
+		else {
+			//TODO: Test on other machines
+			width = hmd->Resolution.w;
+			height = hmd->Resolution.h;
+		}
 
 		//prevent resizing of the HMD by the window manager if it's much larger than the normal monitor
 		glfwWindowHint(GLFW_DECORATED, 0);
@@ -117,8 +123,6 @@ void Display::init() {
 	glfwSwapInterval(1);
 	glfwSetKeyCallback(window, key_callback);
 
-	//init GLEW
-	glewInit();
 
 	//get texture sizes
 	ovrSizei eyeSize[2];
@@ -178,6 +182,10 @@ void Display::init() {
 		std::cout << " NO" << std::endl;
 #endif
 	}
+
+	//Init glut's user input listener
+	glutSpecialFunc(processSpecialKeys);
+
 }
 
 ///Test function
@@ -301,14 +309,16 @@ Display::~Display() {
 
 
 void Display::run() {
-
+#ifdef MESSAGE_CONSTANTS_H
+	Client client;
 	//Create objects
 	try {
-		Client client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
+		client = Client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
 	}
 	catch (...){
 		std::cout << "instantiating client connection to server failed";
 	}
+#endif
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 	Simulator& simulator = Simulator::getInstance();
@@ -341,6 +351,7 @@ void Display::run() {
 
 		//handle user input
 		//pollInput();
+		
 
 
 		//physics tick 
@@ -436,3 +447,23 @@ void Display::render() {
 	//Don't need to swap buffers, handled by the SDK
 
 }
+
+void processSpecialKeys(int key, int x, int y) {
+	switch (key) {
+		case GLUT_KEY_UP:
+
+			break;
+		case GLUT_KEY_DOWN:
+
+			break;
+		case GLUT_KEY_LEFT:
+			
+			break;
+		case GLUT_KEY_RIGHT:
+			 
+			break;
+
+		
+	}
+}
+

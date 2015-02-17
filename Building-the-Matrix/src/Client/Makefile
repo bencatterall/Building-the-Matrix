@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall --pedantic
 CXXFLAGS += -I../../Dependencies
 DEPS = Address.hpp Socket.hpp
-OBJ = Address.o Socket.o clientMain.o
+OBJ = Address.o Socket.o clientMain.o Client.o
 
 tests: TestClientNetworking
 	./$^

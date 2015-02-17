@@ -1,6 +1,6 @@
-#include "Server.hpp"
-#include "UpdateManager.hpp"
+#include "Socket.hpp"
 #include "Address.hpp"
+#include "UpdateManager.hpp"
 #include "Sender.hpp"
 #include <iostream>
 #include <string>
@@ -11,11 +11,12 @@
 UpdateManager updateManager;
 Socket mySocket;
 std::vector <Address> clients;
+std::vector <std::pair<Address, GameObjectGlobalID>> playerIDs;
 Sender sender;
-bool cont;
+bool contMain;
 
 void broadcast() {
-	while (cont) {
+	while (contMain) {
 		for (Address client : clients) {
 			//send snapshot back
 			std::map<GameObjectGlobalID, GameObject> toSend = updateManager.flushUpdates();
@@ -27,7 +28,7 @@ void broadcast() {
 
 void quit() {
 	if (std::cin.get() == '\n') {
-		cont = false;
+		contMain = false;
 	}
 }
 
@@ -71,8 +72,10 @@ int main(int argc, char **argv) {
 	std::vector < GameObject > initialObjects;
 	//TODO: push initial objects
 
-	updateManager = UpdateManager(initialObjects);
-	sender = Sender(mySocket);
+	
+	updateManager.setInitialObjects(initialObjects);
+	sender.setSocket(mySocket);
+	
 	//start update manager run method in new thread
 	std::thread makeUpdates(&UpdateManager::run, updateManager);
 
@@ -84,9 +87,9 @@ int main(int argc, char **argv) {
 
 	//start listener fo quitting
 	std::thread quit(quit);
-
+	
 	//start receive then update loop in this thread
-	while (cont) {
+	while (contMain) {
 		//try to receive updates
 		Address recFrom;
 		unsigned char buffer[256];
@@ -96,7 +99,8 @@ int main(int argc, char **argv) {
 			//check what type of message was received
 			std::string message((char *)buffer);
 
-			if (message.compare("LOGIN") == 0) {
+			//HANDLE LOGINS
+			if (message.compare(0,5,"LOGIN") == 0) {
 				bool copy = false;
 				std::cout << "Server received login request \n";
 				for (Address s : clients) {
@@ -110,14 +114,19 @@ int main(int argc, char **argv) {
 				if (!copy) {
 					std::cout << "Added client to current list connected with address = " << recFrom.getHBOAddress() << " at port = " << recFrom.getHBOPort() << "\n";
 					clients.push_back(recFrom);
+					//create their car for the game, using the unique global ID they send with the login
+					int ID = atoi((message.substr(6, message.length() - 1)).c_str());
+					playerIDs.push_back(std::pair<Address,GameObjectGlobalID>(recFrom,ID));
+					updateManager.queueUpdate(GameObject(ID,true));
 				}
 				const char data[] = "LOGIN ACCEPTED";
 				sender.sendAck(recFrom, data);
 			}
-
+			//HANDLE LOGOUTS
 			else if (message.compare("LOGOUT") == 0) {
 				std::cout << "Server received logout request \n";
 				std::vector<Address>::iterator it;
+				std::vector<std::pair<Address,GameObjectGlobalID>>::iterator it2;
 				for (it = clients.begin(); it < clients.end(); it++) {
 					if ((it->getAddress() == recFrom.getAddress()) && (it->getPort() == recFrom.getPort())) {
 						clients.erase(it);
@@ -125,7 +134,40 @@ int main(int argc, char **argv) {
 						break;
 					}
 					else {
-						sender.sendAck((*it),"A fellow player has left the game");
+						const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
+						sender.sendAck((*it),data);
+					}
+				}
+				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it++) {
+					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
+						updateManager.remove(it2->second);
+						playerIDs.erase(it2);
+						std::cout << "removed from current IDs \n";
+						break;
+					}
+				}
+			}
+			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
+			//MOVE NEED: (rot roll, pitch, yaw)
+			else if (message.compare(0,7,"PRESSED") == 0) {
+				char key = buffer[8];
+				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
+					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
+						GameObject o = updateManager.getGameObject(e.second);
+						o.keyPressed(key);
+						updateManager.queueUpdate(o);
+						break;
+					}
+				}
+			}
+			else if (message.compare(0,9,"UNPRESSED") == 0) {
+				char key = buffer[10];
+				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
+					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
+						GameObject o = updateManager.getGameObject(e.second);
+						o.keyUnpressed(key);
+						updateManager.queueUpdate(o);
+						break;
 					}
 				}
 			}
@@ -134,8 +176,7 @@ int main(int argc, char **argv) {
 				std::cout << "Unknown message received\n";
 			}
 		}
-		//call updateManager accordingly
-		//run physics
+		//RUN PHYSICS HERE
 	}
 
 	std::cout << "quitting the server";

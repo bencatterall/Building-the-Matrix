@@ -6,21 +6,25 @@ void UpdateManager::updateObject(Update u) {
 	(this->updatedObjectsForClients).put(u.getObjectID(), u.getEditedObject());
 }
 
-UpdateManager::UpdateManager(std::vector<GameObject> initialGameObjects) {
+UpdateManager::UpdateManager() {
+	(this->cont) = true;
+}
+
+void UpdateManager::setInitialObjects(std::vector<GameObject> initialGameObjects) {
 	for (GameObject go : initialGameObjects) {
 		gameObjectsWorldState.put(go.getID(), go);
 	}
-	(this->cont) = true;
 }
 
 UpdateManager::~UpdateManager(){}
 
-void UpdateManager::queueUpdate(Update update) {
-	(this->pendingUpdates).pushToEnd(update);
+void UpdateManager::queueUpdate(GameObject object) {
+	(this->pendingUpdates).pushToEnd(Update(object.getID(), object));
 }
 
-void UpdateManager::queueUpdates(Message clientUpdate) {
-	//TODO: Use Message function to parse the JSON then add each resulting update to the queue
+void UpdateManager::remove(GameObjectGlobalID id) {
+	GameObject o = (this->gameObjectsWorldState).get(id);
+	(this->pendingUpdates).pushToEnd(Update(o.getID(), o, 1));
 }
 
 std::map<GameObjectGlobalID, GameObject> UpdateManager::flushUpdates() {
@@ -31,11 +35,22 @@ std::map<GameObjectGlobalID, GameObject> UpdateManager::getState() {
 	return (this->gameObjectsWorldState).getSnapshot();
 }
 
+GameObject UpdateManager::getGameObject(GameObjectGlobalID id) {
+	return (this->gameObjectsWorldState).get(id);
+}
+
 void UpdateManager::run() {
 	while (this->cont) {
 		try {
 			Update u = (this->pendingUpdates).popFromFront();
-			updateObject(u);
+			if (u.forDeletion()) {
+				(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
+				//client will need to check for deletion too
+				(this->updatedObjectsForClients).put(u.getObjectID(), u.getEditedObject());
+			}
+			else {
+				updateObject(u);
+			}
 		}
 		catch (int& i) {
 			//ignore, just don't need to carry out any operation if no updates are pending

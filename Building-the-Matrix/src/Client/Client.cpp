@@ -1,3 +1,4 @@
+#ifdef MESSAGE_CONSTANTS_H
 /**
 	Client.cpp
 	Purpose: For game loop to access sending/receiving messages facilities
@@ -16,57 +17,52 @@ Client::Client(Address client, Address server) {
 		throw int(1);
 	}
 	this->server = server;
-	/* will add back in when we're accessing the server
-	bool confirmed = false;
-	int attempts = 0;
-	char data[] = "LOGIN";
-	if (!(this->send(data))) {
-		std::cerr << "Failed to send message";
-		throw int(3);
-	}
-	attempts++;
-	while (!confirmed) {
-		//resend login request if server doesn't reply within a second
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		Address sender;
-		unsigned char buffer[256];
-		int bytes_read = this->receive((char *)buffer);
-		if (bytes_read >= 0) {
-			std::string recmessage((char *)buffer);
-			std::cout << "Client received message: " << recmessage << "\n";
-			confirmed = true;
-		}
-		else {
-			if (attempts == 5) {
-				throw int(2);
-			}
-			if (!(this->send(data))) {
-				std::cerr << "Failed to send message";
-				throw int(3);
-			}
-			attempts++;
-		}
-	}
-	*/
 }
 
 //on client deletion, cleans up used resources
 Client::~Client() {
-	const char data[] = "LOGOUT";
-	if (!(this->send((char *)data))) {
+	if (!(this->sendLogout())) {
 		std::cerr << "Failed to send message";
 	}
 }
 
+bool Client::sendKeyPress(char key) {
+	const char *data = constants.keyPressMessage(key);
+	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+}
+
+bool Client::sendKeyUnpress(char key) {
+	const char *data = constants.keyUnpressMessage(key);
+	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+}
+
+bool Client::sendLoginRequest(GameObjectGlobalID id) {
+	const char *data = constants.loginMessage(id);
+	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+}
+
+bool Client::sendLogout() {
+	const char *data = constants.logoutMessage();
+	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+}
+
 //attempts to send the bytestream given as an argument, and returns true if succesful
-bool Client::send(char *data) {
+bool Client::send(const char *data) {
 	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
 }
 
 //returns number of bytes read from packet in the buffer - if this function returns < 0 it means there was no packet to read
 //else it gives the number of bytes that were received
-int Client::receive(char *data) {
+int Client::receive(const char *data) {
 	Address sender;
 	int bytes_read = (this->socket).receive(sender, (char *)data, sizeof(data));
+	if (bytes_read) {
+		time_last_updated = std::chrono::system_clock::now();
+	}
 	return bytes_read;
+}
+#endif
+
+std::chrono::time_point<std::chrono::system_clock> Client::getTimeLastUpdated() const {
+	return time_last_updated;
 }

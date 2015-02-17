@@ -1,3 +1,6 @@
+#ifndef UPDATEMANAGER_H
+#define UPDATEMANAGER_H
+
 #include "SafeMap.hpp"
 #include "SafeQueue.hpp"
 #include "Message.hpp"
@@ -11,14 +14,17 @@ class UpdateManager {
 		void updateObject(Update u);
 
 	public:
-		UpdateManager(std::vector<GameObject> initialGameObjects);
+		UpdateManager();
+		void setInitialObjects(std::vector<GameObject> initialGameObjects);
 		~UpdateManager();
+		UpdateManager(const UpdateManager& updateManager){} //don't want compiler generating this function as mutexes are uncopyable
 		//for physics to call
-		void queueUpdate(Update update);
-		//for received messages from clients
-		void queueUpdates(Message updates);
+		void queueUpdate(GameObject object);
+		void remove(GameObjectGlobalID id);
 		std::map<GameObjectGlobalID, GameObject> flushUpdates();
 		std::map<GameObjectGlobalID, GameObject> getState();
+		GameObject getGameObject(GameObjectGlobalID id);
 		void run();
 		void stop();
 };
+#endif

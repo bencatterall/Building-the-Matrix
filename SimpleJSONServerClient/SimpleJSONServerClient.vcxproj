@@ -66,17 +66,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Address.hpp" />
+    <ClInclude Include="CommonMinimal.hpp" />
+    <ClInclude Include="Controls.hpp" />
+    <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="Message.hpp" />
     <ClInclude Include="SafeMap.hpp" />
     <ClInclude Include="SafeQueue.hpp" />
     <ClInclude Include="Sender.hpp" />
-    <ClInclude Include="Server.h" />
-    <ClInclude Include="Server.hpp" />
-    <ClInclude Include="ServerMain.h" />
     <ClInclude Include="Socket.hpp" />
+    <ClInclude Include="Update.hpp" />
+    <ClInclude Include="UpdateManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Address.cpp" />
+    <ClCompile Include="Controls.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="SafeMap.cpp" />
     <ClCompile Include="SafeQueue.cpp" />
@@ -84,6 +88,8 @@
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="ServerMain.cpp" />
+    <ClCompile Include="Update.cpp" />
+    <ClCompile Include="UpdateManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

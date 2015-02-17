@@ -34,6 +34,16 @@ namespace PhysicsMaths{
 	// Tests for global-axis aligned bounding box collision.
 	// @param a,b - the two PhysicsObject items to check with
 	// @return true if they collide
+	bool simpleCollision(const GameObjectID a, const GameObjectID b){
+		ObjectManager & obj = ObjectManager::getInstance();
+		GameObject aObj = *obj.getObject(a);
+		GameObject bObj = *obj.getObject(b);
+		return simpleCollision(*aObj.getPhysicsComponent(), *bObj.getPhysicsComponent());
+	}
+
+	// Tests for global-axis aligned bounding box collision.
+	// @param a,b - the two PhysicsObject items to check with
+	// @return true if they collide
 	bool simpleCollision(const PhysicsObject a, const PhysicsObject b){
 		return simpleCollision(*a.getWorldAABB(), *b.getWorldAABB());
 	}
@@ -131,6 +141,16 @@ namespace PhysicsMaths{
 			result->assign(i, translateVertex(matrix, result->at(i)));
 		}
 		return result;
+	}
+
+	void acceleratePlayer(const GameObjectID id){
+		GameObject obj = *ObjectManager::getInstance().getObject(id);
+		PhysicsObject phys = *obj.getPhysicsComponent();
+		vec3 dir = phys.getOrientation();
+		float speed = glm::length(dir);
+		vec3 A = phys.getA();
+		// TODO: Consider further mechanisms for determining power
+		phys.setA(A + glm::normalize(dir)*(5-speed));
 	}
 
 }

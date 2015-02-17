@@ -1,3 +1,6 @@
+#ifndef MESSAGE_H
+#define MESSAGE_H
+
 #include "Address.hpp"
 #include "SafeMap.hpp"
 //THIS IS WHERE JSON WILL NEED TO CONVERT THE MAPS WE WANT TO SEND INTO STRING
@@ -13,3 +16,4 @@ class Message {
 		char* getMessage();
 		std::map<GameObjectGlobalID, GameObject> parseMessage();
 };
+#endif
