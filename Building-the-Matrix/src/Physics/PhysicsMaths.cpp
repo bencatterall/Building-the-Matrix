@@ -158,17 +158,6 @@ namespace PhysicsMaths{
 		return result;
 	}
 
-	void acceleratePlayer(const GameObjectID id){
-		GameObject obj = *ObjectManager::getInstance().getObject(id);
-		PhysicsObject phys = *obj.getPhysicsComponent();
-		vec3 dir = phys.getOrientation();
-		float speed = glm::length(dir);
-		vec3 A = phys.getA();
-		// TODO: Consider further mechanisms for determining power
-		// TODO: Adjust arbitrary constant according to playtesting
-		phys.setA(A + glm::normalize(dir)*(5-speed));
-	}
-
 	bool complexCollision(const GameObjectID a, const GameObjectID b){
 		ObjectManager & obj = ObjectManager::getInstance();
 		std::shared_ptr<PhysicsObject> aObj = obj.getObject(a)->getPhysicsComponent();
@@ -230,6 +219,18 @@ namespace PhysicsMaths{
 		// If the projections onto the axis don't overlap
 		return (maxA < minB || maxB < minA);
 	}
+
+	void acceleratePlayer(const GameObjectID id){
+		GameObject obj = *ObjectManager::getInstance().getObject(id);
+		PhysicsObject phys = *obj.getPhysicsComponent();
+		vec3 dir = phys.getOrientation();
+		float speed = glm::length(dir);
+		vec3 A = phys.getA();
+		// TODO: Consider further mechanisms for determining power
+		// TODO: Adjust arbitrary constant according to playtesting
+		phys.setA(A + glm::normalize(dir)*(5 - speed));
+	}
+
 
 	void reversePlayer(const GameObjectID id){
 		GameObject obj = *ObjectManager::getInstance().getObject(id);
