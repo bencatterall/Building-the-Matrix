@@ -40,6 +40,11 @@ public:
 	float getInvMass() const;
 	float getRest() const;
 
+	// TODO: Move me to cpp once implemented
+	vec3 getOrientation() const{
+		return orientation;
+	}
+
 
 protected:
 
@@ -60,7 +65,7 @@ private:
 
 	// TODO implement these
 	Quaternion spin;
-	Quaternion orientation;
+	vec3 orientation;
 	vec3 angularVelocity;
 	vec3 angulurMomentum;
 	vec3 torque;

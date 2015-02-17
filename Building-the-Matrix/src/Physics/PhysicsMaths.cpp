@@ -143,4 +143,14 @@ namespace PhysicsMaths{
 		return result;
 	}
 
+	void acceleratePlayer(const GameObjectID id){
+		GameObject obj = *ObjectManager::getInstance().getObject(id);
+		PhysicsObject phys = *obj.getPhysicsComponent();
+		vec3 dir = phys.getOrientation();
+		float speed = glm::length(dir);
+		vec3 A = phys.getA();
+		// TODO: Consider further mechanisms for determining power
+		phys.setA(A + glm::normalize(dir)*(5-speed));
+	}
+
 }
