@@ -123,6 +123,19 @@ void Display::init() {
 	glfwSwapInterval(1);
 	glfwSetKeyCallback(window, key_callback);
 
+	//Init GLEW
+	glewInit();
+	if (glewIsSupported("GL_VERSION_4_5")) {
+#ifdef DEBUG
+		std::cout << "YES" << std::endl;
+#endif
+	}
+	else {
+#ifdef DEBUG
+		std::cout << " NO" << std::endl;
+#endif
+	}
+
 
 	//get texture sizes
 	ovrSizei eyeSize[2];
@@ -170,18 +183,7 @@ void Display::init() {
 	//Bind the frame buffer as the output one
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
 
-	//Init GLEW
-	glewInit();
-	if (glewIsSupported("GL_VERSION_4_5")) {
-#ifdef DEBUG
-		std::cout << "YES" << std::endl;
-#endif
-	}
-	else {
-#ifdef DEBUG
-		std::cout << " NO" << std::endl;
-#endif
-	}
+
 
 	//Init glut's user input listener
 	glutSpecialFunc(processSpecialKeys);

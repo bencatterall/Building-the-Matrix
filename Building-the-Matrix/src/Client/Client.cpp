@@ -61,8 +61,10 @@ int Client::receive(const char *data) {
 	}
 	return bytes_read;
 }
-#endif
+
 
 std::chrono::time_point<std::chrono::system_clock> Client::getTimeLastUpdated() const {
 	return time_last_updated;
 }
+
+#endif
