@@ -34,3 +34,5 @@ ServerMain
 *.tlog
 *.log
 Building-the-Matrix.opensdf
+Building-the-Matrix.sdf
+*.sdf
