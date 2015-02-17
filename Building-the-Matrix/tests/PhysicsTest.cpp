@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <memory>
 
+#include "../src/Game.hpp"
 #include "../src/Cube.hpp"
 #include "../src/GameObject.hpp"
 #include "../src/LocationComponent.hpp"
@@ -20,6 +21,8 @@ using glm::vec3;
 
 
 TEST_CASE("Testing Physics", "[physics]"){
+	Game game = Game();
+	game.init();
 	Cube cube = Cube();
 	cube.getLocationComponent()->setPosition(vec3(1, 2, 3));
 	PhysicsObject phy = *cube.getPhysicsComponent();
@@ -30,7 +33,7 @@ TEST_CASE("Testing Physics", "[physics]"){
 		AABB cubeAABB = *phy.getWorldAABB();
 
 		REQUIRE(cubeAABB.getCen() == vec3(1, 2, 3));
-		CHECK(cubeAABB.getXSpan() == 2.0f);
+		REQUIRE(cubeAABB.getXSpan() == 2.0f);
 	}
 
 	SECTION("Linear Motion"){
