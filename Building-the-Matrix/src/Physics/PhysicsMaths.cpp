@@ -57,15 +57,15 @@ namespace PhysicsMaths{
 		// If there exists a gap in the direction of a principal axis, then
 		// there exists a plane normal to that axis which separates them.
 		float xGap = vec3Difference.x - (a.getXSpan() + b.getXSpan()) * 0.5f;
-		if (xGap > 0){
+		if (xGap > 0.0f){
 			return false;
 		}
 		float yGap = vec3Difference.y - (a.getYSpan() + b.getYSpan()) * 0.5f;
-		if (yGap > 0){
+		if (yGap > 0.0f){
 			return false;
 		}
 		float zGap = vec3Difference.z - (a.getZSpan() + b.getZSpan()) * 0.5f;
-		if (zGap > 0){
+		if (zGap > 0.0f){
 			return false;
 		}
 		return true;
@@ -83,8 +83,8 @@ namespace PhysicsMaths{
 		// Transform these to world space
 		glm::mat4 matA = objA.getRenderableComponent()->getProjectionMatrix();
 		glm::mat4 matB = objB.getRenderableComponent()->getProjectionMatrix();
-		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 0));
-		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 0));
+		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 0.0f));
+		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 0.0f));
 
 		// Calculate relative velocity and position
 		vec3 sDiff = aCen - bCen;
@@ -95,14 +95,14 @@ namespace PhysicsMaths{
 		float velDelAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
 
 		// Do not resolve if they are separating already
-		if (velDelAlongCollisionNormal > 0)
+		if (velDelAlongCollisionNormal > 0.0f)
 			return;
 
 		// Choose minimal restitution
 		float e = std::min(physA.getRest(), physB.getRest());
 
 		// Calculate impulse vec3
-		float j = -(1 + e) * velDelAlongCollisionNormal;
+		float j = -(1.0f + e) * velDelAlongCollisionNormal;
 		j = j / (physA.getInvMass() + physB.getInvMass());
 		vec3 impulse = j * sDiffNormal;
 
@@ -151,7 +151,7 @@ namespace PhysicsMaths{
 	}
 
 	const glm::vec3 translateVertex(const glm::mat4x4 matrix, const vec3 vector){
-		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 0));
+		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 0.0f));
 	}
 
 	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 matrix, const std::shared_ptr<vertexVector> vertices) {
@@ -232,7 +232,7 @@ namespace PhysicsMaths{
 		vec3 A = phys.getA();
 		// TODO: Consider further mechanisms for determining power
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys.setA(A + glm::normalize(dir)*(5 - speed));
+		phys.setA(A + glm::normalize(dir)*(5.0f - speed));
 	}
 
 
@@ -243,21 +243,28 @@ namespace PhysicsMaths{
 		float speed = glm::length(dir);
 		vec3 A = phys.getA();
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys.setA(A + glm::normalize(dir)*(-2-speed));
+		phys.setA(A + glm::normalize(dir)*(-2.0f-speed));
 	}
 
-	// TODO: Make into generic spin function
 	void turnLeft(const GameObjectID id){
 		GameObject obj = *ObjectManager::getInstance().getObject(id);
 		std::shared_ptr<PhysicsObject> phys = obj.getPhysicsComponent();
-		turnObject(phys, Quaternion(0.02f, 0, 1, 0), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
-		turnObject(phys, Quaternion(0.02f, 0, 1, 0), &PhysicsObject::getV, &PhysicsObject::setV);
+		turnObject(phys, Quaternion(0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, Quaternion(0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
+
+	}
+
+	void turnRight(const GameObjectID id){
+		GameObject obj = *ObjectManager::getInstance().getObject(id);
+		std::shared_ptr<PhysicsObject> phys = obj.getPhysicsComponent();
+		turnObject(phys, Quaternion(-0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, Quaternion(-0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
 		vec3 dir = (*phys.*getter)();
-		Quaternion oldVector = Quaternion(0, dir.x, dir.y, dir.z);
+		Quaternion oldVector = Quaternion(0.0f, dir.x, dir.y, dir.z);
 		Quaternion out = rotator*oldVector;
 		vec3 updated = vec3(out.x, out.y, out.z);
 		(*phys.*setter)(updated);

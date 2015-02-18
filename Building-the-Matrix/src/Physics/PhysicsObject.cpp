@@ -6,8 +6,8 @@
 
 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
-	: mass(1), inverseMass(1),
-	restitution(1), vertices(vertices),
+	: mass(1.0f), inverseMass(1.0f),
+	restitution(1.0f), vertices(vertices),
 	velocity(vec3()), position(vec3())
 {
 	this->location = locationComp;
@@ -83,4 +83,26 @@ const vec3 PhysicsObject::getOrientation() const{
 
 void PhysicsObject::setOrientation(vec3 & v){
 	orientation = glm::normalize(v);
+}
+
+void PhysicsObject::setMass(const float mass){
+	this->mass = mass;
+	if (mass == 0.0f){
+		inverseMass = 0.0f;
+	}
+	else{
+		inverseMass = 1.0f / mass;
+	}
+}
+
+void PhysicsObject::setRest(const float rest){
+	restitution = rest;
+}
+
+void PhysicsObject::setQuadDrag(const float quadDrag){
+	airRes = quadDrag;
+}
+
+void PhysicsObject::setLinDrag(const float linDrag){
+	friction = linDrag;
 }

@@ -43,7 +43,11 @@ public:
 	float getRest() const;
 	float getQuadDrag() const;
 	float getLinDrag() const;
-	
+	void setMass(const float);
+	void setRest(const float);
+	void setQuadDrag(const float);
+	void setLinDrag(const float);
+
 
 protected:
 
