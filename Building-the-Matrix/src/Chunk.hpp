@@ -7,9 +7,9 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-#define CHUNK_SIZE_X 10
-#define CHUNK_SIZE_Y 10
-#define CHUNK_SIZE_Z 10
+#define CHUNK_SIZE_X 50
+#define CHUNK_SIZE_Y 50
+#define CHUNK_SIZE_Z 50
 ///
 /// Holds a set of cubes
 ///
@@ -29,7 +29,7 @@ class Chunk : public GameObject {
 	/// noise generation
 	///
 	char chunkData[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
-
+	bool chunkVisibleData[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
 	///
 	///  Noise data, used to generate the world
 	///
