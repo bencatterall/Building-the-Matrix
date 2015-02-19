@@ -4,6 +4,7 @@
 #include "Common.hpp"
 #include "GameObject.hpp"
 #include <vector>
+#include <glm/glm.hpp>
 
 ///
 /// TODO IMPROVE
@@ -50,7 +51,7 @@ class Cube : public GameObject {
 
 
 public:
-	Cube();
+	Cube(glm::vec3 pos);
 
 	//TODO:
 	//Fix this hack
