@@ -8,7 +8,7 @@
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), vertices(vertices),
-	velocity(vec3()), position(vec3())
+	velocity(vec3())
 {
 	this->location = locationComp;
 	this->rendComp = rendComp;

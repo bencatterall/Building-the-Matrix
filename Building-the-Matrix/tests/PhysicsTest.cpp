@@ -38,27 +38,16 @@ TEST_CASE("Testing Physics", "[physics]"){
 	phy.setQuadDrag(0.0f);
 	REQUIRE(phy.getQuadDrag() == 0.0f);
 
-	SECTION("AABBs"){
-		AABB cubeAABB = *phy.getWorldAABB();
+	AABB cubeAABB = *phy.getWorldAABB();
 
-		CHECK(cubeAABB.getCen() == vec3(1.0f, 2.0f, 3.0f));
-		REQUIRE(cubeAABB.getXSpan() == 8.0f);
-	}
+	CHECK(cubeAABB.getCen() == vec3(1.0f, 2.0f, 3.0f));
+	REQUIRE(cubeAABB.getXSpan() == 8.0f);
 
-	SECTION("Linear Motion"){
-		PhysicsMaths::stepObject(phy, 1.0f);
+	PhysicsMaths::stepObject(phy, 1.0f);
 
-		REQUIRE(phy.getV() == vec3(0.0f, 1.0f, 1.0f));
-		REQUIRE(phy.getX() == vec3(1.0f, 3.0f, 3.5f));
-	}
+	REQUIRE(phy.getX() == vec3(1.0f, 3.0f, 3.5f));
+	REQUIRE(phy.getV() == vec3(0.0f, 1.0f, 1.0f));
 
-	SECTION("Collision check"){
-		;
-	}
-
-	SECTION("Collision resolution"){
-		;
-	}
 }
 #endif
 #endif
