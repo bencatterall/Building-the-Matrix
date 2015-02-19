@@ -407,6 +407,8 @@ void Display::run() {
 			lastTime += 1.0;
 		}
 
+		client.sendPitchRollYaw();
+
 		//networking get updates;
 		//client.receive();
 		char *buffer = new char[1024];

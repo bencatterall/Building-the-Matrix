@@ -6,7 +6,7 @@
 #include "Address.hpp"
 #include "../Common.hpp"
 #include <mutex>
-
+#include <glm/glm.hpp>
 #include <chrono>
 
 class Client {
@@ -23,6 +23,7 @@ public:
 	~Client();
 	bool sendKeyPress(char key);
 	bool sendKeyUnpress(char key);
+	bool sendPitchRollYaw(glm::vec3 pitch, glm::vec3 roll, glm::vec3 yaw);
 	bool sendLoginRequest();
 	bool sendLogout();
 	bool send(const char *data, int size);

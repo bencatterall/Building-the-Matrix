@@ -22,6 +22,10 @@ void Client::setAddresses(Address client, Address server) {
 	this->server = server;
 }
 
+bool Client::sendPitchRollYaw(glm::vec3 pitch, glm::vec3 roll, glm::vec3 yaw) {
+	char *data = new char[50];
+}
+
 //on client deletion, cleans up used resources
 Client::~Client() {
 	if (!(this->sendLogout())) {

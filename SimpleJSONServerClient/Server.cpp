@@ -132,8 +132,9 @@ int main(int argc, char **argv) {
 					std::cout << "Added client to current list connected with address = " << recFrom.getHBOAddress() << " at port = " << recFrom.getHBOPort() << "\n";
 					clients.push_back(recFrom);
 					//create their car for the game, generate a global ID too
-					playerIDs.push_back(std::pair<Address,GameObjectGlobalID>(recFrom,576));
-					updateManager.queueUpdate(GameObject(576,true));
+					GameObjectGlobalID id = updateManager.getNextObjectID();
+					playerIDs.push_back(std::pair<Address,GameObjectGlobalID>(recFrom,id));
+					updateManager.queueUpdate(GameObject(id,true));
 				}
 				const char data[] = "LOGIN ACCEPTED";
 				sender.sendAck(recFrom, data);
