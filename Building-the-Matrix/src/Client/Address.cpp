@@ -26,7 +26,7 @@ Address::Address(std::string ipAddr, unsigned short port) {
 	//TODO: Put in it's own function
 	size_t pos = 0;
 	int acc = 0;
-	int IPValues[4];
+	unsigned int IPValues[4];
 	while ((pos = ipAddr.find('.')) != std::string::npos) {
 		IPValues[acc] = atoi((ipAddr.substr(0, pos)).c_str());
 		ipAddr = ipAddr.substr(pos + 1, (ipAddr.length() - (pos + 1)));

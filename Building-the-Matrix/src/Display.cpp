@@ -8,16 +8,54 @@
 #include <conio.h>
 #include <iostream>
 #include <memory>
+#include <thread>
+#include <chrono>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <freeglut/glut.h>
+//#include <freeglut/glut.h>
 ovrHmd hmd;
 
 using namespace std;
 
+Client client;
+//asynchronous user input so not required in game loop
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	//Close the health and safety message
+	ovrHSWDisplayState hswDisplayState;
+	ovrHmd_GetHSWDisplayState(hmd, &hswDisplayState);
+	if (hswDisplayState.Displayed)
+		ovrHmd_DismissHSWDisplay(hmd);
 
-void processSpecialKeys(int key, int x, int y);
+	//handle user input
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+		client.sendKeyPress('u');
+	}
+	if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
+		client.sendKeyUnpress('u');
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+		client.sendKeyPress('d');
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
+		client.sendKeyUnpress('d');
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+		client.sendKeyPress('l');
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
+		client.sendKeyUnpress('l');
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+		client.sendKeyPress('r');
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
+		client.sendKeyUnpress('r');
+	}
+}
+
 Display::Display() {
 	init();
 }
@@ -56,7 +94,7 @@ void Display::init() {
 		exit(EXIT_FAILURE);
 	}
 	glfwSetErrorCallback(glfwErrorCallback);
-
+	
 	//Create window based upon setup
 	if (extendedMode){
 		//Find our monitor
@@ -94,6 +132,7 @@ void Display::init() {
 
 		//Finally, create and attach the window
 		window = glfwCreateWindow(width, height, "test", nullptr, nullptr);
+		
 		ovrHmd_AttachToWindow(hmd, glfwGetWin32Window(window), nullptr, nullptr);
 #ifdef DEBUG
 		cout << "DEBUG: Running in extended mode." << std::endl;
@@ -132,6 +171,8 @@ void Display::init() {
 	eyeSize[1] = ovrHmd_GetFovTextureSize(hmd, ovrEye_Right, hmd->DefaultEyeFov[1], 1.0);
 
 	//we'll use a single frame buffer
+	//Window size bug has been found to be because of eye size being larger than the window size.
+	//Window sizes are correct but the framebuffer is larger, h
 	frameBufferWidth = eyeSize[0].w + eyeSize[1].w;
 	frameBufferHeight = (eyeSize[0].h > eyeSize[1].h) ? eyeSize[0].h : eyeSize[1].h;
 	updateRenderTarget(frameBufferWidth, frameBufferHeight);
@@ -184,10 +225,6 @@ void Display::init() {
 		std::cout << " NO" << std::endl;
 #endif
 	}
-
-	//Init glut's user input listener
-	glutSpecialFunc(processSpecialKeys);
-
 }
 
 ///Test function
@@ -311,13 +348,41 @@ Display::~Display() {
 
 
 void Display::run() {
-	Client client;
 	//Create objects
 	try {
-		client = Client(Address(std::string("127.0.0.1"), 4000), Address(std::string("127.0.0.1"), 4001));
+		client.setAddresses(Address(std::string("127.0.0.1"), 9898), Address(std::string("127.0.0.1"), 9899));
 	}
 	catch (...){
-		std::cout << "instantiating client connection to server failed";
+		std::cout << "instantiating client failed";
+	}
+	//try login here
+	bool cont = true;
+	int attempts = 0;
+	char *response = new char[15];
+	while (cont && attempts < 5) {
+		if (client.sendLoginRequest()) {
+			std::cout << "login request sent\n";
+		}
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		if (client.receive(response,15) > 0) {
+			std::string message((char *)response);
+			std::cout << "received " << message << "\n";
+			if (message.compare(0, 14, "LOGIN ACCEPTED") == 0) {
+				//successful
+				std::cout << "login to game server successful\n";
+				cont = false;
+			}
+		}
+		else {
+			//timeout and retry
+			attempts++;
+		}
+	}
+	if (attempts == 5) {
+		std::cout << "Login to game server failed\n";
+	}
+	else {
+		std::cout << "Login to game server successful\n";
 	}
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
@@ -342,17 +407,16 @@ void Display::run() {
 
 		//networking get updates;
 		//client.receive();
+		char *buffer = new char[1024];
+		if (client.receive(buffer,1024) >= 0) {
+			//use update from server
 
-		//update manager service updates
-		//updateManager.processUpdates()
-
-		//some form of prediction
-
-
-		//handle user input
-		//pollInput();
-		
-
+			//update manager service updates
+			//updateManager.processUpdates()
+		}
+		else {
+			//some form of prediction
+		}
 
 		//physics tick 
 		//TODO calculate dt per frame
@@ -447,21 +511,3 @@ void Display::render() {
 	//Don't need to swap buffers, handled by the SDK
 
 }
-
-void processSpecialKeys(int key, int x, int y) {
-	switch (key) {
-		case GLUT_KEY_LEFT:
-			//sen
-			break;
-		case GLUT_KEY_RIGHT:
-			 
-			break;
-		case GLUT_KEY_UP:
-
-			break;
-		case GLUT_KEY_DOWN:
-
-			break;
-	}
-}
-

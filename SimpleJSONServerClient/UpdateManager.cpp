@@ -1,4 +1,5 @@
 #include "UpdateManager.hpp"
+#include <iostream>
 
 void UpdateManager::updateObject(Update u) {
 	//TODO: make this atomic/how?
@@ -41,7 +42,7 @@ GameObject UpdateManager::getGameObject(GameObjectGlobalID id) {
 
 void UpdateManager::run() {
 	while (this->cont) {
-		try {
+		if (!(this->pendingUpdates).isEmpty()) {
 			Update u = (this->pendingUpdates).popFromFront();
 			if (u.forDeletion()) {
 				(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
@@ -51,9 +52,6 @@ void UpdateManager::run() {
 			else {
 				updateObject(u);
 			}
-		}
-		catch (int& i) {
-			//ignore, just don't need to carry out any operation if no updates are pending
 		}
 	}
 }

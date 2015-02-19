@@ -43,7 +43,6 @@ bool Socket::openSocket(int addr, unsigned short port) {
 
 	sockaddr_in address;
 	address.sin_family = AF_INET;
-	//address.sin_addr.s_addr = INADDR_ANY;
 	address.sin_addr.s_addr = addr;
 	//port must be provided in network byte order
 	address.sin_port = port;
@@ -75,11 +74,6 @@ bool Socket::openSocket(int addr, unsigned short port) {
 	return true;
 }
 
-//TODO check how to do this
-bool Socket::isOpen() const{
-	return true;
-}
-
 bool Socket::sendSingle(const Address &dest, const char *data, int size) {
 	sockaddr_in destAddr;
 	destAddr.sin_family = AF_INET;
@@ -92,11 +86,6 @@ bool Socket::sendSingle(const Address &dest, const char *data, int size) {
 		return false;
 	}
 
-	return true;
-}
-
-//TODO implement
-bool Socket::broadcast(const Address *dest, const void *data, int size){
 	return true;
 }
 

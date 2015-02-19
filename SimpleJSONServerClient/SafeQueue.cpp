@@ -8,12 +8,19 @@ SafeQueue<Update>::SafeQueue() {
 
 SafeQueue<Update>::~SafeQueue() {}
 
+bool SafeQueue<Update>::isEmpty() {
+	(this->lock).lock();
+	bool r = (this->queue).empty();
+	(this->lock).unlock();
+	return r;
+}
+
 Update SafeQueue<Update>::popFromFront() {
 	(this->lock).lock();
 	if ((this->queue).empty()) {
-		std::cout << "queue was empty\n";
+		//std::cout << "queue was empty\n";
 		(this->lock).unlock();
-		throw 1;
+		//throw 1;
 	}
 	else {
 		Update u = (this->queue).front();
@@ -37,12 +44,19 @@ SafeQueue<Message>::SafeQueue() {
 
 SafeQueue<Message>::~SafeQueue() {}
 
+bool SafeQueue<Message>::isEmpty() {
+	(this->lock).lock();
+	bool r = (this->queue).empty();
+	(this->lock).unlock();
+	return r;
+}
+
 Message SafeQueue<Message>::popFromFront() {
 	(this->lock).lock();
 	if ((this->queue).empty()) {
-		std::cout << "queue was empty\n";
+		//std::cout << "queue was empty\n";
 		(this->lock).unlock();
-		throw 1;
+		//throw 1;
 	}
 	else {
 		Message u = (this->queue).front();

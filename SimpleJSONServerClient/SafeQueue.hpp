@@ -18,5 +18,6 @@ public:
 	SafeQueue(const SafeQueue& map); //don't want compiler generating this function as mutexes are uncopyable
 	C popFromFront();
 	void pushToEnd(C update);
+	bool isEmpty();
 };
 #endif

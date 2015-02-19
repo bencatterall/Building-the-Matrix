@@ -24,18 +24,16 @@ void Sender::sendAck(Address client, std::string event) {
 //we only want one thread accessing send from the socket
 void Sender::run() {
 	while (this->cont) {
-		try {
+		if (!(this->toSend).isEmpty()) {
 			Message m = (this->toSend).popFromFront();
 			if (!((this->serverSocket).sendSingle(m.getClient(), m.getMessage(), sizeof(m.getMessage())))) {
-				std::cerr << "Failed to send message";
+				std::cout << "Failed to send message\n";
 			}
-		}
-		catch (int& i) {
-			//don't try to send anything if there is nothing to send
 		}
 	}
 }
 
 void Sender::stop() {
+	std::cout << "Called stop on sender";
 	(this->cont) = false;
 }

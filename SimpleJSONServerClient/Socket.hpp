@@ -31,9 +31,7 @@ class Socket {
 		~Socket();
 		bool openSocket(int address, unsigned short port);
 		void closeSocket();
-		bool isOpen() const;
 		bool sendSingle(const Address &dest, const char *data, int size);
-		bool broadcast(const Address *dest, const void *data, int size);
 		int receive(Address &sender, char *data, int size);
 		short getHandle();
 };

@@ -9,10 +9,13 @@
 #include <chrono>
 #include <iostream>
 
+Client::Client() {}
+
 //binds client to a socket and stores address of the server and its own Socket. An int is thrown if something goes wrong
-Client::Client(Address client, Address server) {
+void Client::setAddresses(Address client, Address server) {
 	this->socket = Socket();
 	if (!(this->socket).openSocket(client.getAddress(), client.getPort())) {
+		std::cout << "failed to open client socket\n";
 		throw int(1);
 	}
 	this->server = server;
@@ -27,33 +30,44 @@ Client::~Client() {
 
 bool Client::sendKeyPress(char key) {
 	const char *data = constants.keyPressMessage(key);
-	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	std::cout << key << " pressed\n";
+	bool a;
+	(this->lock).lock();
+	a = ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	(this->lock).unlock();
+	return a;
 }
 
 bool Client::sendKeyUnpress(char key) {
 	const char *data = constants.keyUnpressMessage(key);
-	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	std::cout << key << " unpressed\n";
+	bool a;
+	(this->lock).lock();
+	a = ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	(this->lock).unlock();
+	return a;
 }
 
-bool Client::sendLoginRequest(GameObjectGlobalID id) {
-	const char *data = constants.loginMessage(id);
-	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+bool Client::sendLoginRequest() {
+	const char *data = constants.loginMessage();
+	return ((this->socket).sendSingle((this->server), data, 7));
 }
 
 bool Client::sendLogout() {
 	const char *data = constants.logoutMessage();
-	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	return ((this->socket).sendSingle((this->server), data, 7));
 }
 
 //attempts to send the bytestream given as an argument, and returns true if succesful
 bool Client::send(char *data) {
+	//NOTE sizeof data will fail
 	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
 }
 
 //returns number of bytes read from packet in the buffer - if this function returns < 0 it means there was no packet to read
 //else it gives the number of bytes that were received
-int Client::receive(char *data) {
+int Client::receive(char *data, int size) {
 	Address sender;
-	int bytes_read = (this->socket).receive(sender, (char *)data, sizeof(data));
+	int bytes_read = (this->socket).receive(sender, (char *)data, size);
 	return bytes_read;
 }

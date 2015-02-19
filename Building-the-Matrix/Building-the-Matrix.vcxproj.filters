@@ -182,9 +182,6 @@
     <ClInclude Include="src\shader.hpp">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Common.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Display.hpp">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
@@ -219,6 +216,9 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Client\MessageConstants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

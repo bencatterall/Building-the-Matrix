@@ -77,10 +77,10 @@ int main(int argc, char **argv) {
 	sender.setSocket(mySocket);
 	
 	//start update manager run method in new thread
-	std::thread makeUpdates(&UpdateManager::run, updateManager);
+	std::thread makeUpdates(&UpdateManager::run, &updateManager);
 
 	//start send loop in new thread
-	std::thread sendMessages(&Sender::run, sender);
+	std::thread sendMessages(&Sender::run, &sender);
 
 	//start send update loop in new thread
 	std::thread update(broadcast);
@@ -88,16 +88,20 @@ int main(int argc, char **argv) {
 	//start listener fo quitting
 	std::thread quit(quit);
 	
+	contMain = true;
+
 	//start receive then update loop in this thread
 	while (contMain) {
 		//try to receive updates
 		Address recFrom;
 		unsigned char buffer[256];
-		int bytes_read = mySocket.receive(recFrom, (char *)buffer, sizeof(buffer));
+		int bytes_read = mySocket.receive(recFrom, (char *)buffer, 256);
 
+		//std::cout << "received " << bytes_read << " bytes";
 		if (bytes_read >= 0) {
 			//check what type of message was received
 			std::string message((char *)buffer);
+			std::cout << "message received\n";
 
 			//HANDLE LOGINS
 			if (message.compare(0,5,"LOGIN") == 0) {
@@ -151,6 +155,7 @@ int main(int argc, char **argv) {
 			//MOVE NEED: (rot roll, pitch, yaw)
 			else if (message.compare(0,7,"PRESSED") == 0) {
 				char key = buffer[8];
+				std::cout << "User pressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
 						GameObject o = updateManager.getGameObject(e.second);
@@ -162,6 +167,7 @@ int main(int argc, char **argv) {
 			}
 			else if (message.compare(0,9,"UNPRESSED") == 0) {
 				char key = buffer[10];
+				std::cout << "User unpressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
 						GameObject o = updateManager.getGameObject(e.second);
@@ -178,13 +184,23 @@ int main(int argc, char **argv) {
 		}
 		//RUN PHYSICS HERE
 	}
+	std::cout << "quitting the server\n";
 
-	std::cout << "quitting the server";
-	updateManager.stop();
-	sender.stop();
-	makeUpdates.join();
-	sendMessages.join();
 	update.join();
+	std::cout << "stopped updater\n";
+
 	quit.join();
+	std::cout << "stopped quit listener\n";
+
+	updateManager.stop();
+	std::cout << "set update manager continue to false\n";
+	makeUpdates.join();
+	std::cout << "stopped update manager";
+	
+	sender.stop();
+	std::cout << "set sender continue to false\n";
+	sendMessages.join();
+	std::cout << "stopped sender";
+
 	std::cout << "server killed";
 }

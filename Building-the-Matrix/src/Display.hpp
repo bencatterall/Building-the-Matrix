@@ -36,19 +36,6 @@ class Display {
 		std::cerr << "ERROR: In GLFW: " << error << " " << desc << std::endl;
 	}
 
-	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-			glfwSetWindowShouldClose(window, GL_TRUE);
-
-		//Close the health and safety message
-		ovrHSWDisplayState hswDisplayState;
-		ovrHmd_GetHSWDisplayState(hmd, &hswDisplayState);
-		if (hswDisplayState.Displayed)
-			ovrHmd_DismissHSWDisplay(hmd);
-
-		//handle user input
-	}
-
 	void cleanup();
 	void init();
 public:
