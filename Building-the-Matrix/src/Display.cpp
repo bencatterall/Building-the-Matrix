@@ -434,6 +434,17 @@ void Display::run() {
 	}
 }
 
+void Display::findHeadOrientation() {
+	ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, frameTiming.ScanoutMidpointSeconds);
+
+	if (ts.StatusFlags & (ovrStatus_OrientationTracked | ovrStatus_PositionTracked)) {
+		// The cpp compatibility layer is used to convert ovrPosef to Posef (see OVR_Math.h)
+		Posef pose = ts.HeadPose.ThePose;
+		float yaw, pitch, roll;
+		pose.Rotation.GetEulerAngles<Axis_Y, Axis_X, Axis_Z>(&yaw, &pitch, &roll);
+		headOrientation = glm::vec3(yaw, pitch, roll);
+	}
+}
 void Display::render() {
 
 	//Start a frame
@@ -442,10 +453,14 @@ void Display::render() {
 	//Bind in the frame buffer for the HMD
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
 
+	//Get head tracking info
+	findHeadOrientation();
+
+	//Base OpenGL
 	glClearColor(135.0f / 255.0f, 206.0f / 255.0f, 235.0f/ 255.0f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 	ovrPosef headPose[2];
 	//For each eye

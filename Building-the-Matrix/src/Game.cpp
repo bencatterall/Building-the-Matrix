@@ -38,7 +38,6 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		if (!(objectPtr->isVisible() && objectPtr->isRenderable()))
 			continue;
 
-
 		std::shared_ptr<LocationComponent> locationComponent = objectPtr->getLocationComponent();
 		glm::vec3 objPos = locationComponent->getPosition();
 
