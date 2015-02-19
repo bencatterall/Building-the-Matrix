@@ -49,20 +49,23 @@ void RenderableComponent::setIndexData(std::vector<GLfloat> newIndexData, bool i
 
 void RenderableComponent::bindVBOs() {
 	//Bind the vertex data buffer
-	glEnableVertexAttribArray(0 /* VERTEX_POS_INDX */);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vboVertexId);
-	glVertexAttribPointer(0 /*VERTEX_POS_INDX*/, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
+	if (vertexData.size() > 0) {
+		glEnableVertexAttribArray(0 /* VERTEX_POS_INDX */);
+		glBindBuffer(GL_ARRAY_BUFFER, this->vboVertexId);
+		glVertexAttribPointer(0 /*VERTEX_POS_INDX*/, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	}
 	//Bind the colour data buffer
-	glEnableVertexAttribArray(1 /* VERTEX_COLOUR_INDX */);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vboColourId);
-	glVertexAttribPointer(1 /*VERTEX_POS_INDX*/, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-		
+	if (colourData.size() > 0) {
+		glEnableVertexAttribArray(1 /* VERTEX_COLOUR_INDX */);
+		glBindBuffer(GL_ARRAY_BUFFER, this->vboColourId);
+		glVertexAttribPointer(1 /*VERTEX_POS_INDX*/, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+	}
 	//Bind the texture coordinate buffer
-	glEnableVertexAttribArray(2 /*VERTEX_TEXCOORD0_INDX*/);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
-	glVertexAttribPointer(2 /* VERTEX_TEXCOORD0_INDX */, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-
+	if (textureCoordsData.size() > 0) {
+		glEnableVertexAttribArray(2 /*VERTEX_TEXCOORD0_INDX*/);
+		glBindBuffer(GL_ARRAY_BUFFER, this->vboTextureId);
+		glVertexAttribPointer(2 /* VERTEX_TEXCOORD0_INDX */, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	}
 	if (useIndexedVBO) {
 		//Bind the index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboIndexId);

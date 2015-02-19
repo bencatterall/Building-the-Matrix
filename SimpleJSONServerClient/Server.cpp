@@ -189,7 +189,7 @@ int main(int argc, char **argv) {
 				std::cout << "Unknown message received\n";
 			}
 		}
-		//RUN PHYSICS HERE
+		//TODO: RUN PHYSICS HERE
 	}
 	std::cout << "quitting the server\n";
 
