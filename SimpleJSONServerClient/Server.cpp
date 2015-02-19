@@ -7,6 +7,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+#include "../Building-the-Matrix/src/Physics/Simulator.hpp"
 
 /**
 ServerMain.cpp
@@ -97,7 +98,7 @@ int main(int argc, char **argv) {
 	std::thread l_quit(quit);
 	
 	contMain = true;
-
+	auto timer = std::chrono::system_clock::now();
 	//start receive then update loop in this thread
 	while (contMain) {
 		//try to receive updates
@@ -189,7 +190,14 @@ int main(int argc, char **argv) {
 				std::cout << "Unknown message received\n";
 			}
 		}
+
 		//TODO: RUN PHYSICS HERE
+		Simulator & physicsSimulator = Simulator::getInstance();
+		// TODO: Choose proper timestep based on realtime
+		auto nextTime = std::chrono::system_clock::now();
+		std::chrono::duration<float> timestepDur = nextTime - timer;
+		timer = nextTime;
+		physicsSimulator.tick(timestepDur.count());
 	}
 	std::cout << "quitting the server\n";
 
