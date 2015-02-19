@@ -13,6 +13,7 @@ class Message {
 	public:
 		Message(Address client, std::map<GameObjectGlobalID, GameObject> message);
 		Message(Address client, std::string event);
+		Message(Address client, char *message,int length);
 		Address getClient();
 		char* getMessage();
 		std::map<GameObjectGlobalID, GameObject> parseMessage();

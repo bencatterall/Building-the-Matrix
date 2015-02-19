@@ -19,6 +19,7 @@ class Sender {
 		Sender(const Sender& sender){} //don't want compiler generating this function as mutexes are uncopyable
 		void sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message);
 		void sendAck(Address client,std::string event);
+		void sendMessage(Address client, char *m,int length);
 		void run();
 		void stop();
 };

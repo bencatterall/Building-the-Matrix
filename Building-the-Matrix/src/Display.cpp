@@ -368,7 +368,7 @@ void Display::run() {
 			std::cout << "login request sent\n";
 		}
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		if (client.receive(response,15) > 0) {
+		if (client.receive(response,20) > 0) {
 			std::string message((char *)response);
 			std::cout << "received " << message << "\n";
 			if (message.compare(0, 14, "LOGIN ACCEPTED") == 0) {

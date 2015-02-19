@@ -134,6 +134,7 @@ int main(int argc, char **argv) {
 			std::cout << "received: " << message << "\n";
 			//HANDLE LOGINS
 			if (prefixMatch(message, "LOGIN")) {
+				GameObjectGlobalID id;
 				bool copy = false;
 				std::cout << "Server received login request \n";
 				for (Address s : clients) {
@@ -141,6 +142,11 @@ int main(int argc, char **argv) {
 						//already received request but ACK not received by sender so just try again
 						std::cout << "resending login ACK \n";
 						copy = true;
+						for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
+							if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
+								id = e.second;
+							}
+						}
 						break;
 					}
 				}
@@ -148,12 +154,17 @@ int main(int argc, char **argv) {
 					std::cout << "Added client to current list connected with address = " << recFrom.getHBOAddress() << " at port = " << recFrom.getHBOPort() << "\n";
 					clients.push_back(recFrom);
 					//create their car for the game, generate a global ID too
-					GameObjectGlobalID id = updateManager.getNextObjectID();
+					id = updateManager.getNextObjectID();
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
 					updateManager.queueUpdate(GameObject(id, true));
 				}
-				const char data[] = "LOGIN ACCEPTED";
-				sender.sendAck(recFrom, data);
+				char data[] = "LOGIN ACCEPTED     ";
+				char *idparts = (char*)&id;
+				data[15] = idparts[0];
+				data[16] = idparts[1];
+				data[17] = idparts[2];
+				data[18] = idparts[3];
+				sender.sendMessage(recFrom, data,20);
 			}
 			//HANDLE LOGOUTS
 			else if (prefixMatch(message, "LOGOUT")) {

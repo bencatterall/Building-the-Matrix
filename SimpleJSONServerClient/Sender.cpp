@@ -21,6 +21,11 @@ void Sender::sendAck(Address client, std::string event) {
 	(this->toSend).pushToEnd(m);
 }
 
+void Sender::sendMessage(Address client, char *message, int length){
+	Message m = Message(client, message, length);
+	(this->toSend).pushToEnd(m);
+}
+
 //we only want one thread accessing send from the socket
 void Sender::run() {
 	while (this->cont) {
