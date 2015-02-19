@@ -42,30 +42,39 @@ void Chunk::init() {
 	int numCubes = 0;
 
 	//NOTE: Cube[] is 1000 in header, need to update
-	int xLength = 50, yLength = 50, zLength = 50;
+	int xLength = 256, yLength = 150, zLength = 256;
 	SimplexNoise noiseGenerator;
 
 	//Generate the world 
 	for (int x = -xLength / 2; x < xLength / 2; ++x) {
 		for (int z = -zLength / 2; z < zLength / 2; ++z) {
-			for (int y = -yLength / 2; y < yLength / 2; ++y) {
-
 				//Generate noise 
-				double noise = noiseGenerator.noise(x / 40.0, y / 40.0, z / 40.0);
+				//[-1.0,1.0]
+			double noise = (noiseGenerator.noise2D(x / 80.0, z / 80.0));
 
-				//Set data
-				chunkNoiseData[x + (xLength / 2)][y + (yLength/2)][z + (zLength /2)] = noise;
-
-				if (noise > 0.4) {
+				/*
+				if (noise > 0.1) {
 					//Don't  draw it => Don't generate its geometry
 					chunkData[x + (xLength / 2)][y + (yLength / 2)][z + (zLength / 2)] = 0;
-					continue;
+					continue; 
 				}
-				//Set to default grass
-				chunkData[x + (xLength / 2)][y + (yLength / 2)][z + (zLength / 2)] = 1;
+				*/
+				
 
-				numCubes++;
-			}
+				//fill in y below
+				int yHeight = (int)(noise*(yLength/2) * 0.3);
+				for (int y = 0; y < yHeight; ++y) {
+					chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
+					numCubes++;
+				}
+				for (int y = yHeight; y < yLength; ++y) {
+					chunkData[x + (xLength / 2)][y + yLength / 2][z + (zLength / 2)] = 0;
+				}
+				//Set data
+				chunkNoiseData[x + (xLength / 2)][yHeight + yLength / 2][z + (zLength / 2)] = noise;
+				//Set to default grass
+				//chunkData[x + (xLength / 2)][yHeight][z + (zLength / 2)] = 1;
+				//numCubes++;
 		}
 	}
 
@@ -83,9 +92,6 @@ void Chunk::init() {
 					chunkVisibleData[baseX][baseY][baseZ] = false;
 					continue;
 				}
-
-
-					
 
 				chunkVisibleData[baseX][baseY][baseZ] = false;
 				//hide cubes if there is a cube:
@@ -133,7 +139,16 @@ void Chunk::init() {
 		}
 	}
 
-	//Generate renderable data
+	//The six face
+	//Defined from looking at the world down -z, with x and y aligned to screen
+//	chunkData[0]; //left
+//	chunkData[1]; // right
+	chunkData[2]; // top
+	chunkData[3]; //bottom
+	chunkData[4]; //front
+	chunkData[5]; //back
+
+	//Generate renderable data[0]
 	for (int x = -xLength / 2; x < xLength / 2; ++x) {
 		for (int z = -zLength / 2; z < zLength / 2; ++z) {
 			for (int y = -yLength / 2; y < yLength / 2; ++y) {
@@ -146,15 +161,17 @@ void Chunk::init() {
 				if (!chunkVisibleData[baseX][baseY][baseZ])
 					continue;
 			
-				float sf = 8.0f;
+				float sf = 2.0f;
 				float xPos = sf*(x);
 				float yPos = sf*(y);
 				float zPos = sf*(z);
 
+				//generate face data
+
 				//TODO improve efficiency of this entire class
 				for (size_t i = 0; i < sizeof(cubeData) / sizeof(glm::vec3); ++i) {
 					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeData[i] * 4.0f;
+					glm::vec3 newCubeData = cubeData[i] * 1.0f;
 					newCubeData.x += xPos;
 					newCubeData.y += yPos;
 					newCubeData.z += zPos;
@@ -184,6 +201,7 @@ void Chunk::init() {
 	renderableComponent->setTextureCoordsData(chunkTextureCoordsData, false);
 
 }
+
 
 const glm::vec3 Chunk::cubeData[36] = {
 	glm::vec3(-1.0f, -1.0f, -1.0f), // triangle 1 : begin

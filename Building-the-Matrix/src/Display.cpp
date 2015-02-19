@@ -187,7 +187,6 @@ void Display::init() {
 
 	//Init glut's user input listener
 	glutSpecialFunc(processSpecialKeys);
-
 }
 
 ///Test function
@@ -376,7 +375,7 @@ void Display::render() {
 	//Bind in the frame buffer for the HMD
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
 
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0);
+	glClearColor(135.0f / 255.0f, 206.0f / 255.0f, 235.0f/ 255.0f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
