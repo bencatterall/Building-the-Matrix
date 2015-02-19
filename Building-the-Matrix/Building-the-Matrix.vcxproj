@@ -92,6 +92,7 @@
     <ClCompile Include="src\Physics\PhysicsMaths.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
     <ClCompile Include="src\Physics\Simulator.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="src\Physics\PhysicsMaths.hpp" />
     <ClInclude Include="src\Physics\PhysicsObject.hpp" />
     <ClInclude Include="src\Physics\Simulator.hpp" />
+    <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\SimplexNoise.hpp" />
