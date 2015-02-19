@@ -1,8 +1,11 @@
 #ifndef PLAYER_H
+#define PLAYER_H
 
-class GameObject;
-class Player : public GameObject {
+#include "Cube.hpp"
+class Player : public Cube {
 
+public:
+	Player(float xPos, float yPos, float zPos);
 };
 
 #endif

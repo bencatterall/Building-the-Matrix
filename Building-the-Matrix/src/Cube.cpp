@@ -8,7 +8,7 @@ Cube::Cube(glm::vec3 pos) {
 
 	//TODO improve efficiency of this entire class
 	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
-		cubeVertexData.push_back(4.0f*cubeData[i]);
+		cubeVertexData.push_back(10.0f*cubeData[i]);
 	}
 
 	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {

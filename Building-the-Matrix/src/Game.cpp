@@ -9,31 +9,46 @@
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
+#include "Player.hpp"
+#include "ObjectManager.hpp"
 #include "SimplexNoise.hpp"
 
 void Game::init() {
 	//Sahil: You can comment this out
 	chunks = new Chunk[numChunks];
 
+	//Add objects to the object manager
+	ObjectManager& objManager = ObjectManager::getInstance();
+	for (int i = 0; i < numChunks; ++i) {
+		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
+	}
+	float xPos = 0.0f, yPos = -50.0f, zPos = -100.0;
+	player = std::make_shared<Player>(xPos, yPos, zPos);
+	objManager.addObject(player);
+
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 	//Move camera to the position of the player
-	float xPos = 0.0f, yPos = -50.0f, zPos = -100.0;
-	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
+	glm::vec3 pos = player->getLocationComponent()->getPosition();
+	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(pos.x, pos.y, pos.z));
 
-	//per cube
-	for (int i = 0; i < numChunks; ++i) {
-		if (!(chunks[i].isVisible() && chunks[i].isRenderable()))
+	//Render all objects
+	ObjectManager& objManager = ObjectManager::getInstance();
+	std::vector<GameObjectID> objects = objManager.getObjects();
+	for (GameObjectID objectID : objects) {
+		std::shared_ptr<GameObject> objectPtr = objManager.getObject(objectID);
+		if (!(objectPtr->isVisible() && objectPtr->isRenderable()))
 			continue;
 
-		std::shared_ptr<LocationComponent> locationComponent = chunks[i].getLocationComponent();
+
+		std::shared_ptr<LocationComponent> locationComponent = objectPtr->getLocationComponent();
 		glm::vec3 pos = locationComponent->getPosition();
 
 		modelViewMatrix = glm::translate(baseModelViewMatrix, glm::vec3(pos.x, pos.y, pos.z));
 
 		//Get the renderable component and bind in the shader
-		std::shared_ptr<RenderableComponent> renderableComponent = chunks[i].getRenderableComponent();
+		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
 
 		if (!objectShader)
