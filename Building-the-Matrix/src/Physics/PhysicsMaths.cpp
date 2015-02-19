@@ -2,7 +2,6 @@
 
 #include "../GameObject.hpp"
 #include "../ObjectManager.hpp"
-#include "../RenderableComponent.hpp"
 #include "../LocationComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
