@@ -22,16 +22,13 @@ void Game::init() {
 	for (int i = 0; i < numChunks; ++i) {
 		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
 	}
-	float xPos = 0.0f, yPos = -50.0f, zPos = -100.0;
+	float xPos = 0.0f, yPos = 50.0f, zPos = -60.0;
 	player = std::make_shared<Player>(xPos, yPos, zPos);
 	objManager.addObject(player);
 
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
-	//Move camera to the position of the player
-	glm::vec3 pos = player->getLocationComponent()->getPosition();
-	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(pos.x, pos.y, pos.z));
 
 	//Render all objects
 	ObjectManager& objManager = ObjectManager::getInstance();
@@ -43,21 +40,27 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 
 
 		std::shared_ptr<LocationComponent> locationComponent = objectPtr->getLocationComponent();
-		glm::vec3 pos = locationComponent->getPosition();
+		glm::vec3 objPos = locationComponent->getPosition();
 
-		modelViewMatrix = glm::translate(baseModelViewMatrix, glm::vec3(pos.x, pos.y, pos.z));
+		//Move object to world space 
+		glm::mat4 objWorldMatrix = glm::translate(glm::mat4(1.0), glm::vec3(objPos.x, objPos.y,objPos.z));
+
+		//Move camera to the position of the player
+		glm::vec3 eyePos(0.0f, 50.0, -100.0);
+		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
+		objCameraMatrix = modelViewMatrix * objCameraMatrix;
 
 		//Get the renderable component and bind in the shader
 		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
-
+ 
 		if (!objectShader)
 			continue;
 
 		renderableComponent->bindShader();
 
 		renderableComponent->setProjectionMatrix(projectionMatrix);
-		renderableComponent->setModelviewMatrix(modelViewMatrix);
+		renderableComponent->setModelviewMatrix(objCameraMatrix);
 
 		//set uniforms
 		glUniformMatrix4fv(glGetUniformLocation(objectShader->getProgram(), "matProjection"),

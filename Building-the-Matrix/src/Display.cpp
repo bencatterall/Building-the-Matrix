@@ -443,7 +443,7 @@ void Display::render() {
 	glClearColor(135.0f / 255.0f, 206.0f / 255.0f, 235.0f/ 255.0f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	ovrPosef headPose[2];
 	//For each eye
