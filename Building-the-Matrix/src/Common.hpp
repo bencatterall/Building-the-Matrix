@@ -22,8 +22,8 @@
 // Enable debug mode
 #define DEBUG
 
-typedef unsigned long long GameObjectID;
-typedef unsigned long long GameObjectGlobalID;
+typedef int GameObjectID;
+typedef int GameObjectGlobalID;
 
 #endif
 

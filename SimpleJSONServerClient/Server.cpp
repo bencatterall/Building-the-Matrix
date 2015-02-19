@@ -7,7 +7,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-#include "../Building-the-Matrix/src/Physics/Simulator.hpp"
+//#include "../Building-the-Matrix/src/Physics/Simulator.hpp"
 
 /**
 ServerMain.cpp
@@ -199,12 +199,14 @@ int main(int argc, char **argv) {
 		}
 
 		//TODO: RUN PHYSICS HERE
+#ifdef SIMULATOR_H
 		Simulator & physicsSimulator = Simulator::getInstance();
 		// TODO: Choose proper timestep based on realtime
 		auto nextTime = std::chrono::system_clock::now();
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
+#endif
 	}
 	std::cout << "quitting the server\n";
 
