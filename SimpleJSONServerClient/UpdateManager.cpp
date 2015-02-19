@@ -9,12 +9,19 @@ void UpdateManager::updateObject(Update u) {
 
 UpdateManager::UpdateManager() {
 	(this->cont) = true;
+	(this->nextID) = 1;
 }
 
 void UpdateManager::setInitialObjects(std::vector<GameObject> initialGameObjects) {
 	for (GameObject go : initialGameObjects) {
 		gameObjectsWorldState.put(go.getID(), go);
 	}
+}
+
+GameObjectGlobalID UpdateManager::getNextObjectID() {
+	GameObjectGlobalID id = (this->nextID);
+	(this->nextID)++;
+	return id;
 }
 
 UpdateManager::~UpdateManager(){}

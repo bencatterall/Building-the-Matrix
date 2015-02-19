@@ -12,6 +12,7 @@ class UpdateManager {
 		SafeQueue<Update> pendingUpdates;
 		bool cont;
 		void updateObject(Update u);
+		GameObjectGlobalID nextID;
 
 	public:
 		UpdateManager();
@@ -24,6 +25,7 @@ class UpdateManager {
 		std::map<GameObjectGlobalID, GameObject> flushUpdates();
 		std::map<GameObjectGlobalID, GameObject> getState();
 		GameObject getGameObject(GameObjectGlobalID id);
+		GameObjectGlobalID getNextObjectID();
 		void run();
 		void stop();
 };

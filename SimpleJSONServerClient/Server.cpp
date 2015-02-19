@@ -22,6 +22,12 @@ std::vector <std::pair<Address, GameObjectGlobalID>> playerIDs;
 Sender sender;
 bool contMain;
 
+bool prefixMatch(std::string message, std::string prefix) {
+	return message.compare(0, prefix.length(), prefix) == 0;
+}
+
+
+
 void broadcast() {
 	while (contMain) {
 		for (Address client : clients) {
@@ -39,8 +45,18 @@ void quit() {
 	}
 }
 
-bool prefixMatch(std::string message, std::string prefix) {
-	return message.compare(0, prefix.length(), prefix) == 0;
+void physics() {
+	while (contMain) {
+		//TODO: RUN PHYSICS HERE
+		#ifdef SIMULATOR_H
+			Simulator & physicsSimulator = Simulator::getInstance();
+			// TODO: Choose proper timestep based on realtime
+			auto nextTime = std::chrono::system_clock::now();
+			std::chrono::duration<float> timestepDur = nextTime - timer;
+			timer = nextTime;
+			physicsSimulator.tick(timestepDur.count());
+		#endif
+	}
 }
 
 int main(int argc, char **argv) {
@@ -98,24 +114,24 @@ int main(int argc, char **argv) {
 	//start send update loop in new thread
 	std::thread update(broadcast);
 
+	std::thread physics(physics);
+
 	//start listener fo quitting
 	std::thread l_quit(quit);
 	
 	contMain = true;
 	auto timer = std::chrono::system_clock::now();
-	//start receive then update loop in this thread
+	//input loops in this thread
 	while (contMain) {
 		//try to receive updates
 		Address recFrom;
 		unsigned char buffer[256];
 		int bytes_read = mySocket.receive(recFrom, (char *)buffer, 256);
-
-		//std::cout << "received " << bytes_read << " bytes";
+		
 		if (bytes_read >= 0) {
 			//check what type of message was received
 			std::string message((char *)buffer);
 			std::cout << "received: " << message << "\n";
-
 			//HANDLE LOGINS
 			if (prefixMatch(message, "LOGIN")) {
 				bool copy = false;
@@ -124,7 +140,7 @@ int main(int argc, char **argv) {
 					if ((s.getAddress() == recFrom.getAddress()) && (s.getPort() == recFrom.getPort())) {
 						//already received request but ACK not received by sender so just try again
 						std::cout << "resending login ACK \n";
-						copy = true;	
+						copy = true;
 						break;
 					}
 				}
@@ -132,8 +148,9 @@ int main(int argc, char **argv) {
 					std::cout << "Added client to current list connected with address = " << recFrom.getHBOAddress() << " at port = " << recFrom.getHBOPort() << "\n";
 					clients.push_back(recFrom);
 					//create their car for the game, generate a global ID too
-					playerIDs.push_back(std::pair<Address,GameObjectGlobalID>(recFrom,576));
-					updateManager.queueUpdate(GameObject(576,true));
+					GameObjectGlobalID id = updateManager.getNextObjectID();
+					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
+					updateManager.queueUpdate(GameObject(id, true));
 				}
 				const char data[] = "LOGIN ACCEPTED";
 				sender.sendAck(recFrom, data);
@@ -142,7 +159,7 @@ int main(int argc, char **argv) {
 			else if (prefixMatch(message, "LOGOUT")) {
 				std::cout << "Server received logout request \n";
 				std::vector<Address>::iterator it;
-				std::vector<std::pair<Address,GameObjectGlobalID>>::iterator it2;
+				std::vector<std::pair<Address, GameObjectGlobalID>>::iterator it2;
 				for (it = clients.begin(); it < clients.end(); it++) {
 					if ((it->getAddress() == recFrom.getAddress()) && (it->getPort() == recFrom.getPort())) {
 						clients.erase(it);
@@ -151,7 +168,7 @@ int main(int argc, char **argv) {
 					}
 					else {
 						const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
-						sender.sendAck((*it),data);
+						sender.sendAck((*it), data);
 					}
 				}
 				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
@@ -164,7 +181,6 @@ int main(int argc, char **argv) {
 				}
 			}
 			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
-			//MOVE NEED: (rot roll, pitch, yaw)
 			else if (prefixMatch(message, "PRESSED")) {
 				char key = buffer[8];
 				std::cout << "User pressed " << key << "\n";
@@ -189,25 +205,29 @@ int main(int argc, char **argv) {
 					}
 				}
 			}
-			else if (prefixMatch(message, "GETID")) {
-				// TODO: return a new ID to the client
+			//HANDLE HEAD ORIENTATION
+			else if (prefixMatch(message, "PRY")) {
+				std::cout << "recieved pitch, roll and yaw from " << recFrom.getHBOAddress() << " " << recFrom.getHBOPort() << "\n";
+				float *pry = new float[3];
+				pry[0] = (float)((buffer[3] << 24) | (buffer[4] << 16) | (buffer[5] << 8) | buffer[6]);
+				pry[1] = (float)((buffer[7] << 24) | (buffer[8] << 16) | (buffer[9] << 8) | buffer[10]);
+				pry[2] = (float)((buffer[11] << 24) | (buffer[12] << 16) | (buffer[13] << 8) | buffer[14]);
+				std::cout << "p=" << pry[0] << " r=" << pry[1] << " y=" << pry[2] << "\n";
+				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
+					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
+						GameObject o = updateManager.getGameObject(e.second);
+						o.setPRY(pry[0], pry[1], pry[2]);
+						updateManager.queueUpdate(o);
+						break;
+					}
+				}
 			}
-
 			else {
 				std::cout << "Unknown message received\n";
 			}
 		}
-
-		//TODO: RUN PHYSICS HERE
-#ifdef SIMULATOR_H
-		Simulator & physicsSimulator = Simulator::getInstance();
-		// TODO: Choose proper timestep based on realtime
-		auto nextTime = std::chrono::system_clock::now();
-		std::chrono::duration<float> timestepDur = nextTime - timer;
-		timer = nextTime;
-		physicsSimulator.tick(timestepDur.count());
-#endif
 	}
+
 	std::cout << "quitting the server\n";
 
 	update.join();
@@ -215,6 +235,9 @@ int main(int argc, char **argv) {
 
 	l_quit.join();
 	std::cout << "stopped quit listener\n";
+	
+	physics.join();
+	std::cout << "stopped receiver\n";
 
 	updateManager.stop();
 	std::cout << "set update manager continue to false\n";
