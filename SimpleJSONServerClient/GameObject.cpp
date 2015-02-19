@@ -1,6 +1,6 @@
 #include "GameObject.hpp"
 
-GameObject::GameObject(GameObjectGlobalID id,bool userObj) {
+GameObject::GameObject(GameObjectGlobalID id, bool userObj) {
 	(this->ID) = id;
 	(this->userControllable) = userObj;
 }

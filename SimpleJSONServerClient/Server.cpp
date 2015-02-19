@@ -188,6 +188,9 @@ int main(int argc, char **argv) {
 					}
 				}
 			}
+			else if (prefixMatch(message, "GETID")) {
+				// TODO: return a new ID to the client
+			}
 
 			else {
 				std::cout << "Unknown message received\n";
