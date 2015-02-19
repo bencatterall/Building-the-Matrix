@@ -34,7 +34,7 @@ bool Client::sendKeyPress(char key) {
 	std::cout << key << " pressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	a = ((this->socket).sendSingle((this->server), data, 10));
 	(this->lock).unlock();
 	return a;
 }
@@ -44,7 +44,7 @@ bool Client::sendKeyUnpress(char key) {
 	std::cout << key << " unpressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), data, sizeof(data)));
+	a = ((this->socket).sendSingle((this->server), data, 12));
 	(this->lock).unlock();
 	return a;
 }
