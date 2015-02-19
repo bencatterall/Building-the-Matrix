@@ -32,18 +32,21 @@ public:
 	const vec3 getX() const;
 	const vec3 getV() const;
 	const vec3 getA() const;
+	const vec3 getOrientation() const;
 	void setX(vec3 &);
 	void setV(vec3 &);
 	void setA(vec3 &);
+	void setOrientation(vec3 &);
 	
 	float getMass() const;
 	float getInvMass() const;
 	float getRest() const;
-
-	// TODO: Move me to cpp once implemented
-	vec3 getOrientation() const{
-		return orientation;
-	}
+	float getQuadDrag() const;
+	float getLinDrag() const;
+	void setMass(const float);
+	void setRest(const float);
+	void setQuadDrag(const float);
+	void setLinDrag(const float);
 
 
 protected:

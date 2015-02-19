@@ -27,7 +27,7 @@ void Display::init() {
 	hmd = ovrHmd_Create(0);
 
 	if (!hmd) {
-		cout << "Failed to openl Oculus HMD, falling back onto virtual debug." << std::endl;
+		cout << "Failed to open Oculus HMD, falling back onto virtual debug." << std::endl;
 		hmd = ovrHmd_CreateDebug(ovrHmd_DK2);
 
 		//Called when creating normally but not on debug
