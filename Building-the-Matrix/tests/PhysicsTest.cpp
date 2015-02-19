@@ -40,7 +40,7 @@ TEST_CASE("Testing Physics", "[physics]"){
 
 	AABB cubeAABB = *phy.getWorldAABB();
 
-	CHECK(cubeAABB.getCen() == vec3(1.0f, 2.0f, 3.0f));
+	REQUIRE(cubeAABB.getCenter() == vec3(1.0f, 2.0f, 3.0f));
 	REQUIRE(cubeAABB.getXSpan() == 8.0f);
 
 	PhysicsMaths::stepObject(phy, 1.0f);

@@ -350,6 +350,7 @@ Display::~Display() {
 
 void Display::run() {
 	//Create objects
+	
 	try {
 		client.setAddresses(Address(std::string("127.0.0.1"), 9898), Address(std::string("127.0.0.1"), 9899));
 	}
@@ -382,7 +383,7 @@ void Display::run() {
 	if (attempts == 5) {
 		std::cout << "Login to game server failed\n";
 	}
-
+	
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 	Simulator& simulator = Simulator::getInstance();
@@ -416,7 +417,7 @@ void Display::run() {
 		else {
 			//some form of prediction
 		}
-
+		
 		//physics tick 
 		//TODO calculate dt per frame
 		//simulator.tick(dt);

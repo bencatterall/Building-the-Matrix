@@ -22,7 +22,7 @@ public:
 
 	vec3 getMin() const;
 	vec3 getMax() const;
-	vec3 getCen() const;
+	vec3 getCenter() const;
 	float getXSpan() const;
 	float getYSpan() const;
 	float getZSpan() const;
