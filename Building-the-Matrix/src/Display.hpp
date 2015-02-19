@@ -16,6 +16,8 @@
 #include "OVR_CAPI_GL.h"
 #include "Kernel\OVR_Math.h"
 
+#include <glm/glm.hpp>
+
 using namespace OVR;
 //TODO: Remove this hack
 extern ovrHmd hmd;
@@ -30,7 +32,7 @@ class Display {
 	int frameBufferWidth = 0;
 	int frameBufferHeight = 0;
 	GLFWwindow* window = nullptr;
-
+	glm::vec3 headOrientation;
 
 	static void glfwErrorCallback(int error, const char* desc) {
 		std::cerr << "ERROR: In GLFW: " << error << " " << desc << std::endl;
@@ -38,6 +40,11 @@ class Display {
 
 	void cleanup();
 	void init();
+	///
+	/// Vector of yaw, pitch, roll in radians
+	///
+	glm::vec3 getHeadOrientation() { return headOrientation;  }
+	void findHeadOrientation();
 public:
 	Display();
 	~Display();
