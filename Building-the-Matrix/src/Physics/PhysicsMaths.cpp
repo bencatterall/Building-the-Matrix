@@ -3,6 +3,7 @@
 #include "../GameObject.hpp"
 #include "../ObjectManager.hpp"
 #include "../RenderableComponent.hpp"
+#include "../LocationComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
@@ -52,7 +53,7 @@ namespace PhysicsMaths{
 	// @param a,b - the two AABB items to check with
 	// @return true if they collide
 	bool simpleCollision(const AABB &a, const AABB &b){
-		vec3 vec3Difference = a.getCen() - b.getCen();
+		vec3 vec3Difference = a.getCenter() - b.getCenter();
 		
 		// If there exists a gap in the direction of a principal axis, then
 		// there exists a plane normal to that axis which separates them.
@@ -77,12 +78,12 @@ namespace PhysicsMaths{
 		GameObject objB = *objMan.getObject(bID);
 		PhysicsObject physA = *objA.getPhysicsComponent();
 		PhysicsObject physB = *objB.getPhysicsComponent();
-		vec3 aCen = physA.getLocalAABB().getCen();
-		vec3 bCen = physB.getLocalAABB().getCen();
+		vec3 aCen = physA.getLocalAABB().getCenter();
+		vec3 bCen = physB.getLocalAABB().getCenter();
 		
 		// Transform these to world space
-		glm::mat4 matA = objA.getRenderableComponent()->getProjectionMatrix();
-		glm::mat4 matB = objB.getRenderableComponent()->getProjectionMatrix();
+		glm::mat4 matA = glm::translate(glm::mat4x4(1.0f), objA.getLocationComponent()->getPosition());
+		glm::mat4 matB = glm::translate(glm::mat4x4(1.0f), objB.getLocationComponent()->getPosition());
 		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 0.0f));
 		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 0.0f));
 
@@ -152,7 +153,7 @@ namespace PhysicsMaths{
 	}
 
 	const glm::vec3 translateVertex(const glm::mat4x4 matrix, const vec3 vector){
-		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 0.0f));
+		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 1.0f));
 	}
 
 	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 matrix, const std::shared_ptr<vertexVector> vertices) {
@@ -169,8 +170,14 @@ namespace PhysicsMaths{
 		std::shared_ptr<PhysicsObject> bObj = obj.getObject(b)->getPhysicsComponent();
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
 		std::shared_ptr<vertexVector> bBox = bObj->getLocalAABB().getFullBox();
-		std::shared_ptr<vertexVector> aBoxWorld = translateVertexVector(obj.getObject(a)->getRenderableComponent()->getProjectionMatrix(), aBox);
-		std::shared_ptr<vertexVector> bBoxWorld = translateVertexVector(obj.getObject(b)->getRenderableComponent()->getProjectionMatrix(), bBox);
+		vec3 vecA = obj.getObject(a)->getLocationComponent()->getPosition();
+		vec3 vecB = obj.getObject(b)->getLocationComponent()->getPosition();
+		glm::mat4x4 transA = glm::translate(glm::mat4x4(1.0f), vecA);
+		glm::mat4x4	transB = glm::translate(glm::mat4x4(1.0f), vecB);
+		transA *= obj.getObject(a)->getLocationComponent()->getRotationMatrix();
+		transB *= obj.getObject(b)->getLocationComponent()->getRotationMatrix();
+		std::shared_ptr<vertexVector> aBoxWorld = translateVertexVector(transA, aBox);
+		std::shared_ptr<vertexVector> bBoxWorld = translateVertexVector(transB, bBox);
 		
 		// Generate planes to check to see if they are seperated by that plane
 		for (size_t i = 0; i < 3; i++){

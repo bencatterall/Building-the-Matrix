@@ -53,7 +53,6 @@ protected:
 
 private:
 	// Will need some more information later
-	vertexVector vertices;
 	std::shared_ptr<AABB> boundingBox;
 	float restitution; // Co-efficent of restitution
 	float mass;		// Mass of Object, with 0 representing +inf
@@ -66,11 +65,11 @@ private:
 	vec3 acc;		// Acceleration
 
 	// TODO implement these
-	Quaternion spin;
+	//Quaternion spin;
 	vec3 orientation;
-	vec3 angularVelocity;
-	vec3 angulurMomentum;
-	vec3 torque;
+	//vec3 angularVelocity;
+	//vec3 angulurMomentum;
+	//vec3 torque;
 	//
 
 };
