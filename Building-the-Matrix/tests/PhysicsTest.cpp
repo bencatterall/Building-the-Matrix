@@ -7,6 +7,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <memory>
+#include <freeglut/glut.h>
 
 #include "../src/Game.hpp"
 #include "../src/Cube.hpp"
@@ -19,10 +20,13 @@
 
 using glm::vec3;
 
-
 TEST_CASE("Testing Physics", "[physics]"){
-	Game game = Game();
+	int argc = 0;
+
+	glutInit(&argc, nullptr);
+	Game game;
 	game.init();
+	REQUIRE(false);
 	Cube cube = Cube();
 	cube.getLocationComponent()->setPosition(vec3(1.0f, 2.0f, 3.0f));
 	REQUIRE(cube.getLocationComponent()->getPosition() == vec3(1.0f, 2.0f, 3.0f));
