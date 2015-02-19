@@ -31,6 +31,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		ovrHmd_DismissHSWDisplay(hmd);
 
 	//handle user input
+	//TODO: local movement needed, rather than just getting server to move us
 	if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
 		client.sendKeyPress('u');
 	}
