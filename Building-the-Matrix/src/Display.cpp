@@ -407,7 +407,7 @@ void Display::run() {
 			lastTime += 1.0;
 		}
 
-		client.sendPitchRollYaw();
+		client.sendPitchRollYaw(getHeadOrientation());
 
 		//networking get updates;
 		//client.receive();
