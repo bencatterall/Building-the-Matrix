@@ -14,7 +14,7 @@ class Sender {
 		bool cont;
 	public:
 		Sender();
-		void setSocket(Socket s);
+		void setSocket(Socket *s);
 		~Sender();
 		Sender(const Sender& sender){} //don't want compiler generating this function as mutexes are uncopyable
 		void sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message);

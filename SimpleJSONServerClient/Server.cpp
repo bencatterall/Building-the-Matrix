@@ -8,6 +8,12 @@
 #include <vector>
 #include <chrono>
 
+/**
+ServerMain.cpp
+Purpose: Controls a server instance bounded to arg[1] address and arg[2] port number
+
+*/
+
 UpdateManager updateManager;
 Socket mySocket;
 std::vector <Address> clients;
@@ -76,7 +82,7 @@ int main(int argc, char **argv) {
 
 	
 	updateManager.setInitialObjects(initialObjects);
-	sender.setSocket(mySocket);
+	sender.setSocket(&mySocket);
 	
 	//start update manager run method in new thread
 	std::thread makeUpdates(&UpdateManager::run, &updateManager);
@@ -103,7 +109,7 @@ int main(int argc, char **argv) {
 		if (bytes_read >= 0) {
 			//check what type of message was received
 			std::string message((char *)buffer);
-			std::cout << "message received\n";
+			std::cout << "received: " << message << "\n";
 
 			//HANDLE LOGINS
 			if (message.compare(0,5,"LOGIN") == 0) {
@@ -120,16 +126,15 @@ int main(int argc, char **argv) {
 				if (!copy) {
 					std::cout << "Added client to current list connected with address = " << recFrom.getHBOAddress() << " at port = " << recFrom.getHBOPort() << "\n";
 					clients.push_back(recFrom);
-					//create their car for the game, using the unique global ID they send with the login
-					int ID = atoi((message.substr(6, message.length() - 1)).c_str());
-					playerIDs.push_back(std::pair<Address,GameObjectGlobalID>(recFrom,ID));
-					updateManager.queueUpdate(GameObject(ID,true));
+					//create their car for the game, generate a global ID too
+					playerIDs.push_back(std::pair<Address,GameObjectGlobalID>(recFrom,576));
+					updateManager.queueUpdate(GameObject(576,true));
 				}
 				const char data[] = "LOGIN ACCEPTED";
 				sender.sendAck(recFrom, data);
 			}
 			//HANDLE LOGOUTS
-			else if (message.compare("LOGOUT") == 0) {
+			else if (message.compare(0,6,"LOGOUT") == 0) {
 				std::cout << "Server received logout request \n";
 				std::vector<Address>::iterator it;
 				std::vector<std::pair<Address,GameObjectGlobalID>>::iterator it2;
@@ -144,7 +149,7 @@ int main(int argc, char **argv) {
 						sender.sendAck((*it),data);
 					}
 				}
-				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it++) {
+				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
 					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
 						updateManager.remove(it2->second);
 						playerIDs.erase(it2);

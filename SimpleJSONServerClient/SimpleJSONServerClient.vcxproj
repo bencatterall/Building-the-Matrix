@@ -87,7 +87,6 @@
     <ClCompile Include="Sender.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="ServerMain.cpp" />
     <ClCompile Include="Update.cpp" />
     <ClCompile Include="UpdateManager.cpp" />
   </ItemGroup>

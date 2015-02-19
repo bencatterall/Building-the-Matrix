@@ -1,17 +1,33 @@
 #include "Message.hpp" 
+#include <iostream>
+
+int Message::getMessageSize() {
+	return (this->messageSize);
+}
 
 Message::Message(Address client, std::map<GameObjectGlobalID, GameObject> message) {
 	 //TODO: turn map into a json string
-	 char *s = "JSON UPDATE EXAMPLE";
+	 char *s = "JSON UPDATE EXAMPLE\0";
 	 (this->client) = client;
 	 (this->message) = s;
+	 (this->messageSize) = 20;
 }
 
 Message::Message(Address client, std::string event) {
+	std::cout << "event was " << event << "\n";
 	//TODO: make an ACK message in JSON depending on what event happened e.g. a user logged out
-	std::string s = "JSON EVENT EXAMPLE";
-	(this->client) = client;
-	(this->message) = "example";
+	if (event.compare(0,14,"LOGIN ACCEPTED") == 0) {
+		std::cout << "sending LOGIN ACCEPTED\n";
+		(this->client) = client;
+		(this->message) = "LOGIN ACCEPTED\0";
+		(this->messageSize) = 15;
+	}
+	else if (event.compare("A FELLOW PLAYER HAS LEFT THE GAME")==0){
+		std::cout << "sending A FELLOW PLAYER HAS LEFT THE GAME\n";
+		(this->client) = client;
+		(this->message) = "A FELLOW PLAYER HAS LEFT THE GAME\0";
+		(this->messageSize) = 38;
+	}
 }
 
 Address Message::getClient() {

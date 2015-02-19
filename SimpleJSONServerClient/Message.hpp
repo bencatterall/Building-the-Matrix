@@ -9,11 +9,13 @@ class Message {
 	private:
 		Address client;
 		char *message;
+		int messageSize;
 	public:
 		Message(Address client, std::map<GameObjectGlobalID, GameObject> message);
 		Message(Address client, std::string event);
 		Address getClient();
 		char* getMessage();
 		std::map<GameObjectGlobalID, GameObject> parseMessage();
+		int getMessageSize();
 };
 #endif

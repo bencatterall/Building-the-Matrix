@@ -382,9 +382,6 @@ void Display::run() {
 	if (attempts == 5) {
 		std::cout << "Login to game server failed\n";
 	}
-	else {
-		std::cout << "Login to game server successful\n";
-	}
 
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();

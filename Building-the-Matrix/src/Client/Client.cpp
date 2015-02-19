@@ -51,12 +51,12 @@ bool Client::sendKeyUnpress(char key) {
 
 bool Client::sendLoginRequest() {
 	const char *data = constants.loginMessage();
-	return ((this->socket).sendSingle((this->server), data, 7));
+	return ((this->socket).sendSingle((this->server), data, 10));
 }
 
 bool Client::sendLogout() {
 	const char *data = constants.logoutMessage();
-	return ((this->socket).sendSingle((this->server), data, 7));
+	return ((this->socket).sendSingle((this->server), data, 10));
 }
 
 //attempts to send the bytestream given as an argument, and returns true if succesful

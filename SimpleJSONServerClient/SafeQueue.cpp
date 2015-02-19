@@ -25,7 +25,7 @@ Update SafeQueue<Update>::popFromFront() {
 	else {
 		Update u = (this->queue).front();
 		(this->queue).pop();
-		std::cout << "popped element, size now " << (this->queue).size() << "\n";
+		std::cout << "popped element from pending updates queue, size now " << (this->queue).size() << "\n";
 		(this->lock).unlock();
 		return u;
 	}
@@ -34,7 +34,7 @@ Update SafeQueue<Update>::popFromFront() {
 void SafeQueue<Update>::pushToEnd(Update update) {
 	(this->lock).lock();
 	(this->queue).push(update);
-	std::cout << "pushed element, size now " << (this->queue).size() << "\n";
+	std::cout << "pushed element to pending updates queue, size now " << (this->queue).size() << "\n";
 	(this->lock).unlock();
 }
 
@@ -61,7 +61,7 @@ Message SafeQueue<Message>::popFromFront() {
 	else {
 		Message u = (this->queue).front();
 		(this->queue).pop();
-		std::cout << "popped element, size now " << (this->queue).size() << "\n";
+		std::cout << "popped element from messages to send queue, size now " << (this->queue).size() << "\n";
 		(this->lock).unlock();
 		return u;
 	}
@@ -70,6 +70,6 @@ Message SafeQueue<Message>::popFromFront() {
 void SafeQueue<Message>::pushToEnd(Message message) {
 	(this->lock).lock();
 	(this->queue).push(message);
-	std::cout << "pushed element, size now " << (this->queue).size() << "\n";
+	std::cout << "pushed element to messages to send queue, size now " << (this->queue).size() << "\n";
 	(this->lock).unlock();
 }

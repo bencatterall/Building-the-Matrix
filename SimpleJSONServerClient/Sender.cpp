@@ -7,8 +7,8 @@ Sender::Sender() {
 
 Sender::~Sender() {}
 
-void Sender::setSocket(Socket s) {
-	(this->serverSocket) = s;
+void Sender::setSocket(Socket *s) {
+	(this->serverSocket) = *s;
 }
 
 void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message) {
@@ -26,7 +26,7 @@ void Sender::run() {
 	while (this->cont) {
 		if (!(this->toSend).isEmpty()) {
 			Message m = (this->toSend).popFromFront();
-			if (!((this->serverSocket).sendSingle(m.getClient(), m.getMessage(), sizeof(m.getMessage())))) {
+			if (!((this->serverSocket).sendSingle(m.getClient(), m.getMessage(), m.getMessageSize()))) {
 				std::cout << "Failed to send message\n";
 			}
 		}
