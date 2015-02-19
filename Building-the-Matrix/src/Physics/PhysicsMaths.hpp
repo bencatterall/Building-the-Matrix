@@ -32,7 +32,7 @@ namespace PhysicsMaths
 	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
 	void handleCollision(GameObjectID, GameObjectID);
-	void stepObject(PhysicsObject, float);
+	void stepObject(PhysicsObject &, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
 	const vec3 translateVertex(const glm::mat4x4, const vec3);

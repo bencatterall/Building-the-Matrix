@@ -60,7 +60,6 @@ private:
 	float inverseMass; // Precomputed value of (1/mass)
 	float friction;	// Co-efficient of linear friction
 	float airRes;	// Co-efficient of quadratic drag
-	vec3 position;	// Centre position
 	std::shared_ptr<LocationComponent> location;
 	std::shared_ptr<RenderableComponent> rendComp;
 	vec3 velocity;	// Velocity

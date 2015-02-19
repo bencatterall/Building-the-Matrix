@@ -13,7 +13,6 @@ GameObject::GameObject(bool renderable, bool visible) :
 	if (renderable) {
 		this->renderableComponent = std::make_shared<RenderableComponent>();
 		this->locationComponent = std::make_shared<LocationComponent>();
-		this->physicsObject = std::make_shared<PhysicsObject>(this->locationComponent, this->renderableComponent);
 	}
 }
 

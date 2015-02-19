@@ -112,8 +112,9 @@ namespace PhysicsMaths{
 		physB.setV(physB.getV() + impulse * physB.getMass() / mass_sum);
 	}
 
-	void stepObject(PhysicsObject physObj, float timestep){
-		physObj.setX(UATtoS(physObj.getV(), physObj.getA(), timestep));
+	void stepObject(PhysicsObject & physObj, float timestep){
+		vec3 delS = UATtoS(physObj.getV(), physObj.getA(), timestep);
+		physObj.setX(physObj.getX() + delS);
 		vec3 newV = UATtoV(physObj.getV(), physObj.getA(), timestep);
 		vec3 acc = physObj.getA();
 		// Drag calculations
@@ -156,8 +157,8 @@ namespace PhysicsMaths{
 
 	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 matrix, const std::shared_ptr<vertexVector> vertices) {
 		std::shared_ptr<vertexVector> result = std::make_shared<vertexVector>(*vertices);
-		for (size_t i = 0; i < result->size(); i++){
-			result->assign(i, translateVertex(matrix, result->at(i)));
+		for (size_t i = 0; i < vertices->size(); i++){
+			result->at(i) = translateVertex(matrix, result->at(i));
 		}
 		return result;
 	}

@@ -8,7 +8,7 @@
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), vertices(vertices),
-	velocity(vec3()), position(vec3())
+	velocity(vec3())
 {
 	this->location = locationComp;
 	this->rendComp = rendComp;
@@ -20,11 +20,10 @@ PhysicsObject::~PhysicsObject()
 }
 
 const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
-	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(
-		rendComp->getProjectionMatrix(), boundingBox->getFullBox()
-		);
-
-	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(worldSpace);
+	glm::mat4x4 projMat = rendComp->getProjectionMatrix();
+	std::shared_ptr<vertexVector> fullBox = boundingBox->getFullBox();
+	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(projMat, fullBox);
+	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(*worldSpace);
 	return worldBox;
 }
 
