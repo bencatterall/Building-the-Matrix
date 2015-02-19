@@ -2,20 +2,20 @@
 #include "Message.hpp"
 #include <iostream>
 
-SafeQueue<Update>::SafeQueue() {
+template<> SafeQueue<Update>::SafeQueue() {
 	(this->queue) = std::queue<Update>();
 }
 
-SafeQueue<Update>::~SafeQueue() {}
+template<> SafeQueue<Update>::~SafeQueue() {}
 
-bool SafeQueue<Update>::isEmpty() {
+template<> bool SafeQueue<Update>::isEmpty() {
 	(this->lock).lock();
 	bool r = (this->queue).empty();
 	(this->lock).unlock();
 	return r;
 }
 
-Update SafeQueue<Update>::popFromFront() {
+template<> Update SafeQueue<Update>::popFromFront() {
 	(this->lock).lock();
 	if ((this->queue).empty()) {
 		//std::cout << "queue was empty\n";
@@ -31,27 +31,27 @@ Update SafeQueue<Update>::popFromFront() {
 	}
 }
 
-void SafeQueue<Update>::pushToEnd(Update update) {
+template<> void SafeQueue<Update>::pushToEnd(Update update) {
 	(this->lock).lock();
 	(this->queue).push(update);
 	std::cout << "pushed element to pending updates queue, size now " << (this->queue).size() << "\n";
 	(this->lock).unlock();
 }
 
-SafeQueue<Message>::SafeQueue() {
+template<> SafeQueue<Message>::SafeQueue() {
 	(this->queue) = std::queue<Message>();
 }
 
-SafeQueue<Message>::~SafeQueue() {}
+template<> SafeQueue<Message>::~SafeQueue() {}
 
-bool SafeQueue<Message>::isEmpty() {
+template<> bool SafeQueue<Message>::isEmpty() {
 	(this->lock).lock();
 	bool r = (this->queue).empty();
 	(this->lock).unlock();
 	return r;
 }
 
-Message SafeQueue<Message>::popFromFront() {
+template<> Message SafeQueue<Message>::popFromFront() {
 	(this->lock).lock();
 	if ((this->queue).empty()) {
 		//std::cout << "queue was empty\n";
@@ -67,7 +67,7 @@ Message SafeQueue<Message>::popFromFront() {
 	}
 }
 
-void SafeQueue<Message>::pushToEnd(Message message) {
+template<> void SafeQueue<Message>::pushToEnd(Message message) {
 	(this->lock).lock();
 	(this->queue).push(message);
 	std::cout << "pushed element to messages to send queue, size now " << (this->queue).size() << "\n";

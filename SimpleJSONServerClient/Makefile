@@ -1,11 +1,11 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall --pedantic
-DEPS = Address.hpp Socket.hpp
-OBJ = Address.o Socket.o
+DEPS = Address.hpp Socket.hpp GameObject.hpp UpdateManager.hpp Sender.hpp SafeQueue.hpp SafeMap.hpp Update.hpp Controls.hpp Message.hpp
+OBJ = Address.o Socket.o GameObject.o UpdateManager.o Sender.o SafeQueue.o SafeMap.o Update.o Controls.o Message.o
 
-all: ServerMain
+all: Server
 
-ServerMain: %: %.cpp $(OBJ) 
+Server: %: %.cpp $(OBJ) 
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 %.o: %.cpp $(DEPS)

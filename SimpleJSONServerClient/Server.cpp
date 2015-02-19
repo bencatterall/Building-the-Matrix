@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 	std::thread update(broadcast);
 
 	//start listener fo quitting
-	std::thread quit(quit);
+	std::thread l_quit(quit);
 	
 	contMain = true;
 
@@ -196,7 +196,7 @@ int main(int argc, char **argv) {
 	update.join();
 	std::cout << "stopped updater\n";
 
-	quit.join();
+	l_quit.join();
 	std::cout << "stopped quit listener\n";
 
 	updateManager.stop();
