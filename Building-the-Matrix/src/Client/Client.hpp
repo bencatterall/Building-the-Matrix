@@ -17,6 +17,7 @@ private:
 	MessageConstants constants;
     std::chrono::time_point<std::chrono::system_clock> time_last_updated;
 public:
+	const std::chrono::seconds timeout;
 	Client();
 	void setAddresses(Address client, Address server);
 	~Client();
@@ -27,6 +28,7 @@ public:
 	bool send(const char *data, int size);
 	int receive(char *data,int size);
     std::chrono::time_point<std::chrono::system_clock> getTimeLastUpdated() const;
+    bool timedOut() const;
 };
 
 #endif

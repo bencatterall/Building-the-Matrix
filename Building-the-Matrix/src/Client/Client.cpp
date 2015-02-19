@@ -10,7 +10,7 @@
 #include <chrono>
 #include <iostream>
 
-Client::Client() {}
+Client::Client() : timeout(6) {}
 
 //binds client to a socket and stores address of the server and its own Socket. An int is thrown if something goes wrong
 void Client::setAddresses(Address client, Address server) {
@@ -76,7 +76,10 @@ int Client::receive(char *data, int size) {
 	return bytes_read;
 }
 
-
 std::chrono::time_point<std::chrono::system_clock> Client::getTimeLastUpdated() const {
 	return time_last_updated;
+}
+
+bool Client::timedOut() const {
+	return (std::chrono::system_clock::now() - time_last_updated) > timeout;
 }
