@@ -92,8 +92,8 @@ vec3 AABB::getMax() const{
 	return max;
 }
 
-vec3 AABB::getCen() const{
-	return (max-min)/2.0f;
+vec3 AABB::getCenter() const{
+	return (max+min)/2.0f;
 }
 
 float AABB::getXSpan() const{
