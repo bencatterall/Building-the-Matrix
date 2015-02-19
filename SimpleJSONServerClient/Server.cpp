@@ -7,6 +7,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+//#include "../Building-the-Matrix/src/Physics/Simulator.hpp"
 
 /**
 ServerMain.cpp
@@ -36,6 +37,10 @@ void quit() {
 	if (std::cin.get() == '\n') {
 		contMain = false;
 	}
+}
+
+bool prefixMatch(std::string message, std::string prefix) {
+	return message.compare(0, prefix.length(), prefix) == 0;
 }
 
 int main(int argc, char **argv) {
@@ -97,7 +102,7 @@ int main(int argc, char **argv) {
 	std::thread l_quit(quit);
 	
 	contMain = true;
-
+	auto timer = std::chrono::system_clock::now();
 	//start receive then update loop in this thread
 	while (contMain) {
 		//try to receive updates
@@ -112,7 +117,7 @@ int main(int argc, char **argv) {
 			std::cout << "received: " << message << "\n";
 
 			//HANDLE LOGINS
-			if (message.compare(0,5,"LOGIN") == 0) {
+			if (prefixMatch(message, "LOGIN")) {
 				bool copy = false;
 				std::cout << "Server received login request \n";
 				for (Address s : clients) {
@@ -134,7 +139,7 @@ int main(int argc, char **argv) {
 				sender.sendAck(recFrom, data);
 			}
 			//HANDLE LOGOUTS
-			else if (message.compare(0,6,"LOGOUT") == 0) {
+			else if (prefixMatch(message, "LOGOUT")) {
 				std::cout << "Server received logout request \n";
 				std::vector<Address>::iterator it;
 				std::vector<std::pair<Address,GameObjectGlobalID>>::iterator it2;
@@ -160,7 +165,7 @@ int main(int argc, char **argv) {
 			}
 			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
 			//MOVE NEED: (rot roll, pitch, yaw)
-			else if (message.compare(0,7,"PRESSED") == 0) {
+			else if (prefixMatch(message, "PRESSED")) {
 				char key = buffer[8];
 				std::cout << "User pressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
@@ -172,7 +177,7 @@ int main(int argc, char **argv) {
 					}
 				}
 			}
-			else if (message.compare(0,9,"UNPRESSED") == 0) {
+			else if (prefixMatch(message, "UNPRESSED")) {
 				char key = buffer[10];
 				std::cout << "User unpressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
@@ -184,12 +189,24 @@ int main(int argc, char **argv) {
 					}
 				}
 			}
+			else if (prefixMatch(message, "GETID")) {
+				// TODO: return a new ID to the client
+			}
 
 			else {
 				std::cout << "Unknown message received\n";
 			}
 		}
+
 		//TODO: RUN PHYSICS HERE
+#ifdef SIMULATOR_H
+		Simulator & physicsSimulator = Simulator::getInstance();
+		// TODO: Choose proper timestep based on realtime
+		auto nextTime = std::chrono::system_clock::now();
+		std::chrono::duration<float> timestepDur = nextTime - timer;
+		timer = nextTime;
+		physicsSimulator.tick(timestepDur.count());
+#endif
 	}
 	std::cout << "quitting the server\n";
 
