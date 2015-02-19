@@ -43,6 +43,7 @@ namespace PhysicsMaths
 	void reversePlayer(const GameObjectID);
 
 	void turnLeft(const GameObjectID);
+	void turnRight(const GameObjectID);
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 };
 

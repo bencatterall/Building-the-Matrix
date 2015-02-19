@@ -1,17 +1,15 @@
 #include "../LocationComponent.hpp"
-#include "../RenderableComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
 
 
-PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
+PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3())
 {
 	this->location = locationComp;
-	this->rendComp = rendComp;
-	boundingBox = std::make_shared<AABB>(PhysicsMaths::convertGLfloatToVec3(rendComp->getVertexData()));
+	boundingBox = std::make_shared<AABB>(vertices);
 }
 
 PhysicsObject::~PhysicsObject()
