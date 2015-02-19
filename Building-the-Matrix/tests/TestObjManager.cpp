@@ -2,6 +2,7 @@
 
 #ifdef TEST_GRAPHICS
 
+#include <Catch/catch.hpp>
 #include <memory>
 
 #include "../src/Common.hpp"

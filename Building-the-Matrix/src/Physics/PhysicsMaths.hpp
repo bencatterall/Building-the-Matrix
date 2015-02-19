@@ -3,8 +3,7 @@
 
 #include "../Common.hpp"
 
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <vector>
 #include <memory>
 
@@ -16,6 +15,7 @@ class AABB;
 class PhysicsObject;
 
 typedef std::vector<vec3> vertexVector;
+typedef glm::quat Quaternion;
 
 namespace PhysicsMaths
 {
@@ -27,6 +27,9 @@ namespace PhysicsMaths
 
 	bool simpleCollision(const AABB &, const AABB &);
 	bool simpleCollision(const PhysicsObject, const PhysicsObject);
+	bool simpleCollision(const GameObjectID a, const GameObjectID b);
+	bool complexCollision(const GameObjectID a, const GameObjectID b);
+	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
 	void handleCollision(GameObjectID, GameObjectID);
 	void stepObject(PhysicsObject, float);
@@ -34,6 +37,12 @@ namespace PhysicsMaths
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
 	const vec3 translateVertex(const glm::mat4x4, const vec3);
 	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
+
+	void acceleratePlayer(const GameObjectID);
+	void reversePlayer(const GameObjectID);
+
+	void turnLeft(const GameObjectID);
+	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 };
 
 #endif

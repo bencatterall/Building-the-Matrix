@@ -20,7 +20,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -34,3 +33,5 @@ ServerMain
 *.tlog
 *.log
 Building-the-Matrix.opensdf
+Building-the-Matrix.sdf
+*.sdf

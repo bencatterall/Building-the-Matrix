@@ -1,3 +1,4 @@
+
 /**
 	Client.cpp
 	Purpose: For game loop to access sending/receiving messages facilities
@@ -59,9 +60,9 @@ bool Client::sendLogout() {
 }
 
 //attempts to send the bytestream given as an argument, and returns true if succesful
-bool Client::send(char *data) {
-	//NOTE sizeof data will fail
-	return ((this->socket).sendSingle((this->server), data, sizeof(data)));
+
+bool Client::send(const char *data, int size) {
+	return ((this->socket).sendSingle((this->server), data, size));
 }
 
 //returns number of bytes read from packet in the buffer - if this function returns < 0 it means there was no packet to read
@@ -69,5 +70,13 @@ bool Client::send(char *data) {
 int Client::receive(char *data, int size) {
 	Address sender;
 	int bytes_read = (this->socket).receive(sender, (char *)data, size);
+	if (bytes_read) {
+		time_last_updated = std::chrono::system_clock::now();
+	}
 	return bytes_read;
+}
+
+
+std::chrono::time_point<std::chrono::system_clock> Client::getTimeLastUpdated() const {
+	return time_last_updated;
 }

@@ -7,12 +7,15 @@
 #include "../Common.hpp"
 #include <mutex>
 
+#include <chrono>
+
 class Client {
 private:
 	Socket socket;
 	Address server;
 	std::mutex lock;
 	MessageConstants constants;
+    std::chrono::time_point<std::chrono::system_clock> time_last_updated;
 public:
 	Client();
 	void setAddresses(Address client, Address server);
@@ -21,9 +24,9 @@ public:
 	bool sendKeyUnpress(char key);
 	bool sendLoginRequest();
 	bool sendLogout();
-	bool send(char *data);
+	bool send(const char *data, int size);
 	int receive(char *data,int size);
+    std::chrono::time_point<std::chrono::system_clock> getTimeLastUpdated() const;
 };
 
 #endif
-

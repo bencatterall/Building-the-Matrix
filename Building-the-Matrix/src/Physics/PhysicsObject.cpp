@@ -5,49 +5,15 @@
 #include "PhysicsMaths.hpp"
 
 
-PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> location)
-	: mass(1), inverseMass(1),
-	restitution(1), vertices(vertices),
-	velocity(vec3()), position(vec3()),
-	boundingBox(std::make_shared<AABB>(vertexVector()))
-{
-	location = location;
-}
-
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, std::shared_ptr<RenderableComponent> rendComp)
-	: mass(1), inverseMass(1),
-	restitution(1), vertices(vertices),
+	: mass(1.0f), inverseMass(1.0f),
+	restitution(1.0f), vertices(vertices),
 	velocity(vec3()), position(vec3())
 {
-	location = locationComp;
+	this->location = locationComp;
+	this->rendComp = rendComp;
 	boundingBox = std::make_shared<AABB>(PhysicsMaths::convertGLfloatToVec3(rendComp->getVertexData()));
 }
-
-#ifdef Refactor
-PhysicsObject::PhysicsObject(vertexVector vertices)
-	: mass(1), inverseMass(1),
-	restitution(1), vertices(vertices),
-	boundingBox(new AABB(vertices)), velocity(vec3()),
-	position(vec3())
-{
-}
-
-PhysicsObject::PhysicsObject(vertexVector vertices, vec3 pos, float mass, float rest)
-	: mass(mass), inverseMass(mass ? 1 / mass : 0),
-	restitution(rest), vertices(vertices),
-	boundingBox(new AABB(vertices)), velocity(vec3()),
-	position(vec3())
-{
-}
-
-PhysicsObject::PhysicsObject(vertexVector vertices, vec3 pos, vec3 velocity, float mass, float rest)
-	: mass(mass), inverseMass(mass ? 1 / mass : 0),
-	restitution(rest), vertices(vertices),
-	boundingBox(new AABB(vertices)), velocity(velocity),
-	position(pos)
-{
-}
-#endif
 
 PhysicsObject::~PhysicsObject()
 {
@@ -101,4 +67,42 @@ const vec3 PhysicsObject::getV() const{
 
 const vec3 PhysicsObject::getA() const{
 	return acc;
+}
+
+float PhysicsObject::getLinDrag() const{
+	return friction;
+}
+
+float PhysicsObject::getQuadDrag() const{
+	return airRes;
+}
+
+const vec3 PhysicsObject::getOrientation() const{
+	return orientation;
+}
+
+void PhysicsObject::setOrientation(vec3 & v){
+	orientation = glm::normalize(v);
+}
+
+void PhysicsObject::setMass(const float mass){
+	this->mass = mass;
+	if (mass == 0.0f){
+		inverseMass = 0.0f;
+	}
+	else{
+		inverseMass = 1.0f / mass;
+	}
+}
+
+void PhysicsObject::setRest(const float rest){
+	restitution = rest;
+}
+
+void PhysicsObject::setQuadDrag(const float quadDrag){
+	airRes = quadDrag;
+}
+
+void PhysicsObject::setLinDrag(const float linDrag){
+	friction = linDrag;
 }

@@ -19,7 +19,7 @@ void Game::init() {
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 	//Move camera to the position of the player
-	float xPos = 0.0f, yPos = -10.0f, zPos = -300.0f;
+	float xPos = 0.0f, yPos = -50.0f, zPos = -100.0;
 	glm::mat4 baseModelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(xPos, yPos, zPos));
 
 	//per cube

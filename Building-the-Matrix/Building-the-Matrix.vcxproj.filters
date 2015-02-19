@@ -145,7 +145,7 @@
       <Filter>Source Files\tests</Filter>
     </ClCompile>
     <ClCompile Include="src\Client\MessageConstants.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,11 +215,11 @@
     <ClInclude Include="src\Chunk.hpp">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="src\Client\MessageConstants.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Common.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Client\MessageConstants.hpp">
+      <Filter>Header Files\Client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

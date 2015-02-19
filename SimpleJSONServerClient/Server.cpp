@@ -69,6 +69,8 @@ int main(int argc, char **argv) {
 		std::exit(EXIT_FAILURE);
 	}
 
+	std::cout << "connected to host " << serverAddr->getHBOAddress() << " on port " << serverAddr->getHBOPort() << "\n";
+
 	std::vector < GameObject > initialObjects;
 	//TODO: push initial objects
 
@@ -111,7 +113,7 @@ int main(int argc, char **argv) {
 					if ((s.getAddress() == recFrom.getAddress()) && (s.getPort() == recFrom.getPort())) {
 						//already received request but ACK not received by sender so just try again
 						std::cout << "resending login ACK \n";
-						copy = true;
+						copy = true;	
 						break;
 					}
 				}

@@ -17,7 +17,6 @@
 ovrHmd hmd;
 
 using namespace std;
-
 Client client;
 //asynchronous user input so not required in game loop
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -65,7 +64,7 @@ void Display::init() {
 	hmd = ovrHmd_Create(0);
 
 	if (!hmd) {
-		cout << "Failed to openl Oculus HMD, falling back onto virtual debug." << std::endl;
+		cout << "Failed to open Oculus HMD, falling back onto virtual debug." << std::endl;
 		hmd = ovrHmd_CreateDebug(ovrHmd_DK2);
 
 		//Called when creating normally but not on debug
@@ -162,8 +161,19 @@ void Display::init() {
 	glfwSwapInterval(1);
 	glfwSetKeyCallback(window, key_callback);
 
-	//init GLEW
+	//Init GLEW
 	glewInit();
+	if (glewIsSupported("GL_VERSION_4_5")) {
+#ifdef DEBUG
+		std::cout << "YES" << std::endl;
+#endif
+	}
+	else {
+#ifdef DEBUG
+		std::cout << " NO" << std::endl;
+#endif
+	}
+
 
 	//get texture sizes
 	ovrSizei eyeSize[2];
@@ -213,18 +223,9 @@ void Display::init() {
 	//Bind the frame buffer as the output one
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
 
-	//Init GLEW
-	glewInit();
-	if (glewIsSupported("GL_VERSION_4_5")) {
-#ifdef DEBUG
-		std::cout << "YES" << std::endl;
-#endif
-	}
-	else {
-#ifdef DEBUG
-		std::cout << " NO" << std::endl;
-#endif
-	}
+	//Init glut's user input listener
+	//glutSpecialFunc(processSpecialKeys);
+
 }
 
 ///Test function
@@ -384,6 +385,7 @@ void Display::run() {
 	else {
 		std::cout << "Login to game server successful\n";
 	}
+
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 	Simulator& simulator = Simulator::getInstance();
@@ -438,7 +440,7 @@ void Display::render() {
 	//Bind in the frame buffer for the HMD
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
 
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0);
+	glClearColor(135.0f / 255.0f, 206.0f / 255.0f, 235.0f/ 255.0f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -511,3 +513,4 @@ void Display::render() {
 	//Don't need to swap buffers, handled by the SDK
 
 }
+
