@@ -26,9 +26,7 @@ TEST_CASE("Testing Physics", "[physics]"){
 	glutInit(&argc, nullptr);
 	Game game;
 	game.init();
-	REQUIRE(false);
-	Cube cube = Cube();
-	cube.getLocationComponent()->setPosition(vec3(1.0f, 2.0f, 3.0f));
+	Cube cube = Cube(vec3(1.0f, 2.0f, 3.0f));
 	REQUIRE(cube.getLocationComponent()->getPosition() == vec3(1.0f, 2.0f, 3.0f));
 	PhysicsObject phy = *cube.getPhysicsComponent();
 	phy.setA(vec3(0.0f, 0.0f, 1.0f));
@@ -43,8 +41,8 @@ TEST_CASE("Testing Physics", "[physics]"){
 	SECTION("AABBs"){
 		AABB cubeAABB = *phy.getWorldAABB();
 
-		REQUIRE(cubeAABB.getCen() == vec3(1.0f, 2.0f, 3.0f));
-		REQUIRE(cubeAABB.getXSpan() == 2.0f);
+		CHECK(cubeAABB.getCen() == vec3(1.0f, 2.0f, 3.0f));
+		REQUIRE(cubeAABB.getXSpan() == 8.0f);
 	}
 
 	SECTION("Linear Motion"){

@@ -93,19 +93,19 @@ vec3 AABB::getMax() const{
 }
 
 vec3 AABB::getCen() const{
-	return center;
+	return (max-min)/2.0f;
 }
 
 float AABB::getXSpan() const{
-	return xSpan;
+	return max.x-min.x;
 }
 
 float AABB::getYSpan() const{
-	return ySpan;
+	return max.z - min.z;
 }
 
 float AABB::getZSpan() const{
-	return zSpan;
+	return max.z - min.z;
 }
 
 bool AABB::intersects(const AABB &aabb) const{
@@ -120,7 +120,7 @@ inline bool getBit(char c, char bit){
 // each corner of the AABB explicitly
 std::shared_ptr<vertexVector> AABB::getFullBox() const{
 	std::shared_ptr<vertexVector> fullBox = std::make_shared<vertexVector>();
-	fullBox->resize(8);
+	fullBox->reserve(8);
 
 	// Fill in each vertex
 	for (char i = 0; i < 8; i++){

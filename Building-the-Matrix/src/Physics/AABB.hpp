@@ -33,8 +33,7 @@ public:
 protected:
 
 private:
-	vec3 min, center, max;
-	float xSpan, ySpan, zSpan;
+	vec3 min, max;
 };
 
 #endif AABB_H
