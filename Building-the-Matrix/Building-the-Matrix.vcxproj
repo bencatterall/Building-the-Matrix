@@ -83,8 +83,6 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\ImageLoader.cpp" />
-    <ClCompile Include="src\JSON\JsonClass.cpp" />
-    <ClCompile Include="src\JSON\UpdateManager.cpp" />
     <ClCompile Include="src\LocationComponent.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
@@ -94,13 +92,16 @@
     <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
+    <ClCompile Include="src\Serializer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\UpdateManager.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="tests\Catch.cpp" />
     <ClCompile Include="tests\PhysicsTest.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
+    <ClCompile Include="tests\UpdateManagerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp" />
@@ -115,7 +116,6 @@
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\GameObject.hpp" />
     <ClInclude Include="src\ImageLoader.hpp" />
-    <ClInclude Include="src\JSON\UpdateManager.hpp" />
     <ClInclude Include="src\LocationComponent.hpp" />
     <ClInclude Include="src\ObjectManager.hpp" />
     <ClInclude Include="src\Physics\AABB.hpp" />
@@ -124,9 +124,11 @@
     <ClInclude Include="src\Physics\Simulator.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />
+    <ClInclude Include="src\Serializer.hpp" />
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\SimplexNoise.hpp" />
     <ClInclude Include="src\Texture.hpp" />
+    <ClInclude Include="src\UpdateManager.hpp" />
     <ClInclude Include="src\World.hpp" />
   </ItemGroup>
   <ItemGroup>

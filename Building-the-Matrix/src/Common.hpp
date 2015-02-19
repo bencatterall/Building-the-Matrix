@@ -15,12 +15,15 @@
 #define GLM_FORCE_RADIANS
 
 // Enable tests
-//#define TEST
+#define TEST
 //#define TEST_GRAPHICS
 //#define TEST_PHYSICS
+#define TEST_UPDATES
 
 // Enable debug mode
 #define DEBUG
+
+#define  INTEL_X86
 
 typedef int GameObjectID;
 typedef int GameObjectGlobalID;

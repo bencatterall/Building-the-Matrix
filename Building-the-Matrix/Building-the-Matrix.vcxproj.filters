@@ -58,16 +58,16 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{3b6638ec-9146-4ed3-8bc4-068abadd903d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Update Manager">
+      <UniqueIdentifier>{4352daab-0245-40ff-bdf0-c95ce2f702df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Update Manager">
+      <UniqueIdentifier>{022fd06d-e1ec-46bc-85ff-e68cbe495b18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JSON\JsonClass.cpp">
-      <Filter>Source Files\JSON</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JSON\UpdateManager.cpp">
-      <Filter>Source Files\JSON</Filter>
     </ClCompile>
     <ClCompile Include="src\Client\Address.cpp">
       <Filter>Source Files\Client</Filter>
@@ -150,13 +150,19 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Serializer.cpp">
+      <Filter>Source Files\Update Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UpdateManager.cpp">
+      <Filter>Source Files\Update Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\UpdateManagerTest.cpp">
+      <Filter>Source Files\tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp">
       <Filter>Header Files\tests</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSON\UpdateManager.hpp">
-      <Filter>Header Files\JSON</Filter>
     </ClInclude>
     <ClInclude Include="src\Client\Address.hpp">
       <Filter>Header Files\Client</Filter>
@@ -226,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="src\Player.hpp">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serializer.hpp">
+      <Filter>Header Files\Update Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UpdateManager.hpp">
+      <Filter>Header Files\Update Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
