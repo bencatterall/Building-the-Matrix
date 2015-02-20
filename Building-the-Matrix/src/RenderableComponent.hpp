@@ -9,14 +9,14 @@
 
 
 ///
-/// This class holds all the referrences to the data needed to render
+/// This class holds all the references to the data needed to render
 /// the geometry. The idea is that this data is generated and then put
-/// into this object so that it then owns this data and is responsible for
+/// into this object, so that it then owns this data and is responsible for
 /// cleaning it up. Then, when an object is rendered, this object's
 /// information is queried and used in the rendering loops.
 ///
 /// For example, each object has a RenderableComponent and then in the
-/// MapViewer render loop, each one is fetched and then used to draw the object
+/// MapViewer render loop, each one is fetched and then used to draw the object.
 ///
 /// The aim is to separate the rendering code from the object and Map
 /// classes and the logic in these classes so that we reduce code
@@ -135,12 +135,12 @@ public:
 	bool usesIndexedVBO() { return useIndexedVBO; }
 
 	///
-	/// Bind the shader program to the Opengl pipeline to use it for rendering
+	/// Bind the shader program to the OpenGL pipeline to use it for rendering
 	///
 	void bindShader();
 
 	///
-	/// Release the shader program from the Opengl pipeline
+	/// Release the shader program from the OpenGL pipeline
 	///
 	void releaseShader();
 
@@ -223,7 +223,7 @@ public:
 
 	///
 	/// Set the texture coordinate data to use for this component
-	/// @param new_texture_data The new data to use for ther tehadxture coordinates of this object
+	/// @param new_texture_data The new data to use for the texture coordinates of this object
 	/// @param is_dynamic If true, then the data for this buffer will be changed often. If false, it is static
 	///
 	void setTextureCoordsData(std::vector<GLfloat> newTextureData, bool isDynamic);

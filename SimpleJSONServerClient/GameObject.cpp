@@ -6,6 +6,7 @@ GameObject::GameObject(GameObjectGlobalID id) {
 	(this->deleted) = false;
 }
 
+<<<<<<< HEAD
 GameObject::GameObject(const GameObject& other) {
 	//copy
 	(this->ID) = other.ID;
@@ -19,6 +20,38 @@ GameObject::GameObject(const GameObject& other) {
 	(this->renderable) = other.renderable;
 	(this->deleted) = other.deleted;
 	(this->userControllable) = other.userControllable;
+=======
+GameObject::GameObject(const char *buffer) {
+	struct SerializedObject {
+		float xrot;
+		float yrot;
+		float zrot;
+		float xpos;
+		float ypos;
+		float zpos;
+		bool visible;
+		bool renderable;
+	} obj;
+	memcpy(obj, buffer, sizeof(obj));
+	xrot = obj.xrot;
+	xrot = obj.yrot;
+	zrot = obj.zrot;
+	xpos = obj.xpos;
+	ypos = obj.ypos;
+	zpos = obj.zpos;
+	visible = obj.visible;
+	renderable = obj.renderable;
+}
+
+GameObject::GameObject() {}
+
+GameObject::~GameObject() {}
+
+void GameObject::keyPressed(char key) {
+	if (this->userControllable) {
+		(this->control).regKeyPress(key);
+	}
+>>>>>>> b0d51678cb0e811dfa152d3d5dc72d931e99be57
 }
 
 GameObject::GameObject() {}
@@ -27,4 +60,28 @@ GameObject::~GameObject() {}
 
 GameObjectGlobalID GameObject::getID(){
 	return this->ID;
+}
+
+virtual int GameObject::serialize(char* buffer) {
+	struct SerializedObject {
+		float xrot;
+		float yrot;
+		float zrot;
+		float xpos;
+		float ypos;
+		float zpos;
+		bool visible;
+		bool renderable;
+	} obj;
+	obj.xrot = xrot;
+	obj.yrot = xrot;
+	obj.zrot = zrot;
+	obj.xpos = xpos;
+	obj.ypos = ypos;
+	obj.zpos = zpos;
+	obj.visible = visible;
+	obj.renderable = renderable;
+
+	memcpy(buffer, obj, sizeof(obj));
+	return sizeof(obj);
 }

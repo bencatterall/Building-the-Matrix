@@ -1,9 +1,8 @@
-/**
-	clientMain.cpp
-	Purpose: Controls a client instance bounded to arg[1] address and arg[2] port number, and sending to
-	server at arg[3] address and arg[4] port number
-
-*/
+///
+/// clientMain.cpp
+/// Purpose: Controls a client instance bounded to arg[1] address and arg[2] port number, and sending to
+/// server at arg[3] address and arg[4] port number
+///
 
 #include "Address.hpp"
 #include "Socket.hpp"

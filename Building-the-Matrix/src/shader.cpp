@@ -34,7 +34,7 @@ Shader::Shader(const std::string vs, const std::string fs)
 	glAttachShader(programObj, fragmentShader);
 
 	// Temporary hack before restructuring.
-	// TODO: Untemparary-ify this.
+	// TODO: Untemporary-ify this.
 	glBindAttribLocation(programObj, /* VERTEX_POS_INDX */ 0, "a_position");
 	glBindAttribLocation(programObj, /* VERTEX_COLOUR_INDX */ 1, "a_colour");
 	glBindAttribLocation(programObj, /* VERTEX_TEXCOORD0_INDX */ 2, "a_texCoord");
@@ -94,7 +94,7 @@ GLuint Shader::loadShader(GLenum type, const std::string src) {
 	shader = glCreateShader(type);
 
 	if (!shader) {
-		//Could't create shader
+		//Couldn't create shader
 #ifndef DEBUG
 		cerr << "ERROR: Failed to create shader: " << src << std::endl;
 #endif

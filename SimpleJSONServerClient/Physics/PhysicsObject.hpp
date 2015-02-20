@@ -1,7 +1,7 @@
 #ifndef PHYSICS_OBJECT_H
 #define PHYSICS_OBJECT_H
 
-#include "../src/Common.hpp"
+#include "../Common.hpp"
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <memory>
