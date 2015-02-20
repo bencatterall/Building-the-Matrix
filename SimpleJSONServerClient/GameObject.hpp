@@ -5,7 +5,7 @@
 #include "Controls.hpp"
 
 class GameObject {
-	private:
+	public:
 		GameObjectGlobalID ID;
 		//add in position as a vector etc...
 		float xrot;
@@ -16,19 +16,14 @@ class GameObject {
 		float zpos;
 		bool visible;
 		bool renderable;
+		bool deleted;
 		//for use with user vehicles only
 		bool userControllable;
-		Control control;
-		float pitch;
-		float roll;
-		float yaw;
-	public:
-		GameObject(GameObjectGlobalID id,bool userObj);
-		void keyPressed(char key);
-		void keyUnpressed(char key);
+
+		GameObject(GameObjectGlobalID id);
+		GameObject(const GameObject& other);
 		GameObject();
-		~GameObject();
+		virtual ~GameObject();
 		GameObjectGlobalID getID();
-		void setPRY(float pitch, float roll, float yaw);
 };
 #endif

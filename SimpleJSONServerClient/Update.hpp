@@ -1,18 +1,15 @@
 #include "CommonMinimal.hpp"
 #include "GameObject.hpp"
+#include <memory>
 
 class Update {
 	private:
 		GameObjectGlobalID ID;
-		GameObject object;
-		//0 for edit, 1 for deletion
-		int type;
+		std::shared_ptr<GameObject> object;
 	public:
-		Update(GameObjectGlobalID ID, GameObject object);
-		Update(GameObjectGlobalID ID, GameObject object,int type);
+		Update(GameObjectGlobalID ID, std::shared_ptr<GameObject> object);
 		Update();
 		~Update();
 		GameObjectGlobalID getObjectID();
-		GameObject getEditedObject();
-		bool forDeletion();
+		std::shared_ptr<GameObject> getEditedObject();
 };

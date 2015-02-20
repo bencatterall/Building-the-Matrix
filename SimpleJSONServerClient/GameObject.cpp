@@ -1,33 +1,29 @@
 #include "GameObject.hpp"
 
-GameObject::GameObject(GameObjectGlobalID id, bool userObj) {
+GameObject::GameObject(GameObjectGlobalID id) {
 	(this->ID) = id;
-	(this->userControllable) = userObj;
+	(this->userControllable) = false;
+	(this->deleted) = false;
+}
+
+GameObject::GameObject(const GameObject& other) {
+	//copy
+	(this->ID) = other.ID;
+	(this->xrot) = other.xrot;
+	(this->yrot) = other.yrot;
+	(this->zrot) = other.zrot;
+	(this->xpos) = other.xpos;
+	(this->ypos) = other.ypos;
+	(this->zpos) = other.zpos;
+	(this->visible) = other.visible;
+	(this->renderable) = other.renderable;
+	(this->deleted) = other.deleted;
+	(this->userControllable) = other.userControllable;
 }
 
 GameObject::GameObject() {}
 
 GameObject::~GameObject() {}
-
-void GameObject::keyPressed(char key) {
-	if (this->userControllable) {
-		(this->control).regKeyPress(key);
-	}
-}
-
-void GameObject::setPRY(float pitch, float roll, float yaw) {
-	if (this->userControllable) {
-		(this->pitch) = pitch;
-		(this->roll) = roll;
-		(this->yaw) = yaw;
-	}
-}
-
-void GameObject::keyUnpressed(char key) {
-	if (this->userControllable) {
-		(this->control).regKeyUnpress(key);
-	}
-}
 
 GameObjectGlobalID GameObject::getID(){
 	return this->ID;

@@ -2,6 +2,7 @@
 #include "Address.hpp"
 #include "UpdateManager.hpp"
 #include "Sender.hpp"
+#include "Player.hpp"
 #include <iostream>
 #include <string>
 #include <thread>
@@ -26,14 +27,20 @@ bool prefixMatch(std::string message, std::string prefix) {
 	return message.compare(0, prefix.length(), prefix) == 0;
 }
 
-
-
 void broadcast() {
 	while (contMain) {
 		for (Address client : clients) {
 			//send snapshot back
 			std::map<GameObjectGlobalID, GameObject> toSend = updateManager.flushUpdates();
-			sender.sendUpdateMessage(client, toSend);
+			if (!toSend.empty()) {
+				std::map<GameObjectGlobalID, GameObject>::iterator it;
+				std::cout << "Sending snapshot: \n";
+				for (it = toSend.begin(); it != toSend.end(); it++) {
+					std::cout << "(" << (it->first) << ")\t";
+				}
+				sender.sendUpdateMessage(client, toSend);
+				std::cout << "\n";
+			}
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
@@ -98,13 +105,15 @@ int main(int argc, char **argv) {
 
 	std::cout << "connected to host " << serverAddr->getHBOAddress() << " on port " << serverAddr->getHBOPort() << "\n";
 
-	std::vector < GameObject > initialObjects;
+	std::vector < std::shared_ptr<GameObject> > initialObjects;
 	//TODO: push initial objects
 
 	
 	updateManager.setInitialObjects(initialObjects);
 	sender.setSocket(&mySocket);
 	
+	contMain = true;
+
 	//start update manager run method in new thread
 	std::thread makeUpdates(&UpdateManager::run, &updateManager);
 
@@ -119,7 +128,6 @@ int main(int argc, char **argv) {
 	//start listener fo quitting
 	std::thread l_quit(quit);
 	
-	contMain = true;
 	auto timer = std::chrono::system_clock::now();
 	//input loops in this thread
 	while (contMain) {
@@ -131,7 +139,7 @@ int main(int argc, char **argv) {
 		if (bytes_read >= 0) {
 			//check what type of message was received
 			std::string message((char *)buffer);
-			std::cout << "received: " << message << "\n";
+			//std::cout << "received: " << message << "\n";
 			//HANDLE LOGINS
 			if (prefixMatch(message, "LOGIN")) {
 				GameObjectGlobalID id;
@@ -156,7 +164,9 @@ int main(int argc, char **argv) {
 					//create their car for the game, generate a global ID too
 					id = updateManager.getNextObjectID();
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
-					updateManager.queueUpdate(GameObject(id, true));
+					std::shared_ptr<GameObject> p = std::make_shared<Player>(id);
+					p->userControllable = true;
+					updateManager.queueUpdate(p);
 				}
 				char data[] = "LOGIN ACCEPTED     ";
 				char *idparts = (char*)&id;
@@ -196,10 +206,11 @@ int main(int argc, char **argv) {
 				char key = buffer[8];
 				std::cout << "User pressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
-					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
-						GameObject o = updateManager.getGameObject(e.second);
-						o.keyPressed(key);
-						updateManager.queueUpdate(o);
+					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
+						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
+						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
+						player->keyPressed(key);
+						updateManager.queueUpdate(player);
 						break;
 					}
 				}
@@ -208,27 +219,29 @@ int main(int argc, char **argv) {
 				char key = buffer[10];
 				std::cout << "User unpressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
-					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
-						GameObject o = updateManager.getGameObject(e.second);
-						o.keyUnpressed(key);
-						updateManager.queueUpdate(o);
+					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
+						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
+						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
+						player->keyUnpressed(key);
+						updateManager.queueUpdate(player);
 						break;
 					}
 				}
 			}
 			//HANDLE HEAD ORIENTATION
 			else if (prefixMatch(message, "PRY")) {
-				std::cout << "recieved pitch, roll and yaw from " << recFrom.getHBOAddress() << " " << recFrom.getHBOPort() << "\n";
+				//std::cout << "recieved pitch, roll and yaw from " << recFrom.getHBOAddress() << " " << recFrom.getHBOPort() << "\n";
 				float *pry = new float[3];
 				pry[0] = (float)((buffer[3] << 24) | (buffer[4] << 16) | (buffer[5] << 8) | buffer[6]);
 				pry[1] = (float)((buffer[7] << 24) | (buffer[8] << 16) | (buffer[9] << 8) | buffer[10]);
 				pry[2] = (float)((buffer[11] << 24) | (buffer[12] << 16) | (buffer[13] << 8) | buffer[14]);
-				std::cout << "p=" << pry[0] << " r=" << pry[1] << " y=" << pry[2] << "\n";
+				//std::cout << "p=" << pry[0] << " r=" << pry[1] << " y=" << pry[2] << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
-					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getAddress()) {
-						GameObject o = updateManager.getGameObject(e.second);
-						o.setPRY(pry[0], pry[1], pry[2]);
-						updateManager.queueUpdate(o);
+					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
+						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
+						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
+						player->setPRY(pry[0], pry[1], pry[2]);
+						updateManager.queueUpdate(player);
 						break;
 					}
 				}

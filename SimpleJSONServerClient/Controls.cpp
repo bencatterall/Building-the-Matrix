@@ -4,12 +4,19 @@ Control::Control() {}
 
 Control::~Control() {}
 
+Control::Control(const Control& other) {
+	(this->U_HELD) = other.U_HELD;
+	(this->D_HELD) = other.D_HELD;
+	(this->L_HELD) = other.L_HELD;
+	(this->R_HELD) = other.R_HELD;
+}
+
 void Control::regKeyPress(char key) {
-	if (key == 's') {
-		(this->S_HELD) = true;
+	if (key == 'u') {
+		(this->U_HELD) = true;
 	}
-	if (key == 'c') {
-		(this->C_HELD) = true;
+	if (key == 'd') {
+		(this->D_HELD) = true;
 	}
 	if (key == 'r') {
 		(this->R_HELD) = true;
@@ -20,11 +27,11 @@ void Control::regKeyPress(char key) {
 }
 
 void Control::regKeyUnpress(char key) {
-	if (key == 's') {
-		(this->S_HELD) = false;
+	if (key == 'u') {
+		(this->U_HELD) = false;
 	}
-	if (key == 'c') {
-		(this->C_HELD) = false;
+	if (key == 'd') {
+		(this->D_HELD) = false;
 	}
 	if (key == 'r') {
 		(this->R_HELD) = false;
@@ -35,6 +42,6 @@ void Control::regKeyUnpress(char key) {
 }
 
 bool *Control::getCurrentControls() {
-	bool *arr = new bool[ S_HELD, C_HELD, R_HELD, L_HELD ];
+	bool *arr = new bool[ U_HELD, D_HELD, R_HELD, L_HELD ];
 	return arr;
 }
