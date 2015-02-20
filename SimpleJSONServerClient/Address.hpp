@@ -2,7 +2,7 @@
 #define ADDRESS_H
 
 #include <string>
-#include "../Common.hpp"
+#include "Common.hpp"
 
 #if PLATFORM == PLATFORM_WINDOWS
 
