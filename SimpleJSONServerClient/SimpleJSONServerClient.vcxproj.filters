@@ -55,6 +55,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>	
     <ClInclude Include="Physics\AABB.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
@@ -112,6 +114,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+	      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Physics\PhysicsMaths.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
