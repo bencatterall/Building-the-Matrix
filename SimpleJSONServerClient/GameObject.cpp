@@ -6,7 +6,6 @@ GameObject::GameObject(GameObjectGlobalID id) {
 	(this->deleted) = false;
 }
 
-<<<<<<< HEAD
 GameObject::GameObject(const GameObject& other) {
 	//copy
 	(this->ID) = other.ID;
@@ -20,8 +19,9 @@ GameObject::GameObject(const GameObject& other) {
 	(this->renderable) = other.renderable;
 	(this->deleted) = other.deleted;
 	(this->userControllable) = other.userControllable;
-=======
-GameObject::GameObject(const char *buffer) {
+}
+
+/* GameObject::GameObject(const char *buffer) {
 	struct SerializedObject {
 		float xrot;
 		float yrot;
@@ -41,18 +41,7 @@ GameObject::GameObject(const char *buffer) {
 	zpos = obj.zpos;
 	visible = obj.visible;
 	renderable = obj.renderable;
-}
-
-GameObject::GameObject() {}
-
-GameObject::~GameObject() {}
-
-void GameObject::keyPressed(char key) {
-	if (this->userControllable) {
-		(this->control).regKeyPress(key);
-	}
->>>>>>> b0d51678cb0e811dfa152d3d5dc72d931e99be57
-}
+} */
 
 GameObject::GameObject() {}
 
@@ -62,7 +51,7 @@ GameObjectGlobalID GameObject::getID(){
 	return this->ID;
 }
 
-virtual int GameObject::serialize(char* buffer) {
+/* virtual int GameObject::serialize(char* buffer) {
 	struct SerializedObject {
 		float xrot;
 		float yrot;
@@ -84,4 +73,4 @@ virtual int GameObject::serialize(char* buffer) {
 
 	memcpy(buffer, obj, sizeof(obj));
 	return sizeof(obj);
-}
+} */
