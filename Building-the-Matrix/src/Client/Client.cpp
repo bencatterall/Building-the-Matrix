@@ -1,9 +1,8 @@
 
-/**
-	Client.cpp
-	Purpose: For game loop to access sending/receiving messages facilities
-
-*/
+///
+/// Client.cpp
+/// Purpose: For game loop to access sending/receiving messages facilities
+///
 
 #include "Client.hpp"
 #include <thread>
@@ -86,7 +85,7 @@ bool Client::sendLogout() {
 	return ((this->socket).sendSingle((this->server), data, 10));
 }
 
-//attempts to send the bytestream given as an argument, and returns true if succesful
+//attempts to send the bytestream given as an argument, and returns true if successful
 
 bool Client::send(const char *data, int size) {
 	return ((this->socket).sendSingle((this->server), data, size));

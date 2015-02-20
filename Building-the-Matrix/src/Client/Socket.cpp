@@ -1,9 +1,8 @@
-/**
-	Socket.cpp
-	Purpose: Abstraction for socket that sits between application and I/O in the OS - used to send and receive
-	messages at the socket's bound address and port
-
-*/
+///
+/// Socket.cpp
+/// Purpose: Abstraction for socket that sits between application and I/O in the OS - used to send and receive
+/// messages at the socket's bound address and port
+///
 
 #include "Socket.hpp"
 #include <iostream>
