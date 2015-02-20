@@ -3,7 +3,6 @@
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
 
-
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3())
@@ -102,4 +101,42 @@ void PhysicsObject::setQuadDrag(const float quadDrag){
 
 void PhysicsObject::setLinDrag(const float linDrag){
 	friction = linDrag;
+}
+
+void PhysicsObject::turnObject(const Quaternion rotator, const vec3(PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
+	vec3 dir = (*this.*getter)();
+	Quaternion oldVector = Quaternion(0.0f, dir.x, dir.y, dir.z);
+	Quaternion out = rotator*oldVector;
+	vec3 updated = vec3(out.x, out.y, out.z);
+	(*this.*setter)(updated);
+}
+
+void PhysicsObject::acceleratePlayer(){
+	vec3 dir = this->getOrientation();
+	float speed = glm::length(dir);
+	vec3 A = this->getA();
+	// TODO: Consider further mechanisms for determining power
+	// TODO: Adjust arbitrary constant according to playtesting
+	this->setA(A + glm::normalize(dir)*(5.0f - speed));
+}
+
+
+void PhysicsObject::reversePlayer(){
+	vec3 dir = this->getOrientation();
+	float speed = glm::length(dir);
+	vec3 A = this->getA();
+	// TODO: Adjust arbitrary constant according to playtesting
+	this->setA(A + glm::normalize(dir)*(-2.0f - speed));
+}
+
+void PhysicsObject::turnLeft(float turnSpeed = TURN_SPEED){
+	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
+	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getA, &PhysicsObject::setA);
+
+}
+
+void PhysicsObject::turnRight(float turnSpeed = TURN_SPEED){
+	turnLeft(-turnSpeed);
+
 }

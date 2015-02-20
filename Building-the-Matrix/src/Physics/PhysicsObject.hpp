@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 
+#define TURN_SPEED 0.02f
+
 class AABB;
 class LocationComponent;
 
@@ -43,10 +45,17 @@ public:
 	void setQuadDrag(const float);
 	void setLinDrag(const float);
 
+	void PhysicsObject::acceleratePlayer();
+	void PhysicsObject::reversePlayer();
+	void PhysicsObject::turnLeft(float);
+	void PhysicsObject::turnRight(float);
+
 
 protected:
 
 private:
+	void turnObject(const Quaternion rotator, const vec3(PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
+
 	// Will need some more information later
 	std::shared_ptr<AABB> boundingBox;
 	float restitution; // Co-efficent of restitution
@@ -57,10 +66,10 @@ private:
 	std::shared_ptr<LocationComponent> location;
 	vec3 velocity;	// Velocity
 	vec3 acc;		// Acceleration
+	vec3 orientation;
 
 	// TODO implement these
 	//Quaternion spin;
-	vec3 orientation;
 	//vec3 angularVelocity;
 	//vec3 angulurMomentum;
 	//vec3 torque;
