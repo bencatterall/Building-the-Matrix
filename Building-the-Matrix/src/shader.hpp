@@ -6,7 +6,7 @@
 #include <sstream>
 
 ///
-/// An Opengl shader program loader, compiler and manager.
+/// An OpenGL shader program loader, compiler and manager.
 ///
 class Shader {
 	///

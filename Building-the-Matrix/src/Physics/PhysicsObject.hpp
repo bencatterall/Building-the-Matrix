@@ -58,14 +58,14 @@ private:
 
 	// Will need some more information later
 	std::shared_ptr<AABB> boundingBox;
-	float restitution; // Co-efficent of restitution
-	float mass;		// Mass of Object, with 0 representing +inf
-	float inverseMass; // Precomputed value of (1/mass)
-	float friction;	// Co-efficient of linear friction
-	float airRes;	// Co-efficient of quadratic drag
+	float restitution;		// Co-efficent of restitution
+	float mass;				// Mass of Object, with 0 representing +inf
+	float inverseMass;		// Precomputed value of (1/mass)
+	float friction;			// Co-efficient of linear friction
+	float airRes;			// Co-efficient of quadratic drag
 	std::shared_ptr<LocationComponent> location;
-	vec3 velocity;	// Velocity
-	vec3 acc;		// Acceleration
+	vec3 velocity;			// Velocity
+	vec3 acc;				// Acceleration
 	vec3 orientation;
 
 	// TODO implement these

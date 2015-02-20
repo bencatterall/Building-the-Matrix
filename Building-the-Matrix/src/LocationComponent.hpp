@@ -49,7 +49,7 @@ public:
 	glm::mat4 getRotationMatrix() { return rotationMatrix; }
 
 	///
-	/// Get & set scale factor
+	/// Get and set scale factor
 	///
 	void setScaleFactor(double sf) { scaleFactor = sf; }
 	double getScaleFactor() { return scaleFactor; } 

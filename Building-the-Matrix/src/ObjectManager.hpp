@@ -19,7 +19,7 @@ class ObjectManager {
 	std::map<GameObjectID, std::shared_ptr<GameObject>> gameObjects;
 
 	///
-	/// Cache of gameObjectIDs
+	/// Cache of GameObjectIDs
 	///
 	std::vector<GameObjectID> gameObjectIDs;
 
@@ -42,7 +42,7 @@ public:
 	}
 
 	///
-	/// Get the next available Globall Unique ID (GUID) for the new object
+	/// Get the next available Global Unique ID (GUID) for the new object
 	/// Thread-safe
 	/// An ID of 0 is invalid
 	///
@@ -61,7 +61,7 @@ public:
 	}
 
 	///
-	/// Add an object to the object Manager
+	/// Add an object to the Object Manager
 	///
 	bool addObject(std::shared_ptr<GameObject> gameObject);
 
@@ -71,12 +71,12 @@ public:
 	std::shared_ptr<GameObject> getObject(GameObjectID id);
 
 	///
-	/// Remove an object from the object manager
+	/// Remove an object from the Object Manager
 	///
 	bool removeObject(GameObjectID id);
 
 	/// 
-	/// Return a list of all object IDs we are managing
+	/// Return a list of all Object IDs we are managing
 	///
 	const std::vector<GameObjectID> getObjects() {
 		return gameObjectIDs;
