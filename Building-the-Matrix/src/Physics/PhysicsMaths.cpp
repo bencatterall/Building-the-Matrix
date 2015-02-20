@@ -253,20 +253,16 @@ namespace PhysicsMaths{
 		phys.setA(A + glm::normalize(dir)*(-2.0f-speed));
 	}
 
-	void turnLeft(const GameObjectID id){
+	void turnLeft(const GameObjectID id, float turnSpeed = TURN_SPEED){
 		GameObject obj = *ObjectManager::getInstance().getObject(id);
 		std::shared_ptr<PhysicsObject> phys = obj.getPhysicsComponent();
-		turnObject(phys, Quaternion(0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
-		turnObject(phys, Quaternion(0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
+		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
-	void turnRight(const GameObjectID id){
-		GameObject obj = *ObjectManager::getInstance().getObject(id);
-		std::shared_ptr<PhysicsObject> phys = obj.getPhysicsComponent();
-		turnObject(phys, Quaternion(-0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
-		turnObject(phys, Quaternion(-0.02f, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
-
+	void turnRight(const GameObjectID id, float turnSpeed = TURN_SPEED){
+		turnLeft(id, -turnSpeed);
 	}
 
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
@@ -275,5 +271,19 @@ namespace PhysicsMaths{
 		Quaternion out = rotator*oldVector;
 		vec3 updated = vec3(out.x, out.y, out.z);
 		(*phys.*setter)(updated);
+	}
+
+	vec3 convertYPRtoDirection(const vec3 YPR){
+		float xRad = YPR.x * PI / 180.0, yRad = YPR.y * PI / 180.0;
+		return vec3(
+			cos(xRad) * cos(yRad),
+			sin(xRad) * cos(yRad),
+			sin(yRad)
+			);
+	}
+
+	vec3 convertDirectiontoYPR(const vec3 direction){
+		//TODO Implement me
+		return glm::normalize(direction);
 	}
 }

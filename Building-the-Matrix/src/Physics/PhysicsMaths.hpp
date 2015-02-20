@@ -8,7 +8,8 @@
 #include <vector>
 #include <memory>
 
-#define GRAVITY 9.81
+#define GRAVITY 9.81f
+#define PI 3.14159265358979323846f
 
 using glm::vec3;
 
@@ -42,9 +43,12 @@ namespace PhysicsMaths
 	void acceleratePlayer(const GameObjectID);
 	void reversePlayer(const GameObjectID);
 
-	void turnLeft(const GameObjectID);
-	void turnRight(const GameObjectID);
+	void turnLeft(const GameObjectID, float);
+	void turnRight(const GameObjectID, float);
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
+
+	vec3 convertYPRtoDirection(const vec3);
+	vec3 convertDirectiontoYPR(const vec3);
 };
 
 #endif
