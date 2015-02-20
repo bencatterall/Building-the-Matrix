@@ -109,3 +109,44 @@ int Serializer::packByte(char* buffer, char byte) {
 	//One byte
 	return 1;
 }
+
+std::map<GameObjectGlobalID, GameObject> unpackMap(const char *buffer, int &p) {
+	// TODO: Handle unserialization of Player objects (which extend GameObjects)
+	std::map<GameObjectGlobalID, GameObject> result;
+
+	int map_len = self::unpackInt(buffer, p);
+	for (int i = 0; i < map_len; i++) {
+		GameObjectGlobalID curr_id = self::unpackInt(buffer, p);
+		GameObject curr_obj(buffer);
+		// a copy is made for the map
+		result[curr_id] = curr_obj;
+	}
+	return result;
+}
+
+int Serializer::packMap(
+    char* buffer,
+    std::map<GameObjectGlobalID, GameObject> objectMap
+) {
+	// TODO: Using C++ streams would make things much more elegant.
+	int bytes_used = 0;
+	int tmp_cnt;
+
+	tmp_cnt = self::packInt(buffer, objectMap.size());
+	bytes_used += tmp_cnt;
+	buffer += tmp_cnt;
+
+	for(auto it = objectMap.begin(); it != objectMap.end(); ++it) {
+		// pack GameObjectGlobalID
+		tmp_cnt = self::packInt(buffer, it->first);
+		bytes_used += tmp_cnt;
+		buffer += tmp_cnt;
+
+		// pack GameObject
+		tmp_cnt = it->second.serialize(buffer);
+		bytes_used += tmp_cnt;
+		buffer += tmp_cnt;
+	}
+	return bytes_used;
+}
+

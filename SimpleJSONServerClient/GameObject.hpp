@@ -23,12 +23,14 @@ class GameObject {
 		float roll;
 		float yaw;
 	public:
-		GameObject(GameObjectGlobalID id,bool userObj);
+		GameObject(GameObjectGlobalID id, bool userObj);
+		GameObject(const char *buffer); // for unserialization
 		void keyPressed(char key);
 		void keyUnpressed(char key);
 		GameObject();
 		~GameObject();
 		GameObjectGlobalID getID();
 		void setPRY(float pitch, float roll, float yaw);
+		virtual int serialize(char* buffer);		
 };
 #endif
