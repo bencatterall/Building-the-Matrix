@@ -110,16 +110,17 @@ int Serializer::packByte(char* buffer, char byte) {
 	return 1;
 }
 
-std::map<GameObjectGlobalID, GameObject> unpackMap(const char *buffer, int &p) {
+std::map<GameObjectGlobalID, GameObject> Serializer::unpackMap(char *buffer, int &p) {
 	// TODO: Handle unserialization of Player objects (which extend GameObjects)
 	std::map<GameObjectGlobalID, GameObject> result;
 
-	int map_len = self::unpackInt(buffer, p);
+	int map_len = Serializer::unpackInt(buffer, p);
 	for (int i = 0; i < map_len; i++) {
-		GameObjectGlobalID curr_id = self::unpackInt(buffer, p);
-		GameObject curr_obj(buffer);
-		// a copy is made for the map
-		result[curr_id] = curr_obj;
+		GameObjectGlobalID curr_id = Serializer::unpackInt(buffer, p);
+		// TODO: re-enable when unserialize method for GameObject works on Client
+		// GameObject curr_obj(buffer);
+		// // a copy is made for the map
+		// result[curr_id] = curr_obj;
 	}
 	return result;
 }
@@ -132,20 +133,22 @@ int Serializer::packMap(
 	int bytes_used = 0;
 	int tmp_cnt;
 
-	tmp_cnt = self::packInt(buffer, objectMap.size());
+	tmp_cnt = Serializer::packInt(buffer, objectMap.size());
 	bytes_used += tmp_cnt;
 	buffer += tmp_cnt;
 
 	for(auto it = objectMap.begin(); it != objectMap.end(); ++it) {
 		// pack GameObjectGlobalID
-		tmp_cnt = self::packInt(buffer, it->first);
+		tmp_cnt = Serializer::packInt(buffer, it->first);
 		bytes_used += tmp_cnt;
 		buffer += tmp_cnt;
 
 		// pack GameObject
-		tmp_cnt = it->second.serialize(buffer);
-		bytes_used += tmp_cnt;
-		buffer += tmp_cnt;
+		// TODO: re-enable when serialize method for GameObject works on client
+		//       (or when this part of the Serializer class is ported to server)
+		// tmp_cnt = it->second.serialize(buffer);
+		// bytes_used += tmp_cnt;
+		// buffer += tmp_cnt;
 	}
 	return bytes_used;
 }

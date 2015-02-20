@@ -1,6 +1,8 @@
 #ifndef SERIALIZER_H
 #define SERIALIZER_H
 #include <string>
+#include <map>
+#include "GameObject.hpp"
 
 class Serializer {
 	
