@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 	//start send update loop in new thread
 	std::thread update(broadcast);
 
-	std::thread physics(physics);
+	std::thread t_physics(physics);
 
 	//start listener fo quitting
 	std::thread l_quit(quit);
@@ -247,7 +247,7 @@ int main(int argc, char **argv) {
 	l_quit.join();
 	std::cout << "stopped quit listener\n";
 	
-	physics.join();
+	t_physics.join();
 	std::cout << "stopped receiver\n";
 
 	updateManager.stop();

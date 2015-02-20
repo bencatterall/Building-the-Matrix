@@ -45,10 +45,10 @@ public:
 	void setQuadDrag(const float);
 	void setLinDrag(const float);
 
-	void PhysicsObject::acceleratePlayer();
-	void PhysicsObject::reversePlayer();
-	void PhysicsObject::turnLeft(float);
-	void PhysicsObject::turnRight(float);
+	void acceleratePlayer();
+	void reversePlayer();
+	void turnLeft(float);
+	void turnRight(float);
 
 
 protected:

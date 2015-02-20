@@ -23,7 +23,7 @@ class Shader {
 	bool loaded = false;
 
 	GLuint loadShader(GLenum type, const std::string src);
-	std::string Shader::loadFile(std::string fileName);
+	std::string loadFile(std::string fileName);
 public:
 	Shader(const std::string programName);
 	Shader(const std::string vs, const std::string fs);
