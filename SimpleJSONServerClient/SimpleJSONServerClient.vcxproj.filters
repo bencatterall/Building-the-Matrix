@@ -54,9 +54,7 @@
     <ClInclude Include="Controls.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Player.hpp">
-=======
     <ClInclude Include="Physics\AABB.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
@@ -76,7 +74,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.hpp">
->>>>>>> b0d51678cb0e811dfa152d3d5dc72d931e99be57
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -114,9 +111,7 @@
     <ClCompile Include="Controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Player.cpp">
-=======
     <ClCompile Include="Physics\PhysicsMaths.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
@@ -133,7 +128,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
->>>>>>> b0d51678cb0e811dfa152d3d5dc72d931e99be57
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

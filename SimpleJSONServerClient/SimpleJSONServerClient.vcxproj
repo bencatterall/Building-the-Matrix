@@ -72,15 +72,12 @@
     <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="LocationComponent.hpp" />
     <ClInclude Include="Message.hpp" />
-<<<<<<< HEAD
     <ClInclude Include="Player.hpp" />
-=======
     <ClInclude Include="ObjectManager.hpp" />
     <ClInclude Include="Physics\AABB.hpp" />
     <ClInclude Include="Physics\PhysicsMaths.hpp" />
     <ClInclude Include="Physics\PhysicsObject.hpp" />
     <ClInclude Include="Physics\Simulator.hpp" />
->>>>>>> b0d51678cb0e811dfa152d3d5dc72d931e99be57
     <ClInclude Include="SafeMap.hpp" />
     <ClInclude Include="SafeQueue.hpp" />
     <ClInclude Include="Sender.hpp" />
@@ -94,15 +91,12 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="LocationComponent.cpp" />
     <ClCompile Include="Message.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Player.cpp" />
-=======
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Physics\AABB.cpp" />
     <ClCompile Include="Physics\PhysicsMaths.cpp" />
     <ClCompile Include="Physics\PhysicsObject.cpp" />
     <ClCompile Include="Physics\Simulator.cpp" />
->>>>>>> b0d51678cb0e811dfa152d3d5dc72d931e99be57
     <ClCompile Include="SafeMap.cpp" />
     <ClCompile Include="SafeQueue.cpp" />
     <ClCompile Include="Sender.cpp" />
