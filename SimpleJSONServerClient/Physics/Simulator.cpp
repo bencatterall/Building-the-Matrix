@@ -2,8 +2,8 @@
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
 #include "Simulator.hpp"
-#include "..\ObjectManager.hpp"
 #include "..\GameObject.hpp"
+#include "..\UpdateManager.hpp"
 
 #define THRESHOLD 0.02f
 
@@ -23,17 +23,17 @@ Simulator& Simulator::getInstance() {
 }
 
 void Simulator::tick(float timestep){
-	ObjectManager& objMan = ObjectManager::getInstance();
+	UpdateManager& objMan = UpdateManager::UpdateManager();
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
-		std::vector<GameObjectID> gameObjects = objMan.getObjects();
+		auto gameObjects = objMan.getState();
 
 		// Step by THRESHOLD
 		for (size_t i = 0; i < gameObjects.size(); i++)
 		{
-			std::shared_ptr<GameObject> gameObj = objMan.getObject(gameObjects.at(i));
-			PhysicsObject physObj = *gameObj->getPhysicsComponent();
+			GameObject & gameObj = gameObjects.at(i);
+			PhysicsObject physObj = *gameObj.physComp;
 			PhysicsMaths::stepObject(physObj, THRESHOLD);
 		}
 
@@ -42,21 +42,23 @@ void Simulator::tick(float timestep){
 }
 
 void Simulator::processCollisions(){
-	ObjectManager& objMan = ObjectManager::getInstance();
-	std::vector<GameObjectID> gameObjects = objMan.getObjects();
+	UpdateManager& objMan = UpdateManager::UpdateManager();
+	auto gameObjects = objMan.getState();
 
 	// O(n^2) collision check
 	for (size_t i = 0; i < gameObjects.size(); i++)
 	{
-		std::shared_ptr<GameObject> gameObj = objMan.getObject(gameObjects.at(i));
-		PhysicsObject currentObj = *gameObj->getPhysicsComponent();
+		GameObject & gameObj = gameObjects.at(i);
+		PhysicsObject currentObj = *gameObj.physComp;
 		for (size_t j = i; j < gameObjects.size(); j++)
 		{
-			std::shared_ptr<GameObject> gameObj2 = objMan.getObject(gameObjects.at(j));
-			PhysicsObject checkObj = *gameObj2->getPhysicsComponent();
+			GameObject gameObj2 = gameObjects.at(j);
+			PhysicsObject checkObj = *gameObj2.physComp;
+			/* TODO FIX ME
 			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObjects.at(i), gameObjects.at(j))){
 				PhysicsMaths::handleCollision(gameObjects.at(i), gameObjects.at(j));
 			}
+			*/
 		}
 	}
 

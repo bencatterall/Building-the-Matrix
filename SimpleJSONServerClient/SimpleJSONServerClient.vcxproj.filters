@@ -56,7 +56,7 @@
     </ClInclude>
     <ClInclude Include="Player.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>	
+    </ClInclude>
     <ClInclude Include="Physics\AABB.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
@@ -73,9 +73,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LocationComponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -114,7 +111,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-	      <Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Physics\PhysicsMaths.cpp">
       <Filter>Source Files\Physics</Filter>
@@ -129,9 +126,6 @@
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="LocationComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

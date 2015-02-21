@@ -1,13 +1,19 @@
 #ifndef GAMEOBJ_H
 #define GAMEOBJ_H
 
-#include "CommonMinimal.hpp"
+#include <memory>
+
+#include "Common.hpp"
 #include "Controls.hpp"
+#include "LocationComponent.hpp"
+#include "Physics\PhysicsObject.hpp"
 
 class GameObject {
 	public:
 		GameObjectGlobalID ID;
 		//add in position as a vector etc...
+		std::shared_ptr<LocationComponent> locComp;
+		std::shared_ptr<PhysicsObject> physComp;
 		float xrot;
 		float yrot;
 		float zrot;

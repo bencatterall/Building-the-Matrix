@@ -73,7 +73,6 @@
     <ClInclude Include="LocationComponent.hpp" />
     <ClInclude Include="Message.hpp" />
     <ClInclude Include="Player.hpp" />
-    <ClInclude Include="ObjectManager.hpp" />
     <ClInclude Include="Physics\AABB.hpp" />
     <ClInclude Include="Physics\PhysicsMaths.hpp" />
     <ClInclude Include="Physics\PhysicsObject.hpp" />
@@ -92,7 +91,6 @@
     <ClCompile Include="LocationComponent.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Physics\AABB.cpp" />
     <ClCompile Include="Physics\PhysicsMaths.cpp" />
     <ClCompile Include="Physics\PhysicsObject.cpp" />

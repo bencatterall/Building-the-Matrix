@@ -1,5 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
+/*
+#ifndef PLATFORM
 
 #define PLATFORM_WINDOWS  1
 #define PLATFORM_MAC      2
@@ -13,26 +15,18 @@
 #define PLATFORM PLATFORM_UNIX
 #endif
 
+#endif // PLATFORM
+
 #if PLATFORM == PLATFORM_WINDOWS
 #include <Windows.h>
 #endif
-#include "../Building-the-Matrix/Dependencies/glew/glew.h"
-#include "../Building-the-Matrix/Dependencies/GLFW/glfw3.h"
-
-// GLM Fixes
-// We need this define for glm 0.9.6.1, it appears that 32-bit msvc++ compiling is broken
-// when not passed by reference
-//
-// see below for the issue on git.
-// https://github.com/g-truc/glm/issues/283
-#define GLM_FORCE_PURE
-#define GLM_FORCE_RADIANS
 
 // Enable tests
 //#define TEST
 //#define TEST_GRAPHICS
 //#define TEST_PHYSICS
 //#define TEST_UPDATES
+*/
 
 // Enable debug mode
 #define DEBUG
@@ -41,7 +35,7 @@
 
 #include "CommonMinimal.hpp"
 
-typedef GameObjectGlobalID GameObjectID;
+//typedef GameObjectGlobalID GameObjectID;
 
 #endif
 

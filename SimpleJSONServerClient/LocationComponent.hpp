@@ -2,7 +2,12 @@
 #define LOCATION_COMPONENT
 
 #include "Common.hpp"
+
+#define GLM_FORCE_PURE
+#define GLM_FORCE_RADIANS
 #include <glm/vec3.hpp>
+#define GLM_FORCE_PURE
+#define GLM_FORCE_RADIANS
 #include <glm/mat4x4.hpp>
 
 class LocationComponent {
@@ -28,7 +33,7 @@ public:
 		LocationComponent(glm::vec3(0.0, 0.0, 0.0), glm::mat4(1.0)) {
 	}
 
-	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat, double sf = 1.0) :
+	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat = glm::mat4x4(1.0f), double sf = 1.0) :
 		position(pos), rotationMatrix(rotationMat),
 		scaleFactor(sf)
 	{

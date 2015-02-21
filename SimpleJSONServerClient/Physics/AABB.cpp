@@ -2,7 +2,6 @@
 
 #include <glm/vector_relational.hpp>
 
-#include "../ObjectManager.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 

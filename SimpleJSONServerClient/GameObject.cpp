@@ -4,6 +4,11 @@ GameObject::GameObject(GameObjectGlobalID id) {
 	(this->ID) = id;
 	(this->userControllable) = false;
 	(this->deleted) = false;
+	this->locComp = std::make_shared<LocationComponent>();
+	std::vector<vec3> tmpVec = std::vector<vec3>();
+	tmpVec.emplace_back(-4.0f, -4.0f, -4.0f);
+	tmpVec.emplace_back(4.0f, 4.0f, 4.0f);
+	this->physComp = std::make_shared<PhysicsObject>(locComp, tmpVec);
 }
 
 GameObject::GameObject(const GameObject& other) {

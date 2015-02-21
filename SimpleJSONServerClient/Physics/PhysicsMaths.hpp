@@ -2,7 +2,10 @@
 #define PHYSICS_MATHS_H
 
 #include "../Common.hpp"
-
+#include "../../Building-the-Matrix/Dependencies/glew/glew.h"
+#include "../../Building-the-Matrix/Dependencies/GLFW/glfw3.h"
+#define GLM_FORCE_PURE
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
@@ -29,22 +32,22 @@ namespace PhysicsMaths
 
 	bool simpleCollision(const AABB &, const AABB &);
 	bool simpleCollision(const PhysicsObject, const PhysicsObject);
-	bool simpleCollision(const GameObjectID a, const GameObjectID b);
-	bool complexCollision(const GameObjectID a, const GameObjectID b);
+	bool simpleCollision(const GameObjectGlobalID a, const GameObjectGlobalID b);
+	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b);
 	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
-	void handleCollision(GameObjectID, GameObjectID);
+	void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
 	void stepObject(PhysicsObject &, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
 	const vec3 translateVertex(const glm::mat4x4, const vec3);
 	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
 
-	void acceleratePlayer(const GameObjectID);
-	void reversePlayer(const GameObjectID);
+	void acceleratePlayer(const GameObjectGlobalID);
+	void reversePlayer(const GameObjectGlobalID);
 
-	void turnLeft(const GameObjectID, float);
-	void turnRight(const GameObjectID, float);
+	void turnLeft(const GameObjectGlobalID, float);
+	void turnRight(const GameObjectGlobalID, float);
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 
 	vec3 convertYPRtoDirection(const vec3);
