@@ -15,10 +15,10 @@
 #define GLM_FORCE_RADIANS
 
 // Enable tests
-#define TEST
+//#define TEST
 //#define TEST_GRAPHICS
 //#define TEST_PHYSICS
-#define TEST_UPDATES
+//#define TEST_UPDATES
 
 // Enable debug mode
 #define DEBUG
