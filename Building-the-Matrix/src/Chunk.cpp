@@ -64,10 +64,17 @@ void Chunk::init() {
 			//[-1.0,1.0]
 			double noise = (noiseGenerator.noise2D(x / 80.0, z / 80.0));
 
-			//fill in y below this block
+			//fill in y and below this block
 			int yHeight = (int)(noise*(yLength/2) * 0.3);
 			for (int y = -yLength / 2; y < yHeight; ++y) {
-				chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
+				
+				if (y < 4) {
+					//Put sand here
+					chunkData[x + (xLength / 2)][y + yLength / 2][z + (zLength / 2)] = 2;
+				}
+				else {
+					chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
+				}
 			}
 
 			//clear above
@@ -80,7 +87,7 @@ void Chunk::init() {
 		}
 	}
 
-	//Put water on floor
+	//Put water on center
 	for (int x = -xLength / 2; x < xLength / 2; ++x) {
 		for (int z = -zLength / 2; z < zLength / 2; ++z) {
 			if (chunkData[x + (xLength / 2)][yLength/2][z + (zLength / 2)] == 0) {
