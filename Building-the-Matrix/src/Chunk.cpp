@@ -55,7 +55,6 @@ void Chunk::init() {
 			int yHeight = (int)(noise*(yLength/2) * 0.3);
 			for (int y = 0; y < yHeight; ++y) {
 				chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
-				numCubes++;
 			}
 
 			//clear above
@@ -131,13 +130,14 @@ void Chunk::init() {
 
 	//The six face
 	//Defined from looking at the world down -z, with x and y aligned to screen
-//	chunkData[0]; //left
-//	chunkData[1]; // right
-//	chunkData[2]; // top
-//	chunkData[3]; //bottom
-//	chunkData[4]; //front
-//	chunkData[5]; //back
+	//	chunkData[0]; //left
+	//	chunkData[1]; // right
+	//	chunkData[2]; // top
+	//	chunkData[3]; //bottom
+	//	chunkData[4]; //front
+	//	chunkData[5]; //back
 
+	int numVertices = 0;
 	//Generate renderable data[0]
 	for (int x = -xLength / 2; x < xLength / 2; ++x) {
 		for (int z = -zLength / 2; z < zLength / 2; ++z) {
@@ -156,106 +156,147 @@ void Chunk::init() {
 				float yPos = sf*(y);
 				float zPos = sf*(z);
 
+				//Join faces together
+
 				//generate face data
 
 				//TODO improve efficiency of this entire class
 
 				//top face
-				for (size_t i = 0; i < sizeof(cubeTopFace) / sizeof(glm::vec3); ++i) {
-					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeTopFace[i] * 1.0f;
-					newCubeData.x += xPos;
-					newCubeData.y += yPos;
-					newCubeData.z += zPos;
-					chunkVertexData.push_back(newCubeData.x);
-					chunkVertexData.push_back(newCubeData.y);
-					chunkVertexData.push_back(newCubeData.z);
-				}
-				for (size_t i = 0; i < sizeof(cubeTopTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeTopTextureCoords[i]);
+				//Do we need it?
+				//We do if there is not a cube above
+				if (baseY + 1 < yLength) {
+					if (chunkData[baseX][baseY + 1][baseZ] == 0) {
+						for (size_t i = 0; i < sizeof(cubeTopFace) / sizeof(glm::vec3); ++i) {
+							//div by 2 as cube data is -1 to +1
+							glm::vec3 newCubeData = cubeTopFace[i] * 1.0f;
+							newCubeData.x += xPos;
+							newCubeData.y += yPos;
+							newCubeData.z += zPos;
+							chunkVertexData.push_back(newCubeData.x);
+							chunkVertexData.push_back(newCubeData.y);
+							chunkVertexData.push_back(newCubeData.z);
+							numVertices++;
+						}
+						for (size_t i = 0; i < sizeof(cubeTopTextureCoords) / sizeof(GLfloat); ++i) {
+							chunkTextureCoordsData.push_back(cubeTopTextureCoords[i]);
+						}
+					}
 				}
 
 				//bottom face
-				for (size_t i = 0; i < sizeof(cubeBottomFace) / sizeof(glm::vec3); ++i) {
-					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeBottomFace[i] * 1.0f;
-					newCubeData.x += xPos;
-					newCubeData.y += yPos;
-					newCubeData.z += zPos;
-					chunkVertexData.push_back(newCubeData.x);
-					chunkVertexData.push_back(newCubeData.y);
-					chunkVertexData.push_back(newCubeData.z);
-				}
-				for (size_t i = 0; i < sizeof(cubeBottomTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeBottomTextureCoords[i]);
+				//Do we need it?
+				//We do if there is not a cube below
+				if (baseY -1 > 0) {
+					if (chunkData[baseX][baseY - 1][baseZ] == 0) {
+						for (size_t i = 0; i < sizeof(cubeBottomFace) / sizeof(glm::vec3); ++i) {
+							//div by 2 as cube data is -1 to +1
+							glm::vec3 newCubeData = cubeBottomFace[i] * 1.0f;
+							newCubeData.x += xPos;
+							newCubeData.y += yPos;
+							newCubeData.z += zPos;
+							chunkVertexData.push_back(newCubeData.x);
+							chunkVertexData.push_back(newCubeData.y);
+							chunkVertexData.push_back(newCubeData.z);
+							numVertices++;
+						}
+						for (size_t i = 0; i < sizeof(cubeBottomTextureCoords) / sizeof(GLfloat); ++i) {
+							chunkTextureCoordsData.push_back(cubeBottomTextureCoords[i]);
+						}
+					}
 				}
 
 				//front face
-				for (size_t i = 0; i < sizeof(cubeFrontFace) / sizeof(glm::vec3); ++i) {
-					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeFrontFace[i] * 1.0f;
-					newCubeData.x += xPos;
-					newCubeData.y += yPos;
-					newCubeData.z += zPos;
-					chunkVertexData.push_back(newCubeData.x);
-					chunkVertexData.push_back(newCubeData.y);
-					chunkVertexData.push_back(newCubeData.z);
-				}
-				for (size_t i = 0; i < sizeof(cubeFrontTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeFrontTextureCoords[i]);
+				//Do we need it?
+				//We do if there is not a cube in front
+				if (baseZ + 1 < zLength) {
+					if (chunkData[baseX][baseY][baseZ + 1] == 0) {
+						for (size_t i = 0; i < sizeof(cubeFrontFace) / sizeof(glm::vec3); ++i) {
+							//div by 2 as cube data is -1 to +1
+							glm::vec3 newCubeData = cubeFrontFace[i] * 1.0f;
+							newCubeData.x += xPos;
+							newCubeData.y += yPos;
+							newCubeData.z += zPos;
+							chunkVertexData.push_back(newCubeData.x);
+							chunkVertexData.push_back(newCubeData.y);
+							chunkVertexData.push_back(newCubeData.z);
+							numVertices++;
+						}
+						for (size_t i = 0; i < sizeof(cubeFrontTextureCoords) / sizeof(GLfloat); ++i) {
+							chunkTextureCoordsData.push_back(cubeFrontTextureCoords[i]);
+						}
+					}
 				}
 
 				//back face
-				for (size_t i = 0; i < sizeof(cubeBackFace) / sizeof(glm::vec3); ++i) {
-					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeBackFace[i] * 1.0f;
-					newCubeData.x += xPos;
-					newCubeData.y += yPos;
-					newCubeData.z += zPos;
-					chunkVertexData.push_back(newCubeData.x);
-					chunkVertexData.push_back(newCubeData.y);
-					chunkVertexData.push_back(newCubeData.z);
-				}
-				for (size_t i = 0; i < sizeof(cubeBackTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeBackTextureCoords[i]);
+				//Do we need it?
+				//We do if there is not a cube behind
+				if (baseZ - 1 > 0) {
+					if (chunkData[baseX][baseY][baseZ - 1] == 0) {
+						for (size_t i = 0; i < sizeof(cubeBackFace) / sizeof(glm::vec3); ++i) {
+							//div by 2 as cube data is -1 to +1
+							glm::vec3 newCubeData = cubeBackFace[i] * 1.0f;
+							newCubeData.x += xPos;
+							newCubeData.y += yPos;
+							newCubeData.z += zPos;
+							chunkVertexData.push_back(newCubeData.x);
+							chunkVertexData.push_back(newCubeData.y);
+							chunkVertexData.push_back(newCubeData.z);
+							numVertices++;
+						}
+						for (size_t i = 0; i < sizeof(cubeBackTextureCoords) / sizeof(GLfloat); ++i) {
+							chunkTextureCoordsData.push_back(cubeBackTextureCoords[i]);
+						}
+					}
 				}
 
 				//left face
-				for (size_t i = 0; i < sizeof(cubeLeftFace) / sizeof(glm::vec3); ++i) {
-					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeLeftFace[i] * 1.0f;
-					newCubeData.x += xPos;
-					newCubeData.y += yPos;
-					newCubeData.z += zPos;
-					chunkVertexData.push_back(newCubeData.x);
-					chunkVertexData.push_back(newCubeData.y);
-					chunkVertexData.push_back(newCubeData.z);
-				}
-				for (size_t i = 0; i < sizeof(cubeLeftTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeLeftTextureCoords[i]);
+				//Do we need it?
+				//We do if there is not a cube to the left
+				if (baseX - 1 > 0) {
+					if (chunkData[baseX - 1][baseY][baseZ] == 0) {
+						for (size_t i = 0; i < sizeof(cubeLeftFace) / sizeof(glm::vec3); ++i) {
+							//div by 2 as cube data is -1 to +1
+							glm::vec3 newCubeData = cubeLeftFace[i] * 1.0f;
+							newCubeData.x += xPos;
+							newCubeData.y += yPos;
+							newCubeData.z += zPos;
+							chunkVertexData.push_back(newCubeData.x);
+							chunkVertexData.push_back(newCubeData.y);
+							chunkVertexData.push_back(newCubeData.z);
+							numVertices++;
+						}
+						for (size_t i = 0; i < sizeof(cubeLeftTextureCoords) / sizeof(GLfloat); ++i) {
+							chunkTextureCoordsData.push_back(cubeLeftTextureCoords[i]);
+						}
+					}
 				}
 
 				//right face 
-				for (size_t i = 0; i < sizeof(cubeRightFace) / sizeof(glm::vec3); ++i) {
-					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeRightFace[i] * 1.0f;
-					newCubeData.x += xPos;
-					newCubeData.y += yPos;
-					newCubeData.z += zPos;
-					chunkVertexData.push_back(newCubeData.x);
-					chunkVertexData.push_back(newCubeData.y);
-					chunkVertexData.push_back(newCubeData.z);
+				//Do we need it?
+				//We do if there is not a cube to the right
+				if (baseX + 1 < xLength) {
+					if (chunkData[baseX+1][baseY][baseZ] == 0) {
+						for (size_t i = 0; i < sizeof(cubeRightFace) / sizeof(glm::vec3); ++i) {
+							//div by 2 as cube data is -1 to +1
+							glm::vec3 newCubeData = cubeRightFace[i] * 1.0f;
+							newCubeData.x += xPos;
+							newCubeData.y += yPos;
+							newCubeData.z += zPos;
+							chunkVertexData.push_back(newCubeData.x);
+							chunkVertexData.push_back(newCubeData.y);
+							chunkVertexData.push_back(newCubeData.z);
+							numVertices++;
+						}
+						for (size_t i = 0; i < sizeof(cubeRightTextureCoords) / sizeof(GLfloat); ++i) {
+							chunkTextureCoordsData.push_back(cubeRightTextureCoords[i]);
+						}
+					}
 				}
-				for (size_t i = 0; i < sizeof(cubeRightTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeRightTextureCoords[i]);
-				}
-
-			/*	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
+				/*	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
 					chunkColourData.push_back(cubeColours[i]);
 				}
 				*/
-
-
 			}
 		}
 	}
@@ -263,7 +304,7 @@ void Chunk::init() {
 
 	//set renderable data
 	renderableComponent->setVertexData(chunkVertexData, false);
-	renderableComponent->setNumVerticesRender(numCubes * 36);
+	renderableComponent->setNumVerticesRender(numVertices);
 	renderableComponent->setColourData(chunkColourData, false);
 	renderableComponent->setTextureCoordsData(chunkTextureCoordsData, false);
 

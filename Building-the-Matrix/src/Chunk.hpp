@@ -15,7 +15,7 @@
 ///
 /// Holds a set of cubes
 ///
-class Chunk : public GameObject{
+class Chunk : public GameObject {
 
 	
 
