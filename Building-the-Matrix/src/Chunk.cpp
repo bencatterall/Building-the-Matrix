@@ -37,7 +37,6 @@ void Chunk::init() {
 	renderableComponent->setShader(shader);
 	renderableComponent->setTexture(texture);
 
-
 	//The number of cubes we actually want to render
 	int numCubes = 0;
 
@@ -48,33 +47,24 @@ void Chunk::init() {
 	//Generate the world 
 	for (int x = -xLength / 2; x < xLength / 2; ++x) {
 		for (int z = -zLength / 2; z < zLength / 2; ++z) {
-				//Generate noise 
-				//[-1.0,1.0]
+			//Generate noise 
+			//[-1.0,1.0]
 			double noise = (noiseGenerator.noise2D(x / 80.0, z / 80.0));
 
-				/*
-				if (noise > 0.1) {
-					//Don't  draw it => Don't generate its geometry
-					chunkData[x + (xLength / 2)][y + (yLength / 2)][z + (zLength / 2)] = 0;
-					continue; 
-				}
-				*/
-				
+			//fill in y below this block
+			int yHeight = (int)(noise*(yLength/2) * 0.3);
+			for (int y = 0; y < yHeight; ++y) {
+				chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
+				numCubes++;
+			}
 
-				//fill in y below
-				int yHeight = (int)(noise*(yLength/2) * 0.3);
-				for (int y = 0; y < yHeight; ++y) {
-					chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
-					numCubes++;
-				}
-				for (int y = yHeight; y < yLength; ++y) {
-					chunkData[x + (xLength / 2)][y + yLength / 2][z + (zLength / 2)] = 0;
-				}
-				//Set data
-				chunkNoiseData[x + (xLength / 2)][yHeight + yLength / 2][z + (zLength / 2)] = noise;
-				//Set to default grass
-				//chunkData[x + (xLength / 2)][yHeight][z + (zLength / 2)] = 1;
-				//numCubes++;
+			//clear above
+			for (int y = yHeight; y < yLength; ++y) {
+				chunkData[x + (xLength / 2)][y + yLength / 2][z + (zLength / 2)] = 0;
+			}
+
+			//Set data
+			chunkNoiseData[x + (xLength / 2)][yHeight + yLength / 2][z + (zLength / 2)] = noise;
 		}
 	}
 
@@ -143,10 +133,10 @@ void Chunk::init() {
 	//Defined from looking at the world down -z, with x and y aligned to screen
 //	chunkData[0]; //left
 //	chunkData[1]; // right
-	chunkData[2]; // top
-	chunkData[3]; //bottom
-	chunkData[4]; //front
-	chunkData[5]; //back
+//	chunkData[2]; // top
+//	chunkData[3]; //bottom
+//	chunkData[4]; //front
+//	chunkData[5]; //back
 
 	//Generate renderable data[0]
 	for (int x = -xLength / 2; x < xLength / 2; ++x) {
@@ -169,9 +159,11 @@ void Chunk::init() {
 				//generate face data
 
 				//TODO improve efficiency of this entire class
-				for (size_t i = 0; i < sizeof(cubeData) / sizeof(glm::vec3); ++i) {
+
+				//top face
+				for (size_t i = 0; i < sizeof(cubeTopFace) / sizeof(glm::vec3); ++i) {
 					//div by 2 as cube data is -1 to +1
-					glm::vec3 newCubeData = cubeData[i] * 1.0f;
+					glm::vec3 newCubeData = cubeTopFace[i] * 1.0f;
 					newCubeData.x += xPos;
 					newCubeData.y += yPos;
 					newCubeData.z += zPos;
@@ -179,14 +171,89 @@ void Chunk::init() {
 					chunkVertexData.push_back(newCubeData.y);
 					chunkVertexData.push_back(newCubeData.z);
 				}
+				for (size_t i = 0; i < sizeof(cubeTopTextureCoords) / sizeof(GLfloat); ++i) {
+					chunkTextureCoordsData.push_back(cubeTopTextureCoords[i]);
+				}
+
+				//bottom face
+				for (size_t i = 0; i < sizeof(cubeBottomFace) / sizeof(glm::vec3); ++i) {
+					//div by 2 as cube data is -1 to +1
+					glm::vec3 newCubeData = cubeBottomFace[i] * 1.0f;
+					newCubeData.x += xPos;
+					newCubeData.y += yPos;
+					newCubeData.z += zPos;
+					chunkVertexData.push_back(newCubeData.x);
+					chunkVertexData.push_back(newCubeData.y);
+					chunkVertexData.push_back(newCubeData.z);
+				}
+				for (size_t i = 0; i < sizeof(cubeBottomTextureCoords) / sizeof(GLfloat); ++i) {
+					chunkTextureCoordsData.push_back(cubeBottomTextureCoords[i]);
+				}
+
+				//front face
+				for (size_t i = 0; i < sizeof(cubeFrontFace) / sizeof(glm::vec3); ++i) {
+					//div by 2 as cube data is -1 to +1
+					glm::vec3 newCubeData = cubeFrontFace[i] * 1.0f;
+					newCubeData.x += xPos;
+					newCubeData.y += yPos;
+					newCubeData.z += zPos;
+					chunkVertexData.push_back(newCubeData.x);
+					chunkVertexData.push_back(newCubeData.y);
+					chunkVertexData.push_back(newCubeData.z);
+				}
+				for (size_t i = 0; i < sizeof(cubeFrontTextureCoords) / sizeof(GLfloat); ++i) {
+					chunkTextureCoordsData.push_back(cubeFrontTextureCoords[i]);
+				}
+
+				//back face
+				for (size_t i = 0; i < sizeof(cubeBackFace) / sizeof(glm::vec3); ++i) {
+					//div by 2 as cube data is -1 to +1
+					glm::vec3 newCubeData = cubeBackFace[i] * 1.0f;
+					newCubeData.x += xPos;
+					newCubeData.y += yPos;
+					newCubeData.z += zPos;
+					chunkVertexData.push_back(newCubeData.x);
+					chunkVertexData.push_back(newCubeData.y);
+					chunkVertexData.push_back(newCubeData.z);
+				}
+				for (size_t i = 0; i < sizeof(cubeBackTextureCoords) / sizeof(GLfloat); ++i) {
+					chunkTextureCoordsData.push_back(cubeBackTextureCoords[i]);
+				}
+
+				//left face
+				for (size_t i = 0; i < sizeof(cubeLeftFace) / sizeof(glm::vec3); ++i) {
+					//div by 2 as cube data is -1 to +1
+					glm::vec3 newCubeData = cubeLeftFace[i] * 1.0f;
+					newCubeData.x += xPos;
+					newCubeData.y += yPos;
+					newCubeData.z += zPos;
+					chunkVertexData.push_back(newCubeData.x);
+					chunkVertexData.push_back(newCubeData.y);
+					chunkVertexData.push_back(newCubeData.z);
+				}
+				for (size_t i = 0; i < sizeof(cubeLeftTextureCoords) / sizeof(GLfloat); ++i) {
+					chunkTextureCoordsData.push_back(cubeLeftTextureCoords[i]);
+				}
+
+				//right face 
+				for (size_t i = 0; i < sizeof(cubeRightFace) / sizeof(glm::vec3); ++i) {
+					//div by 2 as cube data is -1 to +1
+					glm::vec3 newCubeData = cubeRightFace[i] * 1.0f;
+					newCubeData.x += xPos;
+					newCubeData.y += yPos;
+					newCubeData.z += zPos;
+					chunkVertexData.push_back(newCubeData.x);
+					chunkVertexData.push_back(newCubeData.y);
+					chunkVertexData.push_back(newCubeData.z);
+				}
+				for (size_t i = 0; i < sizeof(cubeRightTextureCoords) / sizeof(GLfloat); ++i) {
+					chunkTextureCoordsData.push_back(cubeRightTextureCoords[i]);
+				}
 
 			/*	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
 					chunkColourData.push_back(cubeColours[i]);
 				}
 				*/
-				for (size_t i = 0; i < sizeof(cubeTextureCoords) / sizeof(GLfloat); ++i) {
-					chunkTextureCoordsData.push_back(cubeTextureCoords[i]);
-				}
 
 
 			}
@@ -202,46 +269,125 @@ void Chunk::init() {
 
 }
 
+const glm::vec3 Chunk::cubeTopFace[6] {
+	glm::vec3(1.0f, 1.0f, 1.0f),
+	glm::vec3(1.0f, 1.0f, -1.0f),
+	glm::vec3(-1.0f, 1.0f, -1.0f),
 
-const glm::vec3 Chunk::cubeData[36] = {
+	glm::vec3(1.0f, 1.0f, 1.0f),
+	glm::vec3(-1.0f, 1.0f, -1.0f),
+	glm::vec3(-1.0f, 1.0f, 1.0f)
+};
+
+const glm::vec3 Chunk::cubeBottomFace[6]{
+	glm::vec3(1.0f, -1.0f, 1.0f),
+	glm::vec3(-1.0f, -1.0f, -1.0f),
+	glm::vec3(1.0f, -1.0f, -1.0f),
+
+	glm::vec3(1.0f, -1.0f, 1.0f),
+	glm::vec3(-1.0f, -1.0f, 1.0f),
+	glm::vec3(-1.0f, -1.0f, -1.0f)
+};
+
+const glm::vec3 Chunk::cubeLeftFace[6] {
 	glm::vec3(-1.0f, -1.0f, -1.0f), // triangle 1 : begin
 	glm::vec3(-1.0f, -1.0f, 1.0f),
 	glm::vec3(-1.0f, 1.0f, 1.0f), // triangle 1 : end
-	glm::vec3(1.0f, 1.0f, -1.0f), // triangle 2 : begin
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f), // triangle 2 : end
-	glm::vec3(1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, -1.0f),
-
-	glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, -1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
 
 	glm::vec3(-1.0f, -1.0f, -1.0f),
 	glm::vec3(-1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, 1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
+	glm::vec3(-1.0f, 1.0f, -1.0f)
+};
+
+const glm::vec3 Chunk::cubeRightFace[6] {
 	glm::vec3(1.0f, 1.0f, 1.0f),
 	glm::vec3(1.0f, -1.0f, -1.0f),
 	glm::vec3(1.0f, 1.0f, -1.0f),
+
 	glm::vec3(1.0f, -1.0f, -1.0f),
 	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
+	glm::vec3(1.0f, -1.0f, 1.0f)
+};
+
+const glm::vec3 Chunk::cubeFrontFace[6]{
 	glm::vec3(-1.0f, 1.0f, 1.0f),
+	glm::vec3(-1.0f, -1.0f, 1.0f),
+	glm::vec3(1.0f, -1.0f, 1.0f),
+
 	glm::vec3(1.0f, 1.0f, 1.0f),
 	glm::vec3(-1.0f, 1.0f, 1.0f),
 	glm::vec3(1.0f, -1.0f, 1.0f)
+};
+
+const glm::vec3 Chunk::cubeBackFace[6]{
+	glm::vec3(1.0f, 1.0f, -1.0f), // triangle 2 : begin
+	glm::vec3(-1.0f, -1.0f, -1.0f),
+	glm::vec3(-1.0f, 1.0f, -1.0f), // triangle 2 : end
+
+	glm::vec3(1.0f, 1.0f, -1.0f),
+	glm::vec3(1.0f, -1.0f, -1.0f),
+	glm::vec3(-1.0f, -1.0f, -1.0f),
+
+};
+
+const GLfloat Chunk::cubeFrontTextureCoords[6 * 2] {
+	0.0f, 0.0,
+	0.0f, 1.0f,
+	1.0f, 1.0f,
+
+	1.0f, 0.0f,
+	0.0f, 0.0f,
+	1.0f, 1.0f,
+};
+
+const GLfloat Chunk::cubeBackTextureCoords[6 * 2] {
+	0.0, 0.0f,
+	1.0f, 1.0f,
+	1.0f, 0.0f,
+
+	0.0f, 0.0f,
+	0.0f, 1.0f,
+	1.0f, 1.0f,
+};
+
+const GLfloat Chunk::cubeLeftTextureCoords[6 * 2] {
+	1.0f, 0.0f,
+	0.0f, 0.0f,
+	0.0f, 1.0f,
+
+	1.0f, 0.0f,
+	0.0f, 1.0f,
+	1.0f, 1.0f
+};
+
+const GLfloat Chunk::cubeRightTextureCoords[6 * 2] {
+	0.0f, 0.0f,
+	1.0f, 1.0f,
+	1.0f, 0.0f,
+
+	1.0f, 1.0f,
+	0.0f, 0.0f,
+	0.0f, 1.0f,
+};
+
+const GLfloat Chunk::cubeTopTextureCoords[6 * 2]{
+	1.0f, 1.0f,
+	1.0f, 0.0f,
+	0.0f, 0.0f,
+
+	1.0f, 1.0f,
+	0.0f, 0.0f,
+	0.0f, 1.0f
+};
+
+const GLfloat Chunk::cubeBottomTextureCoords[6 * 2] {
+	1.0f, 1.0f,
+	0.0f, 0.0f,
+	1.0f, 0.0f,
+
+	1.0f, 1.0f,
+	0.0f, 1.0f,
+	0.0, 0.0f,
 };
 
 const GLfloat Chunk::cubeColours[4 * 36] = {
@@ -283,45 +429,4 @@ const GLfloat Chunk::cubeColours[4 * 36] = {
 	1.0f, 1.0f, 1.0f, 1.0f,
 	1.0f, 1.0f, 0.5f, 1.0f,
 	1.0f, 1.0f, 1.0f, 1.0f
-};
-
-const GLfloat Chunk::cubeTextureCoords[2 * 36] = {
-	1.0f, 1.0f,// triangle 1 : begin
-	0.5f, 1.0f,
-	1.0f, 0.5f, // triangle 1 : end
-	1.0f, 1.0f, // triangle 2 : begin
-	1.0f, 1.0f,
-	1.0f, 1.0f, // triangle 2 : end
-	1.0f, 0.5f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-
-	1.0f, 1.0f,
-	0.5f, 1.0f,
-	1.0f, 1.0f,
-
-	0.5f, 1.0f,
-	0.5f, 1.0f,
-	0.5f, 1.0f,
-	0.5f, 1.0f,
-	0.5f, 1.0f,
-	0.5f, 1.0f,
-	0.5f, 1.0f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	0.5f, 1.0f,
-	1.0f, 0.5f,
-	1.0f, 0.5f,
-	1.0f, 1.0f,
-	1.0f, 0.5f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	0.5f, 0.5f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
-	1.0f, 1.0f,
 };
