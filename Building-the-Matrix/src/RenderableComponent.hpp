@@ -1,6 +1,9 @@
 #ifndef RENDERABLE_COMPONENT_H
 #define RENDERABLE_COMPONENT_H
+
 #include "Common.hpp"
+#include "../Dependencies/glew/glew.h"
+#include "../Dependencies/GLFW/glfw3.h"
 #include "shader.hpp"
 #include "Texture.hpp"
 #include <glm/mat4x4.hpp>

@@ -16,8 +16,7 @@
 #if PLATFORM == PLATFORM_WINDOWS
 #include <Windows.h>
 #endif
-#include "../Dependencies/glew/glew.h"
-#include "../Dependencies/GLFW/glfw3.h"
+
 
 // GLM Fixes
 // We need this define for glm 0.9.6.1, it appears that 32-bit msvc++ compiling is broken
@@ -29,10 +28,10 @@
 #define GLM_FORCE_RADIANS
 
 // Enable tests
-#define TEST
+//#define TEST
 //#define TEST_GRAPHICS
 //#define TEST_PHYSICS
-#define TEST_UPDATES
+//#define TEST_UPDATES
 
 // Enable debug mode
 #define DEBUG

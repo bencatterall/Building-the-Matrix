@@ -2,6 +2,8 @@
 #define PHYSICS_MATHS_H
 
 #include "../Common.hpp"
+#include "../../Dependencies/glew/glew.h"
+#include "../../Dependencies/GLFW/glfw3.h"
 
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>

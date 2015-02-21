@@ -1,4 +1,6 @@
 #include "../Common.hpp"
+#include "../../Dependencies/glew/glew.h"
+#include "../../Dependencies/GLFW/glfw3.h"
 
 #include <glm/vector_relational.hpp>
 

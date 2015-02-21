@@ -1,6 +1,9 @@
 #ifndef SHADER_H
 #define SHADER_H
+
 #include "Common.hpp"
+#include "../Dependencies/glew/glew.h"
+#include "../Dependencies/GLFW/glfw3.h"
 #include <string>
 #include <fstream>
 #include <sstream>
