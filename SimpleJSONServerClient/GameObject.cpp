@@ -56,7 +56,7 @@ GameObjectGlobalID GameObject::getID(){
 	return this->ID;
 }
 
-/* virtual int GameObject::serialize(char* buffer) {
+int GameObject::serialize(char* buffer) {
 	struct SerializedObject {
 		float xrot;
 		float yrot;
@@ -75,7 +75,9 @@ GameObjectGlobalID GameObject::getID(){
 	obj.zpos = zpos;
 	obj.visible = visible;
 	obj.renderable = renderable;
-
-	memcpy(buffer, obj, sizeof(obj));
+	// TODO: Check me
+	const void * objPointer = &obj;
+	//
+	memcpy(buffer, objPointer, sizeof(obj));
 	return sizeof(obj);
-} */
+}
