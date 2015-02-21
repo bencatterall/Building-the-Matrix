@@ -6,13 +6,16 @@
 #include "RenderableComponent.hpp"
 #include "shader.hpp"
 #include "SimplexNoise.hpp"
-#include "Texture.hpp"
+#include "TextureAtlas.hpp"
 
 #include <iostream>
 #include <memory>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <string>
+#include <utility>
+
 Chunk::Chunk()
 	: Chunk(0.0, 0.0, 0.0)
 {
@@ -27,7 +30,7 @@ Chunk::Chunk(double xPos, double yPos, double zPos) {
 
 void Chunk::init() {
 	//Init starting renderable data 
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>("resources/textures/grass.png");
+	std::shared_ptr<TextureAtlas> texture = std::make_shared<TextureAtlas>("resources/textures/texture_atlas.png");
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
 	if (!shader->isLoaded()) {
 		std::cerr << "ERROR: In Chunk::init, cannot load shader." << std::endl;
@@ -36,6 +39,16 @@ void Chunk::init() {
 
 	renderableComponent->setShader(shader);
 	renderableComponent->setTexture(texture);
+
+
+	//Map of cube types (GRASS, WATER etc) to a string identifer
+	std::map<int, std::string> cubeTypeToId;
+	cubeTypeToId.insert(std::make_pair<int, std::string>(1, std::string("grass")));
+	cubeTypeToId.insert(std::make_pair<int, std::string>(2, std::string("sand")));
+	cubeTypeToId.insert(std::make_pair<int, std::string>(3, std::string("stone")));
+	cubeTypeToId.insert(std::make_pair<int, std::string>(4, std::string("water")));
+
+
 
 	//The number of cubes we actually want to render
 	int numCubes = 0;
@@ -53,7 +66,7 @@ void Chunk::init() {
 
 			//fill in y below this block
 			int yHeight = (int)(noise*(yLength/2) * 0.3);
-			for (int y = 0; y < yHeight; ++y) {
+			for (int y = -yLength / 2; y < yHeight; ++y) {
 				chunkData[x + (xLength / 2)][y+yLength /2][z + (zLength / 2)] = 1;
 			}
 
@@ -64,6 +77,15 @@ void Chunk::init() {
 
 			//Set data
 			chunkNoiseData[x + (xLength / 2)][yHeight + yLength / 2][z + (zLength / 2)] = noise;
+		}
+	}
+
+	//Put water on floor
+	for (int x = -xLength / 2; x < xLength / 2; ++x) {
+		for (int z = -zLength / 2; z < zLength / 2; ++z) {
+			if (chunkData[x + (xLength / 2)][yLength/2][z + (zLength / 2)] == 0) {
+				chunkData[x + (xLength / 2)][yLength/2][z + (zLength / 2)] = 4;
+			}
 		}
 	}
 
@@ -148,7 +170,7 @@ void Chunk::init() {
 				int baseZ = z + (zLength / 2);
 
 				//if not visible
-				if (!chunkVisibleData[baseX][baseY][baseZ])
+				if (!chunkVisibleData[baseX][baseY][baseZ] || chunkData[baseX][baseY][baseZ] == 0)
 					continue;
 			
 				float sf = 2.0f;
@@ -167,20 +189,7 @@ void Chunk::init() {
 				//We do if there is not a cube above
 				if (baseY + 1 < yLength) {
 					if (chunkData[baseX][baseY + 1][baseZ] == 0) {
-						for (size_t i = 0; i < sizeof(cubeTopFace) / sizeof(glm::vec3); ++i) {
-							//div by 2 as cube data is -1 to +1
-							glm::vec3 newCubeData = cubeTopFace[i] * 1.0f;
-							newCubeData.x += xPos;
-							newCubeData.y += yPos;
-							newCubeData.z += zPos;
-							chunkVertexData.push_back(newCubeData.x);
-							chunkVertexData.push_back(newCubeData.y);
-							chunkVertexData.push_back(newCubeData.z);
-							numVertices++;
-						}
-						for (size_t i = 0; i < sizeof(cubeTopTextureCoords) / sizeof(GLfloat); ++i) {
-							chunkTextureCoordsData.push_back(cubeTopTextureCoords[i]);
-						}
+						setupFaceData(baseX, baseY + 1, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeTopFace, cubeTopTextureCoords);
 					}
 				}
 
@@ -189,20 +198,7 @@ void Chunk::init() {
 				//We do if there is not a cube below
 				if (baseY -1 > 0) {
 					if (chunkData[baseX][baseY - 1][baseZ] == 0) {
-						for (size_t i = 0; i < sizeof(cubeBottomFace) / sizeof(glm::vec3); ++i) {
-							//div by 2 as cube data is -1 to +1
-							glm::vec3 newCubeData = cubeBottomFace[i] * 1.0f;
-							newCubeData.x += xPos;
-							newCubeData.y += yPos;
-							newCubeData.z += zPos;
-							chunkVertexData.push_back(newCubeData.x);
-							chunkVertexData.push_back(newCubeData.y);
-							chunkVertexData.push_back(newCubeData.z);
-							numVertices++;
-						}
-						for (size_t i = 0; i < sizeof(cubeBottomTextureCoords) / sizeof(GLfloat); ++i) {
-							chunkTextureCoordsData.push_back(cubeBottomTextureCoords[i]);
-						}
+						setupFaceData(baseX, baseY - 1, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBottomFace, cubeBottomTextureCoords);
 					}
 				}
 
@@ -211,20 +207,7 @@ void Chunk::init() {
 				//We do if there is not a cube in front
 				if (baseZ + 1 < zLength) {
 					if (chunkData[baseX][baseY][baseZ + 1] == 0) {
-						for (size_t i = 0; i < sizeof(cubeFrontFace) / sizeof(glm::vec3); ++i) {
-							//div by 2 as cube data is -1 to +1
-							glm::vec3 newCubeData = cubeFrontFace[i] * 1.0f;
-							newCubeData.x += xPos;
-							newCubeData.y += yPos;
-							newCubeData.z += zPos;
-							chunkVertexData.push_back(newCubeData.x);
-							chunkVertexData.push_back(newCubeData.y);
-							chunkVertexData.push_back(newCubeData.z);
-							numVertices++;
-						}
-						for (size_t i = 0; i < sizeof(cubeFrontTextureCoords) / sizeof(GLfloat); ++i) {
-							chunkTextureCoordsData.push_back(cubeFrontTextureCoords[i]);
-						}
+						setupFaceData(baseX, baseY, baseZ + 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeFrontFace, cubeFrontTextureCoords);
 					}
 				}
 
@@ -233,20 +216,7 @@ void Chunk::init() {
 				//We do if there is not a cube behind
 				if (baseZ - 1 > 0) {
 					if (chunkData[baseX][baseY][baseZ - 1] == 0) {
-						for (size_t i = 0; i < sizeof(cubeBackFace) / sizeof(glm::vec3); ++i) {
-							//div by 2 as cube data is -1 to +1
-							glm::vec3 newCubeData = cubeBackFace[i] * 1.0f;
-							newCubeData.x += xPos;
-							newCubeData.y += yPos;
-							newCubeData.z += zPos;
-							chunkVertexData.push_back(newCubeData.x);
-							chunkVertexData.push_back(newCubeData.y);
-							chunkVertexData.push_back(newCubeData.z);
-							numVertices++;
-						}
-						for (size_t i = 0; i < sizeof(cubeBackTextureCoords) / sizeof(GLfloat); ++i) {
-							chunkTextureCoordsData.push_back(cubeBackTextureCoords[i]);
-						}
+						setupFaceData(baseX, baseY, baseZ - 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBackFace, cubeBackTextureCoords);
 					}
 				}
 
@@ -255,20 +225,7 @@ void Chunk::init() {
 				//We do if there is not a cube to the left
 				if (baseX - 1 > 0) {
 					if (chunkData[baseX - 1][baseY][baseZ] == 0) {
-						for (size_t i = 0; i < sizeof(cubeLeftFace) / sizeof(glm::vec3); ++i) {
-							//div by 2 as cube data is -1 to +1
-							glm::vec3 newCubeData = cubeLeftFace[i] * 1.0f;
-							newCubeData.x += xPos;
-							newCubeData.y += yPos;
-							newCubeData.z += zPos;
-							chunkVertexData.push_back(newCubeData.x);
-							chunkVertexData.push_back(newCubeData.y);
-							chunkVertexData.push_back(newCubeData.z);
-							numVertices++;
-						}
-						for (size_t i = 0; i < sizeof(cubeLeftTextureCoords) / sizeof(GLfloat); ++i) {
-							chunkTextureCoordsData.push_back(cubeLeftTextureCoords[i]);
-						}
+						setupFaceData(baseX - 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeLeftFace, cubeLeftTextureCoords);
 					}
 				}
 
@@ -277,20 +234,7 @@ void Chunk::init() {
 				//We do if there is not a cube to the right
 				if (baseX + 1 < xLength) {
 					if (chunkData[baseX+1][baseY][baseZ] == 0) {
-						for (size_t i = 0; i < sizeof(cubeRightFace) / sizeof(glm::vec3); ++i) {
-							//div by 2 as cube data is -1 to +1
-							glm::vec3 newCubeData = cubeRightFace[i] * 1.0f;
-							newCubeData.x += xPos;
-							newCubeData.y += yPos;
-							newCubeData.z += zPos;
-							chunkVertexData.push_back(newCubeData.x);
-							chunkVertexData.push_back(newCubeData.y);
-							chunkVertexData.push_back(newCubeData.z);
-							numVertices++;
-						}
-						for (size_t i = 0; i < sizeof(cubeRightTextureCoords) / sizeof(GLfloat); ++i) {
-							chunkTextureCoordsData.push_back(cubeRightTextureCoords[i]);
-						}
+						setupFaceData(baseX + 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeRightFace, cubeRightTextureCoords);
 					}
 				}
 				/*	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
@@ -308,6 +252,56 @@ void Chunk::init() {
 	renderableComponent->setColourData(chunkColourData, false);
 	renderableComponent->setTextureCoordsData(chunkTextureCoordsData, false);
 
+}
+
+void Chunk::setupFaceData(int cubeX, int cubeY, int cubeZ, float xPos, float yPos, float zPos, int *numVertices,
+	std::string tileName, std::shared_ptr<TextureAtlas> texture, const glm::vec3 (&vertexData)[6],
+	const GLfloat (&texData)[6*2]) {
+	for (size_t i = 0; i < sizeof(vertexData) / sizeof(glm::vec3); ++i) {
+		//div by 2 as cube data is -1 to +1
+		glm::vec3 newCubeData = vertexData[i] * 1.0f;
+		newCubeData.x += xPos;
+		newCubeData.y += yPos;
+		newCubeData.z += zPos;
+		chunkVertexData.push_back(newCubeData.x);
+		chunkVertexData.push_back(newCubeData.y);
+		chunkVertexData.push_back(newCubeData.z);
+		(*numVertices)++;
+	}
+
+
+	std::tuple<float, float, float, float> rect = texture->calculateTextureCoords(tileName);
+	//pairs of (x, y)
+	//(0.0, 0.0) -> (x,y)
+	//(1.0, 0.0) -> (x + width,y)
+	//(0.0, 1.0) -> (x, y + height)
+	//(1.0, 1.0) -> (x + width, y + height)
+	float xOffset = std::get<0>(rect);
+	float yOffset = std::get<1>(rect);
+	float width = std::get<2>(rect);
+	float height = std::get<3>(rect);
+	for (size_t i = 0; i < sizeof(texData) / sizeof(GLfloat); i += 2) {
+		if (texData[i] == 0.0f && texData[i + 1] == 0.0f) {
+			chunkTextureCoordsData.push_back(xOffset);
+			chunkTextureCoordsData.push_back(yOffset);
+		}
+		else if (texData[i] == 1.0f && texData[i + 1] == 0.0f) {
+			chunkTextureCoordsData.push_back(xOffset + width);
+			chunkTextureCoordsData.push_back(yOffset);
+		}
+		else if (texData[i] == 0.0f && texData[i + 1] == 1.0f) {
+			chunkTextureCoordsData.push_back(xOffset);
+			chunkTextureCoordsData.push_back(yOffset + height);
+		}
+		else if (texData[i] == 1.0f && texData[i + 1] == 1.0f) {
+			chunkTextureCoordsData.push_back(xOffset + width);
+			chunkTextureCoordsData.push_back(yOffset + height);
+		}
+		else {
+			assert(false);
+			std::cerr << "ERROR: In Chunk, texture coords calc. Comparisions failed.";
+		}
+	}
 }
 
 const glm::vec3 Chunk::cubeTopFace[6] {

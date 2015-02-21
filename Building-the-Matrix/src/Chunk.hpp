@@ -5,7 +5,9 @@
 #include "../Dependencies/glew/glew.h"
 #include "../Dependencies/GLFW/glfw3.h"
 #include "GameObject.hpp"
+#include "TextureAtlas.hpp"
 
+#include <memory>
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -66,6 +68,9 @@ class Chunk : public GameObject {
 	std::vector<GLfloat> chunkTextureCoordsData;
 	ChunkData chunkDatas[6];
 
+	void setupFaceData(int cubeX, int cubeY, int cubeZ, float xPos, float yPos, float zPos, int *numVertices,
+		std::string tileName, std::shared_ptr<TextureAtlas> texture, const glm::vec3 (&vertexData)[6],
+		const GLfloat (&texData)[6*2]);
 public:
 	Chunk();
 	Chunk(double xPos, double yPos, double zPos);

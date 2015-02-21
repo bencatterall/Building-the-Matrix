@@ -96,11 +96,13 @@
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\UpdateManager.cpp" />
     <ClCompile Include="src\World.cpp" />
-    <ClCompile Include="tests\Catch.cpp" />
+    <ClCompile Include="tests\catch.cpp" />
     <ClCompile Include="tests\PhysicsTest.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
+    <ClCompile Include="tests\TextureAtlasTest.cpp" />
     <ClCompile Include="tests\UpdateManagerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +130,7 @@
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\SimplexNoise.hpp" />
     <ClInclude Include="src\Texture.hpp" />
+    <ClInclude Include="src\TextureAtlas.hpp" />
     <ClInclude Include="src\UpdateManager.hpp" />
     <ClInclude Include="src\World.hpp" />
   </ItemGroup>
