@@ -12,7 +12,8 @@ void Sender::setSocket(Socket *s) {
 }
 
 void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message) {
-	Message m = Message(client, message);
+	//Message m = Message(client, message);
+	Message m = Message(client,"UPDATE MESSAGE",14);
 	(this->toSend).pushToEnd(m);
 }
 

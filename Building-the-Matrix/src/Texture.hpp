@@ -2,6 +2,8 @@
 #define TEXTURE_H
 
 #include "Common.hpp"
+#include "../Dependencies/glew/glew.h"
+#include "../Dependencies/GLFW/glfw3.h"
 #include "ImageLoader.hpp"
 
 #include <string>

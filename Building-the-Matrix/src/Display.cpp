@@ -408,12 +408,14 @@ void Display::run() {
 			lastTime += 1.0;
 		}
 
-		client.sendPitchRollYaw(getHeadOrientation());
+		//AT THE MOMENT THIS SENDS MESSAGES TOO FAST FOR THE SERVER TO HANDLE QUICKLY ENOUGH
+		//client.sendPitchRollYaw(getHeadOrientation());
 
 		//networking get updates;
 		//client.receive();
 		char *buffer = new char[1024];
 		if (client.receive(buffer,1024) >= 0) {
+			std::cout << std::string(buffer);
 			//use update from server
 
 			//update manager service updates

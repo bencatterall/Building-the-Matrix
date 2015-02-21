@@ -3,7 +3,6 @@
 #include "Game.hpp"
 #include "ImageLoader.hpp"
 //#include <freeglut/glut.h>
-
 #ifndef TEST
 int main(int argc, char **argv) {
 	//glutInit(&argc, argv);
@@ -13,4 +12,4 @@ int main(int argc, char **argv) {
 	
 	return 0;
 }
-#endif
+#endif //TEST

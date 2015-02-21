@@ -1,0 +1,2 @@
+#include "LocationComponent.hpp"
+

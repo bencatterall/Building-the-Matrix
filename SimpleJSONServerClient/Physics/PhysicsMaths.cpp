@@ -1,11 +1,12 @@
 #include <algorithm>
 
+#include "../Common.hpp"
 #include "../GameObject.hpp"
-#include "../ObjectManager.hpp"
 #include "../LocationComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
+#include "../UpdateManager.hpp"
 
 
 namespace PhysicsMaths{
@@ -34,11 +35,12 @@ namespace PhysicsMaths{
 	// Tests for global-axis aligned bounding box collision.
 	// @param a,b - the two PhysicsObject items to check with
 	// @return true if they collide
-	bool simpleCollision(const GameObjectID a, const GameObjectID b){
-		ObjectManager & obj = ObjectManager::getInstance();
-		GameObject aObj = *obj.getObject(a);
-		GameObject bObj = *obj.getObject(b);
-		return simpleCollision(*aObj.getPhysicsComponent(), *bObj.getPhysicsComponent());
+	bool simpleCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
+		//TODO: Call proper instance
+		UpdateManager update = UpdateManager::UpdateManager();
+		GameObject aObj = *update.getGameObject(a);
+		GameObject bObj = *update.getGameObject(b);
+		return simpleCollision(*aObj.physComp, *bObj.physComp);
 	}
 
 	// Tests for global-axis aligned bounding box collision.
@@ -71,18 +73,18 @@ namespace PhysicsMaths{
 		return true;
 	}
 
-	void handleCollision(GameObjectID aID, GameObjectID bID){
-		ObjectManager& objMan = ObjectManager::getInstance();
-		GameObject objA = *objMan.getObject(aID);
-		GameObject objB = *objMan.getObject(bID);
-		PhysicsObject physA = *objA.getPhysicsComponent();
-		PhysicsObject physB = *objB.getPhysicsComponent();
+	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
+		UpdateManager& objMan = UpdateManager::UpdateManager();
+		GameObject objA = *objMan.getGameObject(aID);
+		GameObject objB = *objMan.getGameObject(bID);
+		PhysicsObject physA = *objA.physComp;
+		PhysicsObject physB = *objB.physComp;
 		vec3 aCen = physA.getLocalAABB().getCenter();
 		vec3 bCen = physB.getLocalAABB().getCenter();
-		
+
 		// Transform these to world space
-		glm::mat4 matA = glm::translate(glm::mat4x4(1.0f), objA.getLocationComponent()->getPosition());
-		glm::mat4 matB = glm::translate(glm::mat4x4(1.0f), objB.getLocationComponent()->getPosition());
+		glm::mat4 matA = glm::translate(glm::mat4x4(1.0f), objA.locComp->getPosition());
+		glm::mat4 matB = glm::translate(glm::mat4x4(1.0f), objB.locComp->getPosition());
 		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 0.0f));
 		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 0.0f));
 
@@ -95,11 +97,11 @@ namespace PhysicsMaths{
 		float velDelAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
 
 		// Do not resolve if they are separating already
-		if (velDelAlongCollisionNormal > 0.0f)
+		if (velDelAlongCollisionNormal > 0.0f){
 			return;
-
+		}
 		// Choose minimal restitution
-		float e = std::min(physA.getRest(), physB.getRest());
+		float e = ((physA.getRest() < physB.getRest()) ? physA : physB).getRest();
 
 		// Calculate impulse vec3
 		float j = -(1.0f + e) * velDelAlongCollisionNormal;
@@ -163,18 +165,18 @@ namespace PhysicsMaths{
 		return result;
 	}
 
-	bool complexCollision(const GameObjectID a, const GameObjectID b){
-		ObjectManager & obj = ObjectManager::getInstance();
-		std::shared_ptr<PhysicsObject> aObj = obj.getObject(a)->getPhysicsComponent();
-		std::shared_ptr<PhysicsObject> bObj = obj.getObject(b)->getPhysicsComponent();
+	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
+		UpdateManager & obj = UpdateManager::UpdateManager();
+		std::shared_ptr<PhysicsObject> aObj = obj.getGameObject(a)->physComp;
+		std::shared_ptr<PhysicsObject> bObj = obj.getGameObject(b)->physComp;
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
 		std::shared_ptr<vertexVector> bBox = bObj->getLocalAABB().getFullBox();
-		vec3 vecA = obj.getObject(a)->getLocationComponent()->getPosition();
-		vec3 vecB = obj.getObject(b)->getLocationComponent()->getPosition();
+		vec3 vecA = obj.getGameObject(a)->locComp->getPosition();
+		vec3 vecB = obj.getGameObject(b)->locComp->getPosition();
 		glm::mat4x4 transA = glm::translate(glm::mat4x4(1.0f), vecA);
 		glm::mat4x4	transB = glm::translate(glm::mat4x4(1.0f), vecB);
-		transA *= obj.getObject(a)->getLocationComponent()->getRotationMatrix();
-		transB *= obj.getObject(b)->getLocationComponent()->getRotationMatrix();
+		transA *= obj.getGameObject(a)->locComp->getRotationMatrix();
+		transB *= obj.getGameObject(b)->locComp->getRotationMatrix();
 		std::shared_ptr<vertexVector> aBoxWorld = translateVertexVector(transA, aBox);
 		std::shared_ptr<vertexVector> bBoxWorld = translateVertexVector(transB, bBox);
 		
@@ -231,9 +233,9 @@ namespace PhysicsMaths{
 		return (maxA < minB || maxB < minA);
 	}
 
-	void acceleratePlayer(const GameObjectID id){
-		GameObject obj = *ObjectManager::getInstance().getObject(id);
-		PhysicsObject phys = *obj.getPhysicsComponent();
+	void acceleratePlayer(const GameObjectGlobalID id){
+		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		PhysicsObject phys = *obj.physComp;
 		vec3 dir = phys.getOrientation();
 		float speed = glm::length(dir);
 		vec3 A = phys.getA();
@@ -243,9 +245,9 @@ namespace PhysicsMaths{
 	}
 
 
-	void reversePlayer(const GameObjectID id){
-		GameObject obj = *ObjectManager::getInstance().getObject(id);
-		PhysicsObject phys = *obj.getPhysicsComponent();
+	void reversePlayer(const GameObjectGlobalID id){
+		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		PhysicsObject phys = *obj.physComp;
 		vec3 dir = phys.getOrientation();
 		float speed = glm::length(dir);
 		vec3 A = phys.getA();
@@ -253,15 +255,15 @@ namespace PhysicsMaths{
 		phys.setA(A + glm::normalize(dir)*(-2.0f-speed));
 	}
 
-	void turnLeft(const GameObjectID id, float turnSpeed = TURN_SPEED){
-		GameObject obj = *ObjectManager::getInstance().getObject(id);
-		std::shared_ptr<PhysicsObject> phys = obj.getPhysicsComponent();
+	void turnLeft(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
+		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		std::shared_ptr<PhysicsObject> phys = obj.physComp;
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
-	void turnRight(const GameObjectID id, float turnSpeed = TURN_SPEED){
+	void turnRight(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
 		turnLeft(id, -turnSpeed);
 	}
 

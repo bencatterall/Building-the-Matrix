@@ -1,15 +1,8 @@
 #include "Update.hpp"
 
-Update::Update(GameObjectGlobalID ID, GameObject object){
+Update::Update(GameObjectGlobalID ID, std::shared_ptr<GameObject> object){
 	(this->ID) = ID;
 	(this->object) = object;
-	(this->type) = 0;
-}
-
-Update::Update(GameObjectGlobalID ID, GameObject object, int type){
-	(this->ID) = ID;
-	(this->object) = object;
-	(this->type) = type;
 }
 
 Update::Update(){}
@@ -20,10 +13,6 @@ GameObjectGlobalID Update::getObjectID() {
 	return (this->ID);
 }
 
-GameObject Update::getEditedObject() {
+std::shared_ptr<GameObject> Update::getEditedObject() {
 	return (this->object);
-}
-
-bool Update::forDeletion() {
-	return ((this->type) == 1);
 }

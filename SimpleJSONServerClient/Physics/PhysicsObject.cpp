@@ -7,6 +7,9 @@ PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, co
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3())
 {
+	if (locationComp == nullptr){
+		locationComp = std::make_shared<LocationComponent>();
+	}
 	this->location = locationComp;
 	boundingBox = std::make_shared<AABB>(vertices);
 }

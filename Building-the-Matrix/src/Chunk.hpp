@@ -2,6 +2,8 @@
 #define CHUNK_H
 
 #include "Common.hpp"
+#include "../Dependencies/glew/glew.h"
+#include "../Dependencies/GLFW/glfw3.h"
 #include "GameObject.hpp"
 
 #include <glm/glm.hpp>
@@ -18,9 +20,8 @@ class Chunk : public GameObject{
 	
 
 	///
-	/// The world data
-	/// used to do collision detection efficiently and optimisations/cleaning after
-	/// noise generation
+	/// The world data used to do collision detection efficiently
+	/// and optimisations/cleaning after noise generation
 	///
 	char chunkData[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
 	bool chunkVisibleData[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];

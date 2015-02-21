@@ -1,12 +1,15 @@
 #ifndef SHADER_H
 #define SHADER_H
+
 #include "Common.hpp"
+#include "../Dependencies/glew/glew.h"
+#include "../Dependencies/GLFW/glfw3.h"
 #include <string>
 #include <fstream>
 #include <sstream>
 
 ///
-/// An Opengl shader program loader, compiler and manager.
+/// An OpenGL shader program loader, compiler and manager.
 ///
 class Shader {
 	///
@@ -23,7 +26,7 @@ class Shader {
 	bool loaded = false;
 
 	GLuint loadShader(GLenum type, const std::string src);
-	std::string Shader::loadFile(std::string fileName);
+	std::string loadFile(std::string fileName);
 public:
 	Shader(const std::string programName);
 	Shader(const std::string vs, const std::string fs);

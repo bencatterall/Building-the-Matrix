@@ -1,11 +1,7 @@
 #include "../Common.hpp"
-#include "../../Dependencies/glew/glew.h"
-#include "../../Dependencies/GLFW/glfw3.h"
 
 #include <glm/vector_relational.hpp>
 
-#include "../ObjectManager.hpp"
-#include "../RenderableComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 
@@ -43,42 +39,9 @@ AABB::AABB(const vertexVector vertices)
 	}
 }
 
-AABB::AABB(const GameObjectID gID)
+AABB::AABB(const vec3 minimum, const vec3 maximum) :
+		min(minimum), max(maximum)
 {
-	ObjectManager &objMan = ObjectManager::getInstance();
-	GameObject gameObj = *(objMan.getObject(gID));
-	std::vector<GLfloat> rawVertices = gameObj.getRenderableComponent()->getVertexData();
-	const vertexVector vertices = PhysicsMaths::convertGLfloatToVec3(rawVertices);
-	min = max = glm::vec3();
-	if (vertices.size() == 0) {
-		return;
-	}
-
-	max = min = vertices.at(0);
-	for (size_t i = 1; i < vertices.size(); i++){
-		// Piecewise: vertex > max
-		glm::bvec3 bVLT = glm::greaterThan(vertices.at(i), max);
-		// Piecewise: vertex < min
-		glm::bvec3 bVMT = glm::lessThan(vertices.at(i), min);
-		if (bVLT.x){
-			max.x = vertices.at(i).x;
-		}
-		else if (bVMT.x){
-			min.x = vertices.at(i).x;
-		}
-		if (bVLT.y){
-			max.y = vertices.at(i).y;
-		}
-		else if (bVMT.y){
-			min.y = vertices.at(i).y;
-		}
-		if (bVLT.z){
-			max.z = vertices.at(i).z;
-		}
-		else if (bVMT.z){
-			min.z = vertices.at(i).z;
-		}
-	}
 }
 
 // Destructor not needed.

@@ -66,10 +66,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Address.hpp" />
+    <ClInclude Include="Common.hpp" />
     <ClInclude Include="CommonMinimal.hpp" />
     <ClInclude Include="Controls.hpp" />
     <ClInclude Include="GameObject.hpp" />
+    <ClInclude Include="LocationComponent.hpp" />
     <ClInclude Include="Message.hpp" />
+    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Physics\AABB.hpp" />
+    <ClInclude Include="Physics\PhysicsMaths.hpp" />
+    <ClInclude Include="Physics\PhysicsObject.hpp" />
+    <ClInclude Include="Physics\Simulator.hpp" />
     <ClInclude Include="SafeMap.hpp" />
     <ClInclude Include="SafeQueue.hpp" />
     <ClInclude Include="Sender.hpp" />
@@ -81,7 +88,13 @@
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="LocationComponent.cpp" />
     <ClCompile Include="Message.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Physics\AABB.cpp" />
+    <ClCompile Include="Physics\PhysicsMaths.cpp" />
+    <ClCompile Include="Physics\PhysicsObject.cpp" />
+    <ClCompile Include="Physics\Simulator.cpp" />
     <ClCompile Include="SafeMap.cpp" />
     <ClCompile Include="SafeQueue.cpp" />
     <ClCompile Include="Sender.cpp" />

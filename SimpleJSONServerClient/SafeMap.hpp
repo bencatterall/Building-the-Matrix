@@ -5,19 +5,20 @@
 #include <mutex>
 #include "CommonMinimal.hpp"
 #include "GameObject.hpp"
+#include <memory>
 
 template<class K,class V>
 class SafeMap {
 	private:
-		std::map<K,V> map;
+		std::map<K,std::shared_ptr<V>> map;
 		std::mutex lock;
 	public:
 		SafeMap();
 		~SafeMap();
 		SafeMap(const SafeMap& map); //don't want compiler generating this function as mutexes are uncopyable
-		V get(K key);
+		std::shared_ptr<V> get(K key);
 		void deleteEntry(K key);
-		void put(K key, V value);
-		std::map<K, V> getSnapshot();
+		void put(K key, std::shared_ptr<V> value);
+		std::map<K, V> getSnapshot(bool flush);
 };
 #endif

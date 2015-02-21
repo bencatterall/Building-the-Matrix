@@ -1,8 +1,7 @@
-/**
-	Address.cpp
-	Purpose: Stores an address and a port in network byte order to be used by a socket
-
-*/
+///
+/// Address.cpp
+/// Purpose: Stores an address and a port in network byte order to be used by a socket
+///
 
 #include "Address.hpp"
 #include <sstream>
@@ -23,7 +22,7 @@ Address::Address(unsigned int address, unsigned short port){
 
 Address::Address(std::string ipAddr, unsigned short port) {
 	//convert a string to a network byte-order array
-	//TODO: Put in it's own function
+	//TODO: Put in its own function
 	size_t pos = 0;
 	int acc = 0;
 	unsigned int IPValues[4];

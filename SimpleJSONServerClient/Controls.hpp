@@ -2,10 +2,10 @@
 
 class Control {
 	private:
-		//space is down -> accelerate
-		bool S_HELD;
-		//control is down -> brake;
-		bool C_HELD;
+		//up is down -> accelerate
+		bool U_HELD;
+		//down is down -> brake;
+		bool D_HELD;
 		//right is down -> turn right
 		bool R_HELD;
 		//left is down -> turn left
@@ -13,6 +13,7 @@ class Control {
 	public:
 		Control();
 		~Control();
+		Control(const Control& other);
 		void regKeyPress(char key);
 		void regKeyUnpress(char key);
 		bool *getCurrentControls();

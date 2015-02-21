@@ -5,7 +5,7 @@
 * Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
 * Better rank ordering method by Stefan Gustavson in 2012.
 *
-* This could be speeded up even further, but it's useful as it is.
+* This could be sped up even further, but it's useful as it is.
 *
 * Version 2012-03-09
 *

@@ -1,4 +1,4 @@
-#include "../src/Common.hpp"
+/*#include "../src/Common.hpp"
 
 #ifdef TEST
 #ifdef TEST_UPDATES
@@ -55,4 +55,4 @@ TEST_CASE("Testing Update Manager", "[update]"){
 	}
 }
 #endif
-#endif
+#endif */

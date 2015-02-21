@@ -1,13 +1,19 @@
 #ifndef GAMEOBJ_H
 #define GAMEOBJ_H
 
-#include "CommonMinimal.hpp"
+#include <memory>
+
+#include "Common.hpp"
 #include "Controls.hpp"
+#include "LocationComponent.hpp"
+#include "Physics\PhysicsObject.hpp"
 
 class GameObject {
-	private:
+	public:
 		GameObjectGlobalID ID;
 		//add in position as a vector etc...
+		std::shared_ptr<LocationComponent> locComp;
+		std::shared_ptr<PhysicsObject> physComp;
 		float xrot;
 		float yrot;
 		float zrot;
@@ -16,19 +22,18 @@ class GameObject {
 		float zpos;
 		bool visible;
 		bool renderable;
+		bool deleted;
 		//for use with user vehicles only
 		bool userControllable;
-		Control control;
-		float pitch;
-		float roll;
-		float yaw;
 	public:
-		GameObject(GameObjectGlobalID id,bool userObj);
+		GameObject(GameObjectGlobalID id);
+		GameObject(const char *buffer); // for unserialization
 		void keyPressed(char key);
 		void keyUnpressed(char key);
+		GameObject(const GameObject& other);
 		GameObject();
-		~GameObject();
+		virtual ~GameObject();
 		GameObjectGlobalID getID();
-		void setPRY(float pitch, float roll, float yaw);
+		virtual int serialize(char* buffer);		
 };
 #endif
