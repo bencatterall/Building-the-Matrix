@@ -85,8 +85,8 @@ namespace PhysicsMaths{
 		// Transform these to world space
 		glm::mat4 matA = glm::translate(glm::mat4x4(1.0f), objA.locComp->getPosition());
 		glm::mat4 matB = glm::translate(glm::mat4x4(1.0f), objB.locComp->getPosition());
-		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 0.0f));
-		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 0.0f));
+		aCen = vec3(matA * glm::vec4(aCen.x, aCen.y, aCen.z, 1.0f));
+		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 1.0f));
 
 		// Calculate relative velocity and position
 		vec3 sDiff = aCen - bCen;
