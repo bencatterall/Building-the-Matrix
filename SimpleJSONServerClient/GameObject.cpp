@@ -73,6 +73,9 @@ int GameObject::serialize(char* buffer) {
 		Vector position;
 		Vector velocity;
 		Vector acceleration;
+		Vector AABBMin;
+		Vector AABBMax;
+		float mass;
 		*/
 		bool visible;
 		bool renderable;
@@ -90,7 +93,10 @@ int GameObject::serialize(char* buffer) {
 	serializeVec3(physComp->getV(), obj.velocity);
 	serializeVec3(physComp->getA(), obj.acceleration);
 	serializeVec3(physComp->getOrientation(), obj.orientation);
-	*/
+	serializeVec3(physComp->getLocalAABB().getMin(),obj.AABBMin);
+	serializeVec3(physComp->getLocalAABB().getMax(),obj.AABBMax);
+	obj.mass = physComp->getMass();
+	*/	
 
 	obj.visible = visible;
 	obj.renderable = renderable;

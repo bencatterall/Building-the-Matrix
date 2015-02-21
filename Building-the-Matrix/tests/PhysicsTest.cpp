@@ -51,7 +51,53 @@ TEST_CASE("Testing Physics", "[physics]"){
 	REQUIRE(phy.getX() == vec3(1.0f, 3.0f, 3.5f));
 	REQUIRE(phy.getV() == vec3(0.0f, 1.0f, 1.0f));
 
+	Cube cube1 = Cube(vec3(0, 0, 0)), cube2 = Cube(vec3(0, 0, 21));
+	cube2.getPhysicsComponent()->setV(vec3(0,0,-1));
+	PhysicsObject physA = *cube1.getPhysicsComponent(), physB = *cube2.getPhysicsComponent();
+	PhysicsMaths::stepObject(physA, 1.02f);
+	PhysicsMaths::stepObject(physB, 1.02f);
+	vec3 aCen = physA.getLocalAABB().getCenter();
+	vec3 bCen = physB.getLocalAABB().getCenter();
 
+	// Transform these to world space
+	glm::mat4 matA = glm::translate(glm::mat4x4(1.0f), cube1.getLocationComponent()->getPosition());
+	glm::mat4 matB = glm::translate(glm::mat4x4(1.0f), cube2.getLocationComponent()->getPosition());
+	glm::vec4 aCen4 = glm::vec4(aCen.x, aCen.y, aCen.z, 1.0f);
+	glm::vec4 bCen4 = glm::vec4(bCen.x, bCen.y, bCen.z, 1.0f);
+	aCen = vec3(matA * aCen4);
+	bCen = vec3(matB * bCen4);
+
+	// Calculate relative velocity and position
+	if (aCen == bCen) return;
+	vec3 sDiff = aCen - bCen;
+	vec3 sDiffNormal = glm::normalize(sDiff);
+	vec3 vDiff = physA.getV() - physB.getV();
+
+	// Calculate relative velocity along normal direction
+	float velDelAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
+
+	// Do not resolve if they are separating already
+	if (velDelAlongCollisionNormal > 0.0f)
+		return;
+
+	// Choose minimal restitution
+	float e = std::min(physA.getRest(), physB.getRest());
+
+	// Calculate impulse vec3
+	float j = -(1.0f + e) * velDelAlongCollisionNormal;
+	j = j / (physA.getInvMass() + physB.getInvMass());
+	vec3 impulse = j * sDiffNormal;
+
+	// Apply impulse in an amount proportional to its mass proportion.
+	float mass_sum = (physA.getMass() + physB.getMass());
+	physA.setV(physA.getV() - impulse * physA.getMass() / mass_sum);
+	physB.setV(physB.getV() + impulse * physB.getMass() / mass_sum);
+	
+	REQUIRE(physA.getV() == vec3(0, 0, -1));
+	REQUIRE(physB.getV() == vec3(0, 0, 0));
+
+	//Breakpoint purposes
+	REQUIRE(true);
 }
 #endif
 #endif
