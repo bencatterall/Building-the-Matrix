@@ -276,7 +276,7 @@ namespace PhysicsMaths{
 	}
 
 	vec3 convertYPRtoDirection(const vec3 YPR){
-		float xRad = YPR.x * PI / 180.0, yRad = YPR.y * PI / 180.0;
+		float xRad = YPR.x * PI / 180.0f, yRad = YPR.y * PI / 180.0f;
 		return vec3(
 			cos(xRad) * cos(yRad),
 			sin(xRad) * cos(yRad),

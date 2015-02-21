@@ -29,11 +29,7 @@ class LocationComponent {
 	double scaleFactor = 1.0;
 
 public:
-	LocationComponent() :
-		LocationComponent(glm::vec3(0.0, 0.0, 0.0), glm::mat4(1.0)) {
-	}
-
-	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat = glm::mat4x4(1.0f), double sf = 1.0) :
+	LocationComponent(glm::vec3 pos = glm::vec3(0.0f,0.0f,0.0f), glm::mat4 rotationMat = glm::mat4(1.0f), double sf = 1.0) :
 		position(pos), rotationMatrix(rotationMat),
 		scaleFactor(sf)
 	{
