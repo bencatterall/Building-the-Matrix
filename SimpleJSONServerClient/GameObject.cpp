@@ -1,5 +1,9 @@
 #include "GameObject.hpp"
 
+struct Vector{
+	float x, y, z;
+};
+
 GameObject::GameObject(GameObjectGlobalID id) {
 	(this->ID) = id;
 	(this->userControllable) = false;
@@ -64,15 +68,30 @@ int GameObject::serialize(char* buffer) {
 		float xpos;
 		float ypos;
 		float zpos;
+		/*
+		Vector orientation;
+		Vector position;
+		Vector velocity;
+		Vector acceleration;
+		*/
 		bool visible;
 		bool renderable;
 	} obj;
+	
 	obj.xrot = xrot;
 	obj.yrot = xrot;
 	obj.zrot = zrot;
 	obj.xpos = xpos;
 	obj.ypos = ypos;
 	obj.zpos = zpos;
+
+	/*
+	serializeVec3(physComp->getX(), obj.position);
+	serializeVec3(physComp->getV(), obj.velocity);
+	serializeVec3(physComp->getA(), obj.acceleration);
+	serializeVec3(physComp->getOrientation(), obj.orientation);
+	*/
+
 	obj.visible = visible;
 	obj.renderable = renderable;
 	// TODO: Check me
@@ -80,4 +99,10 @@ int GameObject::serialize(char* buffer) {
 	//
 	memcpy(buffer, objPointer, sizeof(obj));
 	return sizeof(obj);
+}
+
+void serializeVec3(const vec3 & input, Vector & output){
+	output.x = input.x;
+	output.y = input.y;
+	output.z = input.z;
 }
