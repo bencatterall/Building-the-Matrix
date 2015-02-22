@@ -1,9 +1,10 @@
 #ifndef PHYSICS_OBJECT_H
 #define PHYSICS_OBJECT_H
 
-#include "../Common.hpp"
-#include <glm/vec3.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "../CommonMinimal.hpp"
+#include "../../Building-the-Matrix/Dependencies/glm/glm.hpp"
+#include "../../Building-the-Matrix/Dependencies/glm/gtc/quaternion.hpp"
+#include "../Serializer.hpp"
 #include <memory>
 #include <vector>
 
@@ -11,6 +12,7 @@
 
 class AABB;
 class LocationComponent;
+class Serializer;
 
 using glm::vec3;
 
@@ -20,7 +22,9 @@ typedef glm::quat Quaternion;
 class PhysicsObject
 {
 public:
+	PhysicsObject(Serializer serializer, unsigned char *serial, int& pointer);
 	PhysicsObject(std::shared_ptr<LocationComponent>, const vertexVector);
+	PhysicsObject(const PhysicsObject& other);
 	virtual ~PhysicsObject();
 	
 	const std::shared_ptr<AABB> getWorldAABB() const;
@@ -50,7 +54,8 @@ public:
 	void turnLeft(float);
 	void turnRight(float);
 
-
+	int serialize(Serializer serializer, unsigned char *buffer);
+	int deserialize(Serializer serializer, unsigned char *buffer);
 protected:
 
 private:

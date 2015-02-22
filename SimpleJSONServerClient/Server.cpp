@@ -164,8 +164,8 @@ int main(int argc, char **argv) {
 					//create their car for the game, generate a global ID too
 					id = updateManager.getNextObjectID();
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
-					std::shared_ptr<GameObject> p = std::make_shared<Player>(id);
-					p->userControllable = true;
+					Player player = Player(id);
+					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
 					updateManager.queueUpdate(p);
 				}
 				char data[] = "LOGIN ACCEPTED     ";
@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
 				data[16] = idparts[1];
 				data[17] = idparts[2];
 				data[18] = idparts[3];
-				sender.sendMessage(recFrom, data,20);
+				sender.sendMessage(recFrom, (unsigned char *)data, 20);
 			}
 			//HANDLE LOGOUTS
 			else if (prefixMatch(message, "LOGOUT")) {

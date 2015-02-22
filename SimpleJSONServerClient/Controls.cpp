@@ -1,17 +1,21 @@
 #include "Controls.hpp"
 
-Control::Control() {}
+KeyboardControl::KeyboardControl() {}
 
-Control::~Control() {}
+KeyboardControl::~KeyboardControl() {}
 
-Control::Control(const Control& other) {
+KeyboardControl::KeyboardControl(const KeyboardControl& other) {
 	(this->U_HELD) = other.U_HELD;
 	(this->D_HELD) = other.D_HELD;
 	(this->L_HELD) = other.L_HELD;
 	(this->R_HELD) = other.R_HELD;
 }
 
-void Control::regKeyPress(char key) {
+KeyboardControl::KeyboardControl(Serializer serializer, unsigned char *buffer, int &next) {
+	next += (this->deserialize(serializer, buffer));
+}
+
+void KeyboardControl::regKeyPress(char key) {
 	if (key == 'u') {
 		(this->U_HELD) = true;
 	}
@@ -26,7 +30,7 @@ void Control::regKeyPress(char key) {
 	}
 }
 
-void Control::regKeyUnpress(char key) {
+void KeyboardControl::regKeyUnpress(char key) {
 	if (key == 'u') {
 		(this->U_HELD) = false;
 	}
@@ -41,7 +45,25 @@ void Control::regKeyUnpress(char key) {
 	}
 }
 
-bool *Control::getCurrentControls() {
+bool *KeyboardControl::getCurrentControls() {
 	bool *arr = new bool[ U_HELD, D_HELD, R_HELD, L_HELD ];
 	return arr;
+}
+
+int KeyboardControl::serialize(Serializer serializer, unsigned char *buffer) {
+	int next = 0;
+	next += serializer.packBool(&buffer[next], U_HELD);
+	next += serializer.packBool(&buffer[next], D_HELD);
+	next += serializer.packBool(&buffer[next], R_HELD);
+	next += serializer.packBool(&buffer[next], L_HELD);
+	return next;
+}
+
+int KeyboardControl::deserialize(Serializer serializer, unsigned char *buffer) {
+	int next = 0;
+	(this->U_HELD) = serializer.unpackBool(&buffer[next], next);
+	(this->D_HELD) = serializer.unpackBool(&buffer[next], next);
+	(this->R_HELD) = serializer.unpackBool(&buffer[next], next);
+	(this->L_HELD) = serializer.unpackBool(&buffer[next], next);
+	return next;
 }

@@ -150,12 +150,6 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Serializer.cpp">
-      <Filter>Source Files\Update Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UpdateManager.cpp">
-      <Filter>Source Files\Update Manager</Filter>
-    </ClCompile>
     <ClCompile Include="tests\UpdateManagerTest.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
@@ -232,12 +226,6 @@
     </ClInclude>
     <ClInclude Include="src\Player.hpp">
       <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Serializer.hpp">
-      <Filter>Header Files\Update Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UpdateManager.hpp">
-      <Filter>Header Files\Update Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

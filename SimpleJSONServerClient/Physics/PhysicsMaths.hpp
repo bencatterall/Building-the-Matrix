@@ -1,13 +1,13 @@
 #ifndef PHYSICS_MATHS_H
 #define PHYSICS_MATHS_H
 
-#include "../Common.hpp"
+#include "../CommonMinimal.hpp"
 #include "../../Building-the-Matrix/Dependencies/glew/glew.h"
 #include "../../Building-the-Matrix/Dependencies/GLFW/glfw3.h"
 #define GLM_FORCE_PURE
 #define GLM_FORCE_RADIANS
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "../../Building-the-Matrix/Dependencies/glm/gtc/quaternion.hpp"
+#include "../../Building-the-Matrix/Dependencies/glm/gtc/matrix_transform.hpp"
 #include <vector>
 #include <memory>
 
@@ -40,8 +40,9 @@ namespace PhysicsMaths
 	void stepObject(PhysicsObject &, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
-	const vec3 translateVertex(const glm::mat4x4, const vec3);
-	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
+	//IS BREAKING THE BUILD - NEED TO BE REFERENCES?
+	//const vec3 translateVertex(const glm::mat4x4, const vec3);
+	//const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
 
 	void acceleratePlayer(const GameObjectGlobalID);
 	void reversePlayer(const GameObjectGlobalID);

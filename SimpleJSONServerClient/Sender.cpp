@@ -1,4 +1,5 @@
 #include "Sender.hpp"
+#include "Player.hpp"
 #include <iostream>
 
 Sender::Sender() {
@@ -12,9 +13,38 @@ void Sender::setSocket(Socket *s) {
 }
 
 void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message) {
-	//Message m = Message(client, message);
-	Message m = Message(client,"UPDATE MESSAGE",14);
-	(this->toSend).pushToEnd(m);
+	unsigned char *m = new unsigned char[1024];
+	int size = 0;
+	for (std::pair<GameObjectGlobalID, GameObject> go : message) {
+		if (go.second.userControllable){
+			//SERIALIZE AS A PLAYER OBJECT
+			std::cout << "serialising a player object\n";
+			m[size] = 'P';
+			size++;
+			Player *p = (Player *)&(go.second);
+			int psize;
+			psize = (p->serialize(&m[size]));
+			std::cout << "player object size = " << psize << "\n";
+			size += psize;
+		}
+		else {
+			std::cout << "serialising a game object\n";
+			m[size] = 'O';
+			size++;
+			int gosize;
+			gosize = go.second.serialize(&m[size]);
+			std::cout << "game object size = " << gosize << "\n";
+			size += gosize;
+		}
+	}
+	std::cout << "total map size = " << size << "\n";
+	
+	Message mess = Message(client,m,size);
+	//TEMP
+	int size2= 0;
+	Player deserialized = Player(&m[1],size2);
+	std::cout << "deserialized " << size2 << " bytes\n";
+	(this->toSend).pushToEnd(mess);
 }
 
 void Sender::sendAck(Address client, std::string event) {
@@ -22,7 +52,7 @@ void Sender::sendAck(Address client, std::string event) {
 	(this->toSend).pushToEnd(m);
 }
 
-void Sender::sendMessage(Address client, char *message, int length){
+void Sender::sendMessage(Address client, unsigned char *message, int length){
 	Message m = Message(client, message, length);
 	(this->toSend).pushToEnd(m);
 }
@@ -32,7 +62,7 @@ void Sender::run() {
 	while (this->cont) {
 		if (!(this->toSend).isEmpty()) {
 			Message m = (this->toSend).popFromFront();
-			if (!((this->serverSocket).sendSingle(m.getClient(), m.getMessage(), m.getMessageSize()))) {
+			if (!((this->serverSocket).sendSingle(m.getClient(), (const char *)m.getMessage(), m.getMessageSize()))) {
 				std::cout << "Failed to send message\n";
 			}
 		}

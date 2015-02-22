@@ -92,11 +92,9 @@
     <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
-    <ClCompile Include="src\Serializer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\UpdateManager.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="tests\Catch.cpp" />
     <ClCompile Include="tests\PhysicsTest.cpp" />
@@ -124,11 +122,9 @@
     <ClInclude Include="src\Physics\Simulator.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />
-    <ClInclude Include="src\Serializer.hpp" />
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\SimplexNoise.hpp" />
     <ClInclude Include="src\Texture.hpp" />
-    <ClInclude Include="src\UpdateManager.hpp" />
     <ClInclude Include="src\World.hpp" />
   </ItemGroup>
   <ItemGroup>

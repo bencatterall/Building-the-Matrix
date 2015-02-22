@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "Common.hpp"
+#include "CommonMinimal.hpp"
 #include "Controls.hpp"
 #include "LocationComponent.hpp"
 #include "Physics\PhysicsObject.hpp"
@@ -14,12 +14,6 @@ class GameObject {
 		//add in position as a vector etc...
 		std::shared_ptr<LocationComponent> locComp;
 		std::shared_ptr<PhysicsObject> physComp;
-		float xrot;
-		float yrot;
-		float zrot;
-		float xpos;
-		float ypos;
-		float zpos;
 		bool visible;
 		bool renderable;
 		bool deleted;
@@ -27,13 +21,14 @@ class GameObject {
 		bool userControllable;
 	public:
 		GameObject(GameObjectGlobalID id);
-		GameObject(const char *buffer); // for unserialization
+		GameObject(unsigned char *buffer, int &size); // for unserialization
 		void keyPressed(char key);
 		void keyUnpressed(char key);
 		GameObject(const GameObject& other);
 		GameObject();
 		virtual ~GameObject();
 		GameObjectGlobalID getID();
-		virtual int serialize(char* buffer);		
+		int serialize(unsigned char* buffer);
+		int deserialize(unsigned char* buffer);
 };
 #endif

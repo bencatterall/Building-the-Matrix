@@ -1,9 +1,9 @@
-#include "../Common.hpp"
-
-#include <glm/vector_relational.hpp>
-
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
+
+AABB::AABB(Serializer serializer, unsigned char *buffer, int &next){
+	next += (this->deserialize(serializer, buffer));
+}
 
 AABB::AABB(const vertexVector vertices)
 {
@@ -42,6 +42,11 @@ AABB::AABB(const vertexVector vertices)
 AABB::AABB(const vec3 minimum, const vec3 maximum) :
 		min(minimum), max(maximum)
 {
+}
+
+AABB::AABB(const AABB& other){
+	(this->min) = other.min;
+	(this->max) = other.max;
 }
 
 // Destructor not needed.
@@ -96,4 +101,26 @@ std::shared_ptr<vertexVector> AABB::getFullBox() const{
 			);
 	}
 	return fullBox;
+}
+
+int AABB::serialize(Serializer serializer, unsigned char *buffer) {
+	int next = 0;
+	next += serializer.packFloat(&buffer[next], min.x);
+	next += serializer.packFloat(&buffer[next], min.y);
+	next += serializer.packFloat(&buffer[next], min.z);
+	next += serializer.packFloat(&buffer[next], max.x);
+	next += serializer.packFloat(&buffer[next], max.y);
+	next += serializer.packFloat(&buffer[next], max.z);
+	return next;
+}
+
+int AABB::deserialize(Serializer serializer, unsigned char *buffer) {
+	int next = 0;
+	(this->min.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->min.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->min.z) = serializer.unpackFloat(&buffer[next], next);
+	(this->max.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->max.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->max.z) = serializer.unpackFloat(&buffer[next], next);
+	return next;
 }

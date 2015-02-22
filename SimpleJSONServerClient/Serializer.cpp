@@ -3,7 +3,7 @@
 #include <cstdint>
 ///Unpack from network byte order
 // p is the size of the float
-float Serializer::unpackFloat(const char* buffer, int &p){
+float Serializer::unpackFloat(unsigned const char* buffer, int &p){
 	uint32_t temp = 0;
 
 	//4 bytes
@@ -17,7 +17,7 @@ float Serializer::unpackFloat(const char* buffer, int &p){
 	return *((float*)&temp);
 }
 
-int Serializer::packFloat(char* buffer, float val) {
+int Serializer::packFloat(unsigned char* buffer, float val) {
 #ifndef INTEL_X86
 #error Not on Intel, serializing incorrect. Expecting little-endian.
 #endif
@@ -32,7 +32,7 @@ int Serializer::packFloat(char* buffer, float val) {
 	return 4;
 }
 
-double Serializer::unpackDouble(const char* buffer, int &p) {
+double Serializer::unpackDouble(unsigned const char* buffer, int &p) {
 	uint64_t temp = 0;
 
 	//8 bytes
@@ -46,13 +46,13 @@ double Serializer::unpackDouble(const char* buffer, int &p) {
 
 	*temp2 = ((buffer[4] << 24) |
 		(buffer[5] << 16) |
-		(buffer[6] << 8)  |
+		(buffer[6] << 8) |
 		(buffer[7]));
 
 	return *((double*)&temp);
 }
 
-int Serializer::packDouble(char* buffer, double val) {
+int Serializer::packDouble(unsigned char* buffer, double val) {
 #ifndef INTEL_X86
 #error Not on Intel, serializing incorrect. Expecting little-endian.
 #endif
@@ -71,7 +71,7 @@ int Serializer::packDouble(char* buffer, double val) {
 	return 8;
 }
 
-int Serializer::unpackInt(const char* buffer, int &p){
+int Serializer::unpackInt(unsigned const char* buffer, int &p){
 	uint32_t temp = 0;
 
 	//4 bytes
@@ -85,7 +85,7 @@ int Serializer::unpackInt(const char* buffer, int &p){
 	return temp;
 }
 
-int Serializer::packInt(char* buffer, int val) {
+int Serializer::packInt(unsigned char* buffer, int val) {
 #ifndef INTEL_X86
 #error Not on Intel, serializing incorrect. Expecting little-endian.
 #endif
@@ -99,11 +99,11 @@ int Serializer::packInt(char* buffer, int val) {
 	return 4;
 }
 
-std::string Serializer::unpackString(const char* buffer, int &p) {
+std::string Serializer::unpackString(unsigned const char* buffer, int &p) {
 	std::string result;
 
 	int i = 0;
-	while(buffer[i]) {
+	while (buffer[i]) {
 		result += buffer[i++];
 	}
 
@@ -114,7 +114,7 @@ std::string Serializer::unpackString(const char* buffer, int &p) {
 	return result;
 }
 
-int Serializer::packString(char* buffer, std::string str) {
+int Serializer::packString(unsigned char* buffer, std::string str) {
 #ifndef INTEL_X86
 #error Not on Intel, serializing incorrect. Expecting little-endian.
 #endif
@@ -130,14 +130,14 @@ int Serializer::packString(char* buffer, std::string str) {
 	return numBytes;
 }
 
-char Serializer::unpackByte(const char* buffer, int &p) {
+char Serializer::unpackByte(unsigned const char* buffer, int &p) {
 	//One byte
 	p++;
 
 	return buffer[0];
 }
 
-int Serializer::packByte(char* buffer, char byte) {
+int Serializer::packByte(unsigned char* buffer, char byte) {
 #ifndef INTEL_X86
 #error Not on Intel, serializing incorrect. Expecting little-endian.
 #endif
@@ -148,7 +148,7 @@ int Serializer::packByte(char* buffer, char byte) {
 	//One byte
 	return 1;
 }
-
+/*
 std::map<GameObjectGlobalID, GameObject> Serializer::unpackMap(char *buffer, int &p) {
 	// TODO: Handle unserialization of Player objects (which extend GameObjects)
 	std::map<GameObjectGlobalID, GameObject> result;
@@ -165,9 +165,9 @@ std::map<GameObjectGlobalID, GameObject> Serializer::unpackMap(char *buffer, int
 }
 
 int Serializer::packMap(
-    char* buffer,
-    std::map<GameObjectGlobalID, GameObject> objectMap
-) {
+	char* buffer,
+	std::map<GameObjectGlobalID, GameObject> objectMap
+	) {
 	// TODO: Using C++ streams would make things much more elegant.
 	int bytes_used = 0;
 	int tmp_cnt;
@@ -176,7 +176,7 @@ int Serializer::packMap(
 	bytes_used += tmp_cnt;
 	buffer += tmp_cnt;
 
-	for(auto it = objectMap.begin(); it != objectMap.end(); ++it) {
+	for (auto it = objectMap.begin(); it != objectMap.end(); ++it) {
 		// pack GameObjectGlobalID
 		tmp_cnt = Serializer::packInt(buffer, it->first);
 		bytes_used += tmp_cnt;
@@ -190,14 +190,15 @@ int Serializer::packMap(
 		// buffer += tmp_cnt;
 	}
 	return bytes_used;
-}
+} */
 
-bool Serializer::unpackBool(const char* buffer, int &p) {
+bool Serializer::unpackBool(unsigned const char* buffer, int &p) {
 	//Assume bool has been packed into one byte
+	p++;
 	return (buffer[0] == 1);
 }
 
-int Serializer::packBool(char* buffer, bool boolean) {
+int Serializer::packBool(unsigned char* buffer, bool boolean) {
 	buffer[0] = (boolean) ? 1 : 0;
 
 	//add one to buffer
