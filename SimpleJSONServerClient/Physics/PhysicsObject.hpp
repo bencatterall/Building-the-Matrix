@@ -56,6 +56,7 @@ public:
 
 	int serialize(Serializer serializer, unsigned char *buffer);
 	int deserialize(Serializer serializer, unsigned char *buffer);
+
 protected:
 
 private:

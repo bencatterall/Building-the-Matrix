@@ -39,10 +39,9 @@ const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
 	std::shared_ptr<vertexVector> fullBox = boundingBox->getFullBox();
 	glm::mat4x4 translateMatrix = glm::translate(glm::mat4x4(1.0f), location->getPosition());
 	translateMatrix *= location->getRotationMatrix();
-	//JUST TO UNBREAK THE BUILD TEMPORARILY
-	//std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(translateMatrix, fullBox);
-	//std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(*worldSpace);
-	//return worldBox;
+	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(translateMatrix, fullBox);
+	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(*worldSpace);
+	return worldBox;
 	return std::shared_ptr<AABB>();
 }
 
@@ -192,7 +191,7 @@ int PhysicsObject::deserialize(Serializer serializer, unsigned char *buffer) {
 	(this->inverseMass) = serializer.unpackFloat(&buffer[next], next);
 	(this->friction) = serializer.unpackFloat(&buffer[next], next);
 	(this->airRes) = serializer.unpackFloat(&buffer[next], next);
-	(this->location) = std::make_shared<LocationComponent>(serializer,&buffer[next],next);
+	(this->location) = std::make_shared<LocationComponent>(serializer, &buffer[next], next);
 	(this->velocity.x) = serializer.unpackFloat(&buffer[next], next);
 	(this->velocity.y) = serializer.unpackFloat(&buffer[next], next);
 	(this->velocity.z) = serializer.unpackFloat(&buffer[next], next);

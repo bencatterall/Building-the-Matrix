@@ -6,6 +6,11 @@ UpdateManager::UpdateManager() {
 	(this->nextID) = 1;
 }
 
+UpdateManager& UpdateManager::getInstance(){
+	static UpdateManager man;
+	return man;
+}
+
 void UpdateManager::setInitialObjects(std::vector<std::shared_ptr<GameObject>> initialGameObjects) {
 	for (std::shared_ptr<GameObject> go : initialGameObjects) {
 		gameObjectsWorldState.put(go->getID(), go);

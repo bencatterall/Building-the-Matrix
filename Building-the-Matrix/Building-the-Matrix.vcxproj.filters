@@ -141,9 +141,6 @@
     <ClCompile Include="tests\PhysicsTest.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
-    <ClCompile Include="tests\Catch.cpp">
-      <Filter>Source Files\tests</Filter>
-    </ClCompile>
     <ClCompile Include="src\Client\MessageConstants.cpp">
       <Filter>Source Files\Client</Filter>
     </ClCompile>
@@ -152,6 +149,21 @@
     </ClCompile>
     <ClCompile Include="tests\UpdateManagerTest.cpp">
       <Filter>Source Files\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureAtlas.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\catch.cpp">
+      <Filter>Source Files\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\TextureAtlasTest.cpp">
+      <Filter>Source Files\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UpdateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleJSONServerClient\Serializer.cpp">
+      <Filter>Source Files\Update Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +238,15 @@
     </ClInclude>
     <ClInclude Include="src\Player.hpp">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UpdateManager.hpp">
+      <Filter>Header Files\Update Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureAtlas.hpp">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SimpleJSONServerClient\Serializer.hpp">
+      <Filter>Header Files\Update Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

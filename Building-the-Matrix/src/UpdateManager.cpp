@@ -8,7 +8,7 @@
 #include <iostream>
 #include <type_traits> //for std::underlying_type
 
-
+/*
 std::vector<char> UpdateManager::receiveMessage(char* data, int datasize) {
 	int dataPtr = 0;
 	//TODO: Check bounds, possible vulnerability if not

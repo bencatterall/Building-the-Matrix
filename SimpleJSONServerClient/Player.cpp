@@ -74,3 +74,7 @@ int Player::deserialize(unsigned char* buffer) {
 	(this->score) = serializer.unpackInt(&buffer[next], next);
 	return next;
 }
+
+bool* Player::getKeysPressed(){
+	return control.getCurrentControls();
+}

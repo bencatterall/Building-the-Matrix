@@ -12,11 +12,13 @@ class UpdateManager {
 		SafeQueue<Update> pendingUpdates;
 		bool cont;
 		GameObjectGlobalID nextID;
+		UpdateManager();
+		~UpdateManager();
+		static UpdateManager man;
 
 	public:
-		UpdateManager();
+		static UpdateManager& getInstance();
 		void setInitialObjects(std::vector<std::shared_ptr<GameObject>> initialGameObjects);
-		~UpdateManager();
 		UpdateManager(const UpdateManager& updateManager){} //don't want compiler generating this function as mutexes are uncopyable
 		//for physics to call
 		void queueUpdate(std::shared_ptr<GameObject> object);

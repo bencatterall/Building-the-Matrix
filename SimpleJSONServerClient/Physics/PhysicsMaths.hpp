@@ -11,13 +11,14 @@
 #include <vector>
 #include <memory>
 
-#define GRAVITY 9.81f
+#include "PhysicsObject.hpp"
+
 #define PI 3.14159265358979323846f
 
 using glm::vec3;
 
 class AABB;
-class PhysicsObject;
+class GameObject;
 
 typedef std::vector<vec3> vertexVector;
 typedef glm::quat Quaternion;
@@ -37,18 +38,19 @@ namespace PhysicsMaths
 	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
 	void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
+	void handleCollision(GameObject &, GameObject &);
 	void stepObject(PhysicsObject &, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
-	//IS BREAKING THE BUILD - NEED TO BE REFERENCES?
-	//const vec3 translateVertex(const glm::mat4x4, const vec3);
-	//const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
+
+	const vec3 translateVertex(const glm::mat4x4 &, const vec3);
+	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 &, const std::shared_ptr<vertexVector>);
 
 	void acceleratePlayer(const GameObjectGlobalID);
 	void reversePlayer(const GameObjectGlobalID);
 
-	void turnLeft(const GameObjectGlobalID, float);
-	void turnRight(const GameObjectGlobalID, float);
+	void turnLeft(const GameObjectGlobalID, float = TURN_SPEED);
+	void turnRight(const GameObjectGlobalID, float = TURN_SPEED);
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 
 	vec3 convertYPRtoDirection(const vec3);

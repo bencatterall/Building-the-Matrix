@@ -1,8 +1,10 @@
-/*#include "../src/Common.hpp"
+#include "../src/Common.hpp"
 
 #ifdef TEST
 #ifdef TEST_UPDATES
 
+#include "../../Dependencies/glew/glew.h"
+#include "../../Dependencies/GLFW/glfw3.h"
 #include <Catch/catch.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
@@ -55,4 +57,4 @@ TEST_CASE("Testing Update Manager", "[update]"){
 	}
 }
 #endif
-#endif */
+#endif

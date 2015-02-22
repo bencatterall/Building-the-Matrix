@@ -81,6 +81,11 @@ AABB::AABB(const GameObjectID gID)
 	}
 }
 
+AABB::AABB(const vec3 minVec,  const vec3 maxVec) : 
+	min(minVec), max(maxVec)
+{
+}
+
 // Destructor not needed.
 AABB::~AABB()
 {

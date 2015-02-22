@@ -37,7 +37,7 @@ namespace PhysicsMaths{
 	// @return true if they collide
 	bool simpleCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		//TODO: Call proper instance
-		UpdateManager update = UpdateManager::UpdateManager();
+		UpdateManager& update = UpdateManager::getInstance();
 		GameObject aObj = *update.getGameObject(a);
 		GameObject bObj = *update.getGameObject(b);
 		return simpleCollision(*aObj.physComp, *bObj.physComp);
@@ -74,9 +74,15 @@ namespace PhysicsMaths{
 	}
 
 	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
-		UpdateManager& objMan = UpdateManager::UpdateManager();
+		UpdateManager& objMan = UpdateManager::getInstance();
+		std::map<GameObjectGlobalID, GameObject> map = objMan.getState();
 		GameObject objA = *objMan.getGameObject(aID);
 		GameObject objB = *objMan.getGameObject(bID);
+		handleCollision(objA, objB);
+	}
+
+	void handleCollision(GameObject& objA, GameObject& objB){
+
 		PhysicsObject physA = *objA.physComp;
 		PhysicsObject physB = *objB.physComp;
 		vec3 aCen = physA.getLocalAABB().getCenter();
@@ -153,11 +159,11 @@ namespace PhysicsMaths{
 		return newData;
 	}
 
-	const glm::vec3 translateVertex(const glm::mat4x4 matrix, const vec3 vector){
+	const glm::vec3 translateVertex(const glm::mat4x4 & matrix, const vec3 vector){
 		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 1.0f));
 	}
 
-	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 matrix, const std::shared_ptr<vertexVector> vertices) {
+	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 & matrix, const std::shared_ptr<vertexVector> vertices) {
 		std::shared_ptr<vertexVector> result = std::make_shared<vertexVector>(*vertices);
 		for (size_t i = 0; i < vertices->size(); i++){
 			result->at(i) = translateVertex(matrix, result->at(i));
@@ -166,7 +172,7 @@ namespace PhysicsMaths{
 	}
 
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
-		UpdateManager & obj = UpdateManager::UpdateManager();
+		UpdateManager & obj = UpdateManager::getInstance();
 		std::shared_ptr<PhysicsObject> aObj = obj.getGameObject(a)->physComp;
 		std::shared_ptr<PhysicsObject> bObj = obj.getGameObject(b)->physComp;
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
@@ -234,7 +240,7 @@ namespace PhysicsMaths{
 	}
 
 	void acceleratePlayer(const GameObjectGlobalID id){
-		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		PhysicsObject phys = *obj.physComp;
 		vec3 dir = phys.getOrientation();
 		float speed = glm::length(dir);
@@ -246,7 +252,7 @@ namespace PhysicsMaths{
 
 
 	void reversePlayer(const GameObjectGlobalID id){
-		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		PhysicsObject phys = *obj.physComp;
 		vec3 dir = phys.getOrientation();
 		float speed = glm::length(dir);
@@ -255,15 +261,15 @@ namespace PhysicsMaths{
 		phys.setA(A + glm::normalize(dir)*(-2.0f-speed));
 	}
 
-	void turnLeft(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
-		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+	void turnLeft(const GameObjectGlobalID id, float turnSpeed){
+		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		std::shared_ptr<PhysicsObject> phys = obj.physComp;
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
-	void turnRight(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
+	void turnRight(const GameObjectGlobalID id, float turnSpeed){
 		turnLeft(id, -turnSpeed);
 	}
 

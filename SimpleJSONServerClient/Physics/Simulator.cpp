@@ -3,6 +3,7 @@
 #include "PhysicsObject.hpp"
 #include "Simulator.hpp"
 #include "..\GameObject.hpp"
+#include "..\Player.hpp"
 #include "..\UpdateManager.hpp"
 
 #define THRESHOLD 0.02f
@@ -23,7 +24,7 @@ Simulator& Simulator::getInstance() {
 }
 
 void Simulator::tick(float timestep){
-	UpdateManager& objMan = UpdateManager::UpdateManager();
+	UpdateManager& objMan = UpdateManager::getInstance();
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
@@ -35,6 +36,22 @@ void Simulator::tick(float timestep){
 			GameObject & gameObj = gameObjects.at(i);
 			PhysicsObject physObj = *gameObj.physComp;
 			PhysicsMaths::stepObject(physObj, THRESHOLD);
+			if (gameObj.userControllable){
+				Player& player = (Player&) gameObj;
+				bool *keys = player.getKeysPressed();
+				if (keys[0]){
+					PhysicsMaths::acceleratePlayer(player.ID);
+				}
+				if (keys[1]){
+					PhysicsMaths::reversePlayer(player.ID);
+				}
+				if (keys[2] && !keys[3]){
+					PhysicsMaths::turnRight(player.ID);
+				}
+				if (keys[3] && !keys[2]){
+					PhysicsMaths::turnLeft(player.ID);
+				}
+			}
 		}
 
 		processCollisions();
@@ -42,7 +59,7 @@ void Simulator::tick(float timestep){
 }
 
 void Simulator::processCollisions(){
-	UpdateManager& objMan = UpdateManager::UpdateManager();
+	UpdateManager& objMan = UpdateManager::getInstance();
 	auto gameObjects = objMan.getState();
 
 	// O(n^2) collision check
@@ -54,11 +71,9 @@ void Simulator::processCollisions(){
 		{
 			GameObject gameObj2 = gameObjects.at(j);
 			PhysicsObject checkObj = *gameObj2.physComp;
-			/* TODO FIX ME
-			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObjects.at(i), gameObjects.at(j))){
-				PhysicsMaths::handleCollision(gameObjects.at(i), gameObjects.at(j));
+			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObj.getID(), gameObj2.getID())){
+				PhysicsMaths::handleCollision(gameObj, gameObj2);
 			}
-			*/
 		}
 	}
 

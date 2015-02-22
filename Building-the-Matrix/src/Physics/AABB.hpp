@@ -18,6 +18,7 @@ class AABB
 public:
 	AABB(const vertexVector);
 	AABB(const GameObjectID);
+	AABB(const vec3, const vec3);
 	virtual ~AABB();
 
 	vec3 getMin() const;
