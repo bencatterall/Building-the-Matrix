@@ -54,11 +54,9 @@ void Simulator::processCollisions(){
 		{
 			GameObject gameObj2 = gameObjects.at(j);
 			PhysicsObject checkObj = *gameObj2.physComp;
-			/* TODO FIX ME
-			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObjects.at(i), gameObjects.at(j))){
-				PhysicsMaths::handleCollision(gameObjects.at(i), gameObjects.at(j));
+			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObj.getID(), gameObj2.getID())){
+				PhysicsMaths::handleCollision(gameObj.getID(), gameObj2.getID());
 			}
-			*/
 		}
 	}
 
