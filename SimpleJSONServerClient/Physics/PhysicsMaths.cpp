@@ -153,11 +153,11 @@ namespace PhysicsMaths{
 		return newData;
 	}
 
-	const glm::vec3 translateVertex(const glm::mat4x4 matrix, const vec3 vector){
+	const glm::vec3 translateVertex(const glm::mat4x4 & matrix, const vec3 vector){
 		return vec3(matrix * glm::vec4(vector.x, vector.y, vector.z, 1.0f));
 	}
 
-	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 matrix, const std::shared_ptr<vertexVector> vertices) {
+	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 & matrix, const std::shared_ptr<vertexVector> vertices) {
 		std::shared_ptr<vertexVector> result = std::make_shared<vertexVector>(*vertices);
 		for (size_t i = 0; i < vertices->size(); i++){
 			result->at(i) = translateVertex(matrix, result->at(i));

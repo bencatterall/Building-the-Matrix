@@ -40,8 +40,8 @@ namespace PhysicsMaths
 	void stepObject(PhysicsObject &, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
-	const vec3 translateVertex(const glm::mat4x4, const vec3);
-	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4, const std::shared_ptr<vertexVector>);
+	const vec3 translateVertex(const glm::mat4x4 &, const vec3);
+	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 &, const std::shared_ptr<vertexVector>);
 
 	void acceleratePlayer(const GameObjectGlobalID);
 	void reversePlayer(const GameObjectGlobalID);
