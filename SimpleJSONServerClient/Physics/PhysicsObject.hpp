@@ -50,6 +50,8 @@ public:
 	void turnLeft(float);
 	void turnRight(float);
 
+	void serialize(char *) const;
+	void deserialize(char *);
 
 protected:
 
