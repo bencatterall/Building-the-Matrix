@@ -23,7 +23,7 @@ Simulator& Simulator::getInstance() {
 }
 
 void Simulator::tick(float timestep){
-	UpdateManager& objMan = UpdateManager::UpdateManager();
+	UpdateManager& objMan = UpdateManager::getInstance();
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
@@ -42,7 +42,7 @@ void Simulator::tick(float timestep){
 }
 
 void Simulator::processCollisions(){
-	UpdateManager& objMan = UpdateManager::UpdateManager();
+	UpdateManager& objMan = UpdateManager::getInstance();
 	auto gameObjects = objMan.getState();
 
 	// O(n^2) collision check

@@ -37,7 +37,7 @@ namespace PhysicsMaths{
 	// @return true if they collide
 	bool simpleCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		//TODO: Call proper instance
-		UpdateManager update = UpdateManager::UpdateManager();
+		UpdateManager& update = UpdateManager::getInstance();
 		GameObject aObj = *update.getGameObject(a);
 		GameObject bObj = *update.getGameObject(b);
 		return simpleCollision(*aObj.physComp, *bObj.physComp);
@@ -74,7 +74,7 @@ namespace PhysicsMaths{
 	}
 
 	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
-		UpdateManager& objMan = UpdateManager::UpdateManager();
+		UpdateManager& objMan = UpdateManager::getInstance();
 		GameObject objA = *objMan.getGameObject(aID);
 		GameObject objB = *objMan.getGameObject(bID);
 		PhysicsObject physA = *objA.physComp;
@@ -166,7 +166,7 @@ namespace PhysicsMaths{
 	}
 
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
-		UpdateManager & obj = UpdateManager::UpdateManager();
+		UpdateManager & obj = UpdateManager::getInstance();
 		std::shared_ptr<PhysicsObject> aObj = obj.getGameObject(a)->physComp;
 		std::shared_ptr<PhysicsObject> bObj = obj.getGameObject(b)->physComp;
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
@@ -234,7 +234,7 @@ namespace PhysicsMaths{
 	}
 
 	void acceleratePlayer(const GameObjectGlobalID id){
-		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		PhysicsObject phys = *obj.physComp;
 		vec3 dir = phys.getOrientation();
 		float speed = glm::length(dir);
@@ -246,7 +246,7 @@ namespace PhysicsMaths{
 
 
 	void reversePlayer(const GameObjectGlobalID id){
-		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		PhysicsObject phys = *obj.physComp;
 		vec3 dir = phys.getOrientation();
 		float speed = glm::length(dir);
@@ -256,7 +256,7 @@ namespace PhysicsMaths{
 	}
 
 	void turnLeft(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
-		GameObject obj = *UpdateManager::UpdateManager().getGameObject(id);
+		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		std::shared_ptr<PhysicsObject> phys = obj.physComp;
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);

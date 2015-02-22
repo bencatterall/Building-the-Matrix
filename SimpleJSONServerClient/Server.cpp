@@ -16,7 +16,7 @@ Purpose: Controls a server instance bounded to arg[1] address and arg[2] port nu
 
 */
 
-UpdateManager updateManager;
+UpdateManager& updateManager = UpdateManager::getInstance();
 Socket mySocket;
 std::vector <Address> clients;
 std::vector <std::pair<Address, GameObjectGlobalID>> playerIDs;
