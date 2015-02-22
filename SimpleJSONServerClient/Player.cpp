@@ -33,3 +33,7 @@ void Player::setPRY(float pitch, float roll, float yaw) {
 void Player::keyUnpressed(char key) {
 	(this->control).regKeyUnpress(key);
 }
+
+bool* Player::getKeysPressed(){
+	return control.getCurrentControls();
+}

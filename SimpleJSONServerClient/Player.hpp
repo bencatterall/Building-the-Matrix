@@ -14,5 +14,5 @@ class Player : public GameObject {
 		void setPRY(float pitch, float roll, float yaw);
 		void keyPressed(char key);
 		void keyUnpressed(char key);
-		bool *getKeysPressed();
+		bool* getKeysPressed();
 };
