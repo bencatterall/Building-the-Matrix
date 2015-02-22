@@ -75,8 +75,14 @@ namespace PhysicsMaths{
 
 	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
 		UpdateManager& objMan = UpdateManager::getInstance();
+		std::map<GameObjectGlobalID, GameObject> map = objMan.getState();
 		GameObject objA = *objMan.getGameObject(aID);
 		GameObject objB = *objMan.getGameObject(bID);
+		handleCollision(objA, objB);
+	}
+
+	void handleCollision(GameObject& objA, GameObject& objB){
+
 		PhysicsObject physA = *objA.physComp;
 		PhysicsObject physB = *objB.physComp;
 		vec3 aCen = physA.getLocalAABB().getCenter();
@@ -255,7 +261,7 @@ namespace PhysicsMaths{
 		phys.setA(A + glm::normalize(dir)*(-2.0f-speed));
 	}
 
-	void turnLeft(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
+	void turnLeft(const GameObjectGlobalID id, float turnSpeed){
 		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
 		std::shared_ptr<PhysicsObject> phys = obj.physComp;
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
@@ -263,7 +269,7 @@ namespace PhysicsMaths{
 
 	}
 
-	void turnRight(const GameObjectGlobalID id, float turnSpeed = TURN_SPEED){
+	void turnRight(const GameObjectGlobalID id, float turnSpeed){
 		turnLeft(id, -turnSpeed);
 	}
 
