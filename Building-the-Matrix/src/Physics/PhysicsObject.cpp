@@ -140,3 +140,37 @@ void PhysicsObject::turnRight(float turnSpeed = TURN_SPEED){
 	turnLeft(-turnSpeed);
 
 }
+
+void PhysicsObject::deserialize(char * buffer){
+	struct {
+		float orientationX;
+		float orientationY;
+		float orientationZ;
+		float positionX;
+		float positionY;
+		float positionZ;
+		float velocityX;
+		float velocityY;
+		float velocityZ;
+		float accelerationX;
+		float accelerationY;
+		float accelerationZ;
+		float AABBMinX;
+		float AABBMinY;
+		float AABBMinZ;
+		float AABBMaxX;
+		float AABBMaxY;
+		float AABBMaxZ;
+	} physicsStruct;
+
+	memcpy(&physicsStruct, buffer, sizeof(physicsStruct));
+
+	setOrientation(vec3(physicsStruct.orientationX, physicsStruct.orientationY, physicsStruct.orientationZ));
+	setX(vec3(physicsStruct.positionX, physicsStruct.positionY, physicsStruct.positionZ));
+	setV(vec3(physicsStruct.velocityX, physicsStruct.velocityY, physicsStruct.velocityZ));
+	setA(vec3(physicsStruct.accelerationX, physicsStruct.accelerationY, physicsStruct.accelerationZ));
+	boundingBox = std::make_shared<AABB>(
+		vec3(physicsStruct.AABBMinX, physicsStruct.AABBMinY, physicsStruct.AABBMinZ),
+		vec3(physicsStruct.AABBMaxX, physicsStruct.AABBMaxY, physicsStruct.AABBMaxZ)
+		);
+}
