@@ -3,6 +3,7 @@
 #include "PhysicsObject.hpp"
 #include "Simulator.hpp"
 #include "..\GameObject.hpp"
+#include "..\Player.hpp"
 #include "..\UpdateManager.hpp"
 
 #define THRESHOLD 0.02f
@@ -35,6 +36,22 @@ void Simulator::tick(float timestep){
 			GameObject & gameObj = gameObjects.at(i);
 			PhysicsObject physObj = *gameObj.physComp;
 			PhysicsMaths::stepObject(physObj, THRESHOLD);
+			if (gameObj.userControllable){
+				Player& player = (Player&) gameObj;
+				bool *keys = player.getKeysPressed();
+				if (keys[0]){
+					PhysicsMaths::acceleratePlayer(player.ID);
+				}
+				if (keys[1]){
+					PhysicsMaths::reversePlayer(player.ID);
+				}
+				if (keys[2] && !keys[3]){
+					PhysicsMaths::turnRight(player.ID);
+				}
+				if (keys[3] && !keys[2]){
+					PhysicsMaths::turnLeft(player.ID);
+				}
+			}
 		}
 
 		processCollisions();
@@ -55,7 +72,7 @@ void Simulator::processCollisions(){
 			GameObject gameObj2 = gameObjects.at(j);
 			PhysicsObject checkObj = *gameObj2.physComp;
 			if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObj.getID(), gameObj2.getID())){
-				PhysicsMaths::handleCollision(gameObj.getID(), gameObj2.getID());
+				PhysicsMaths::handleCollision(gameObj, gameObj2);
 			}
 		}
 	}
