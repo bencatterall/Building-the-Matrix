@@ -178,20 +178,18 @@ namespace PhysicsMaths{
 		return result;
 	}
 
-	bool complexCollision(const GameObjectID a, const GameObjectID b){
+	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		ObjectManager & obj = ObjectManager::getInstance();
 		std::shared_ptr<PhysicsObject> aObj = obj.getObject(a)->getPhysicsComponent();
 		std::shared_ptr<PhysicsObject> bObj = obj.getObject(b)->getPhysicsComponent();
+		return complexCollision(aObj, bObj);
+	}
+
+	bool complexCollision(const std::shared_ptr<PhysicsObject> aObj, const std::shared_ptr<PhysicsObject> bObj){
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
 		std::shared_ptr<vertexVector> bBox = bObj->getLocalAABB().getFullBox();
-		vec3 vecA = obj.getObject(a)->getLocationComponent()->getPosition();
-		vec3 vecB = obj.getObject(b)->getLocationComponent()->getPosition();
-		glm::mat4x4 transA = glm::translate(glm::mat4x4(1.0f), vecA);
-		glm::mat4x4	transB = glm::translate(glm::mat4x4(1.0f), vecB);
-		transA *= obj.getObject(a)->getLocationComponent()->getRotationMatrix();
-		transB *= obj.getObject(b)->getLocationComponent()->getRotationMatrix();
-		std::shared_ptr<vertexVector> aBoxWorld = translateVertexVector(transA, aBox);
-		std::shared_ptr<vertexVector> bBoxWorld = translateVertexVector(transB, bBox);
+		std::shared_ptr<vertexVector> aBoxWorld = aObj->getWorldAABB()->getFullBox();
+		std::shared_ptr<vertexVector> bBoxWorld = bObj->getWorldAABB()->getFullBox();;
 		
 		// Generate planes to check to see if they are seperated by that plane
 		for (size_t i = 0; i < 3; i++){

@@ -53,7 +53,12 @@ TEST_CASE("Testing Physics", "[physics]"){
 
 	Cube cube1 = Cube(vec3(0, 0, 0)), cube2 = Cube(vec3(0, 0, 21));
 	cube2.getPhysicsComponent()->setV(vec3(0,0,-1));
-	PhysicsObject physA = *cube1.getPhysicsComponent(), physB = *cube2.getPhysicsComponent();
+	std::shared_ptr<PhysicsObject> aPtr = cube1.getPhysicsComponent(), bPtr = cube2.getPhysicsComponent();
+	PhysicsObject physA = *aPtr, physB = *bPtr;
+
+	REQUIRE_FALSE(PhysicsMaths::simpleCollision(physA, physB));
+	REQUIRE_FALSE(PhysicsMaths::complexCollision(aPtr, bPtr));
+
 	PhysicsMaths::stepObject(physA, 1.02f);
 	PhysicsMaths::stepObject(physB, 1.02f);
 	vec3 aCen = physA.getLocalAABB().getCenter();
