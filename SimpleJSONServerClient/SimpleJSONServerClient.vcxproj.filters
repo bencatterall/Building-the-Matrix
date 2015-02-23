@@ -78,6 +78,9 @@
     <ClInclude Include="Serializer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ClientState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Address.cpp">
@@ -132,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

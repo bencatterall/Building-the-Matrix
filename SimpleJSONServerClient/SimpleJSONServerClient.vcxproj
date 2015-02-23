@@ -68,6 +68,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Address.hpp" />
+    <ClInclude Include="ClientState.hpp" />
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="CommonMinimal.hpp" />
     <ClInclude Include="Controls.hpp" />
@@ -89,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Address.cpp" />
+    <ClCompile Include="ClientState.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="LocationComponent.cpp" />
