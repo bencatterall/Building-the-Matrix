@@ -49,12 +49,12 @@ namespace PhysicsMaths
 	const vec3 translateVertex(const glm::mat4x4 &, const vec3);
 	const std::shared_ptr<vertexVector> translateVertexVector(const glm::mat4x4 &, const std::shared_ptr<vertexVector>);
 
-	void acceleratePlayer(const GameObjectGlobalID);
-	void reversePlayer(const GameObjectGlobalID);
+	void acceleratePlayer(std::shared_ptr<PhysicsObject> phys);
+	void reversePlayer(std::shared_ptr<PhysicsObject> phys);
 
-	void turnLeft(const GameObjectGlobalID, float = TURN_SPEED);
-	void turnRight(const GameObjectGlobalID, float = TURN_SPEED);
-	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
+	void turnLeft(std::shared_ptr<PhysicsObject>, float = TURN_SPEED);
+	void turnRight(std::shared_ptr<PhysicsObject>, float = TURN_SPEED);
+	void turnObject(std::shared_ptr<PhysicsObject>, Quaternion, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 
 	vec3 convertYPRtoDirection(const vec3);
 	vec3 convertDirectiontoYPR(const vec3);

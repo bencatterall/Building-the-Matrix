@@ -28,7 +28,7 @@ void Simulator::tick(float timestep){
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
 		accumulator -= THRESHOLD;
-		auto gameObjects = objMan.getState();
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects = objMan.getState();
 
 		// Step by THRESHOLD
 		//THIS WAS CRASHING WHEN GAME OBJECTS SIZE WAS 0
@@ -44,27 +44,27 @@ void Simulator::tick(float timestep){
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
 					bool *keys = player->getKeysPressed();
-					if (keys[0]){
-						PhysicsMaths::acceleratePlayer(player->ID);
+					if (keys[0] && !keys[1]){
+						PhysicsMaths::acceleratePlayer(gameObj->physComp);
 					}
-					if (keys[1]){
-						PhysicsMaths::reversePlayer(player->ID);
+					if (keys[1] && !keys[0]){
+						PhysicsMaths::reversePlayer(gameObj->physComp);
 					}
 					if (keys[2] && !keys[3]){
-						PhysicsMaths::turnRight(player->ID);
+						PhysicsMaths::turnRight(gameObj->physComp);
 					}
 					if (keys[3] && !keys[2]){
-						PhysicsMaths::turnLeft(player->ID);
+						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
 				}
+				objMan.queueUpdate(it->second);
 			}
-		processCollisions();
+		processCollisions(gameObjects);
 	}
 }
 
-void Simulator::processCollisions(){
-	UpdateManager& objMan = UpdateManager::getInstance();
-	auto gameObjects = objMan.getState();
+void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects){
+
 
 	// O(n^2) collision check
 	//THIS WAS CRASHING WHEN GAME OBJECTS SIZE WAS 0
@@ -82,10 +82,12 @@ void Simulator::processCollisions(){
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
-				if (PhysicsMaths::simpleCollision(currentObj, checkObj) && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
+				if (PhysicsMaths::simpleCollision(currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
+					UpdateManager::getInstance().queueUpdate(gameObj2);
 				}
 			}
+			UpdateManager::getInstance().queueUpdate(gameObj);
 		}
 	}
 }

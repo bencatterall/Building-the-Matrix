@@ -38,8 +38,9 @@ namespace PhysicsMaths{
 	bool simpleCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		//TODO: Call proper instance
 		UpdateManager& update = UpdateManager::getInstance();
-		GameObject aObj = *update.getGameObject(a);
-		GameObject bObj = *update.getGameObject(b);
+		auto state = update.getState();
+		GameObject aObj = *state.at(a);
+		GameObject bObj = *state.at(b);
 		return simpleCollision(*aObj.physComp, *bObj.physComp);
 	}
 
@@ -194,7 +195,7 @@ namespace PhysicsMaths{
 
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		UpdateManager & obj = UpdateManager::getInstance();
-		auto state = obj.getState();
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> state = obj.getState();
 		GameObject aObj = *state.at(a);
 		GameObject bObj = *state.at(b);
 		return complexCollision(aObj, bObj);
@@ -265,38 +266,32 @@ namespace PhysicsMaths{
 		return (maxA < minB || maxB < minA);
 	}
 
-	void acceleratePlayer(const GameObjectGlobalID id){
-		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
-		PhysicsObject phys = *obj.physComp;
-		vec3 dir = phys.getOrientation();
+	void acceleratePlayer(std::shared_ptr<PhysicsObject> phys){
+		vec3 dir = phys->getOrientation();
 		float speed = glm::length(dir);
-		vec3 A = phys.getA();
+		vec3 A = phys->getA();
 		// TODO: Consider further mechanisms for determining power
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys.setA(A + glm::normalize(dir)*(5.0f - speed));
+		phys->setA(A + glm::normalize(dir)*(5.0f - speed));
 	}
 
 
-	void reversePlayer(const GameObjectGlobalID id){
-		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
-		PhysicsObject phys = *obj.physComp;
-		vec3 dir = phys.getOrientation();
+	void reversePlayer(std::shared_ptr<PhysicsObject> phys){
+		vec3 dir = phys->getOrientation();
 		float speed = glm::length(dir);
-		vec3 A = phys.getA();
+		vec3 A = phys->getA();
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys.setA(A + glm::normalize(dir)*(-2.0f-speed));
+		phys->setA(A + glm::normalize(dir)*(-2.0f-speed));
 	}
 
-	void turnLeft(const GameObjectGlobalID id, float turnSpeed){
-		GameObject obj = *UpdateManager::getInstance().getGameObject(id);
-		std::shared_ptr<PhysicsObject> phys = obj.physComp;
+	void turnLeft(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
 		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
-	void turnRight(const GameObjectGlobalID id, float turnSpeed){
-		turnLeft(id, -turnSpeed);
+	void turnRight(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
+		turnLeft(phys, -turnSpeed);
 	}
 
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
