@@ -12,7 +12,8 @@
 #include <memory>
 #include <thread>
 #include <chrono>
-
+#include <freeglut/glut.h>
+#include <freeglut/freeglut_ext.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 //#include <freeglut/glut.h>
@@ -434,13 +435,12 @@ void Display::run() {
 				}
 				if (buffer[pos] == 'P') {
 					//player object
-					//BEN: IMPLEMENT EXISTS IN OBJECTMANAGER AND DEFAULTS FOR FIELDS THAT WON'T COME FROM THE SERVER
 					std::shared_ptr<Player> player;
 					if (objectManager.exists(ID)) {
 						player = std::dynamic_pointer_cast<Player>(objectManager.getObject(ID));
 					}
 					else {
-						float x, y, z = 0;
+						float x, y, z = 0.0f;
 						player = std::make_shared<Player>(x,y,z);
 					}
 					pos += 2;
@@ -459,7 +459,6 @@ void Display::run() {
 						object = objectManager.getObject(ID);
 					}
 					else {
-						//BEN- should I give anything to constructor?
 						object = std::make_shared<GameObject>();
 					}
 					pos += 2;
@@ -568,7 +567,16 @@ void Display::render() {
 
 		//RENDER
 		renderScene(modelView, projectionMatrix);
+		
 	}
+	glWindowPos2i(100, 120);
+	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+	std::string str = "TEsting the new text engine!!";
+	const unsigned char * strP = (const unsigned char*)str.c_str();
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, strP);
+	glWindowPos2i(1400, 120);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, strP);
+
 	//revert to drawing to display
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

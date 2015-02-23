@@ -18,8 +18,6 @@ Cube::Cube(glm::vec3 pos) {
 
 	for (size_t i = 0; i < sizeof(cubeTextureCoords) / sizeof(GLfloat); ++i) {
 		cubeTextureCoordsData.push_back(cubeTextureCoords[i]);
-	
-	
 	}
 
 	std::shared_ptr<RenderableComponent> renderableComponent = this->getRenderableComponent();

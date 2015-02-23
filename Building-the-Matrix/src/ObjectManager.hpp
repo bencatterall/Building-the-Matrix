@@ -82,10 +82,7 @@ public:
 		return gameObjectIDs;
 	}
 
-	bool exists(GameObjectID) {
-		//BEN: TODO
-		return false;
-	}
+	bool exists(GameObjectID);
 
 };
 
