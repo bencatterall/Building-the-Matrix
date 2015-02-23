@@ -17,6 +17,7 @@ using glm::vec3;
 
 class AABB;
 class PhysicsObject;
+class GameObject;
 
 typedef std::vector<vec3> vertexVector;
 typedef glm::quat Quaternion;
@@ -32,9 +33,9 @@ namespace PhysicsMaths
 	bool simpleCollision(const AABB &, const AABB &);
 	bool simpleCollision(const PhysicsObject, const PhysicsObject);
 	bool simpleCollision(const GameObjectID a, const GameObjectID b);
-	bool complexCollision(const std::shared_ptr<PhysicsObject>, const std::shared_ptr<PhysicsObject>);
+	bool complexCollision(const std::shared_ptr<GameObject>, const std::shared_ptr<GameObject>);
 	bool complexCollision(const GameObjectID a, const GameObjectID b);
-	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
+	bool sat(const vec3 &, const std::shared_ptr<PhysicsObject>, const std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
 	void handleCollision(GameObjectID, GameObjectID);
 	void stepObject(PhysicsObject &, float);
