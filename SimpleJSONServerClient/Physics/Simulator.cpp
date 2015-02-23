@@ -2,9 +2,9 @@
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
 #include "Simulator.hpp"
-#include "..\GameObject.hpp"
-#include "..\Player.hpp"
-#include "..\UpdateManager.hpp"
+#include "../GameObject.hpp"
+#include "../Player.hpp"
+#include "../UpdateManager.hpp"
 
 #define THRESHOLD 0.02f
 

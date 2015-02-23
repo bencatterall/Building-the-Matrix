@@ -53,7 +53,12 @@ TEST_CASE("Testing Physics", "[physics]"){
 
 	Cube cube1 = Cube(vec3(0, 0, 0)), cube2 = Cube(vec3(0, 0, 21));
 	cube2.getPhysicsComponent()->setV(vec3(0,0,-1));
-	PhysicsObject physA = *cube1.getPhysicsComponent(), physB = *cube2.getPhysicsComponent();
+	std::shared_ptr<PhysicsObject> aPtr = cube1.getPhysicsComponent(), bPtr = cube2.getPhysicsComponent();
+	PhysicsObject physA = *aPtr, physB = *bPtr;
+
+	REQUIRE_FALSE(PhysicsMaths::simpleCollision(physA, physB));
+	REQUIRE_FALSE(PhysicsMaths::complexCollision(aPtr, bPtr));
+
 	PhysicsMaths::stepObject(physA, 1.02f);
 	PhysicsMaths::stepObject(physB, 1.02f);
 	vec3 aCen = physA.getLocalAABB().getCenter();
@@ -83,16 +88,31 @@ TEST_CASE("Testing Physics", "[physics]"){
 	// Choose minimal restitution
 	float e = std::min(physA.getRest(), physB.getRest());
 
-	// Calculate impulse vec3
-	float j = -(1.0f + e) * velDelAlongCollisionNormal;
-	j = j / (physA.getInvMass() + physB.getInvMass());
-	vec3 impulse = j * sDiffNormal;
-
-	// Apply impulse in an amount proportional to its mass proportion.
-	float mass_sum = (physA.getMass() + physB.getMass());
-	physA.setV(physA.getV() - impulse * physA.getMass() / mass_sum);
-	physB.setV(physB.getV() + impulse * physB.getMass() / mass_sum);
+	float m1 = physA.getMass();
+	float m2 = physB.getMass();
 	
+	vec3 u1 = glm::dot(physA.getV(), sDiffNormal) * sDiffNormal;
+	vec3 u2 = glm::dot(physB.getV(), sDiffNormal) * sDiffNormal;
+	vec3 u1rejection = physA.getV() - u1;
+	vec3 u2rejection = physB.getV() - u2;
+
+	if (m1 == 0 && m2 == 0) return;
+
+	if (m1 == 0){
+		physB.setV(-e * u2);
+		return;
+	}
+	if (m2 == 0){
+		physA.setV(-e * u1);
+		return;
+	}
+
+	vec3 v1 = (m1 * u1 + m2 * (u2 - e * velDelAlongCollisionNormal * sDiffNormal)) / (m1 + m2);
+	vec3 v2 = v1 + e * velDelAlongCollisionNormal * sDiffNormal;
+	
+	physA.setV(u1rejection + v1);
+	physB.setV(u2rejection + v2);
+
 	REQUIRE(physA.getV() == vec3(0, 0, -1));
 	REQUIRE(physB.getV() == vec3(0, 0, 0));
 
