@@ -109,15 +109,30 @@ namespace PhysicsMaths{
 		// Choose minimal restitution
 		float e = ((physA.getRest() < physB.getRest()) ? physA : physB).getRest();
 
-		// Calculate impulse vec3
-		float j = -(1.0f + e) * velDelAlongCollisionNormal;
-		j = j / (physA.getInvMass() + physB.getInvMass());
-		vec3 impulse = j * sDiffNormal;
+		float m1 = physA.getMass();
+		float m2 = physB.getMass();
 
-		// Apply impulse in an amount proportional to its mass proportion.
-		float mass_sum = (physA.getMass() + physB.getMass());
-		physA.setV(physA.getV() - impulse * physA.getMass() / mass_sum);
-		physB.setV(physB.getV() + impulse * physB.getMass() / mass_sum);
+		vec3 u1 = glm::dot(physA.getV(), sDiffNormal) * sDiffNormal;
+		vec3 u2 = glm::dot(physB.getV(), sDiffNormal) * sDiffNormal;
+		vec3 u1rejection = physA.getV() - u1;
+		vec3 u2rejection = physB.getV() - u2;
+
+		if (m1 == 0 && m2 == 0) return;
+
+		if (m1 == 0){
+			physB.setV(-e * u2);
+			return;
+		}
+		if (m2 == 0){
+			physA.setV(-e * u1);
+			return;
+		}
+
+		vec3 v1 = (m1 * u1 + m2 * (u2 - e * velDelAlongCollisionNormal * sDiffNormal)) / (m1 + m2);
+		vec3 v2 = v1 + e * velDelAlongCollisionNormal * sDiffNormal;
+
+		physA.setV(u1rejection + v1);
+		physB.setV(u2rejection + v2);
 	}
 
 	void stepObject(PhysicsObject & physObj, float timestep){
