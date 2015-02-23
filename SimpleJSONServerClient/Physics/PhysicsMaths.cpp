@@ -195,9 +195,8 @@ namespace PhysicsMaths{
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		UpdateManager & obj = UpdateManager::getInstance();
 		auto state = obj.getState();
-		state.at(a);
-		GameObject aObj = state.at(a);
-		GameObject bObj = state.at(b);
+		GameObject aObj = *state.at(a);
+		GameObject bObj = *state.at(b);
 		return complexCollision(aObj, bObj);
 	}
 
