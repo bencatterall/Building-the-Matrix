@@ -3,6 +3,10 @@
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
 
+PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& pointer) {
+	pointer += (this->deserialize(serializer,serial));
+}
+
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3())
@@ -12,6 +16,19 @@ PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, co
 	}
 	this->location = locationComp;
 	boundingBox = std::make_shared<AABB>(vertices);
+}
+
+PhysicsObject::PhysicsObject(const PhysicsObject& other) {
+	(this->boundingBox) = other.boundingBox;
+	(this->restitution) = other.restitution;
+	(this->mass) = other.mass;
+	(this->inverseMass) = other.inverseMass;
+	(this->friction) = other.friction;
+	(this->airRes) = other.airRes;
+	(this->location) = other.location;
+	(this->velocity) = other.velocity;
+	(this->acc) = other.acc;
+	(this->orientation) = other.orientation;
 }
 
 PhysicsObject::~PhysicsObject()
@@ -25,6 +42,7 @@ const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
 	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(translateMatrix, fullBox);
 	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(*worldSpace);
 	return worldBox;
+	return std::shared_ptr<AABB>();
 }
 
 // TODO: Refactor me
@@ -48,11 +66,23 @@ void PhysicsObject::setX(vec3 &newPos){
 	location->setPosition(newPos);
 }
 
+void PhysicsObject::setX(vec3 &&newPos){
+	location->setPosition(newPos);
+}
+
 void PhysicsObject::setV(vec3 &newVelocity){
 	velocity = vec3(newVelocity);
 }
 
+void PhysicsObject::setV(vec3 &&newVelocity){
+	velocity = vec3(newVelocity);
+}
+
 void PhysicsObject::setA(vec3 &newAcc){
+	acc = vec3(newAcc);
+}
+
+void PhysicsObject::setA(vec3 &&newAcc){
 	acc = vec3(newAcc);
 }
 
@@ -144,80 +174,44 @@ void PhysicsObject::turnRight(float turnSpeed = TURN_SPEED){
 
 }
 
-void PhysicsObject::serialize(char * buffer) const{
-	struct {
-		float orientationX;
-		float orientationY;
-		float orientationZ;
-		float positionX;
-		float positionY;
-		float positionZ;
-		float velocityX;
-		float velocityY;
-		float velocityZ;
-		float accelerationX;
-		float accelerationY;
-		float accelerationZ;
-		float AABBMinX;
-		float AABBMinY;
-		float AABBMinZ;
-		float AABBMaxX;
-		float AABBMaxY;
-		float AABBMaxZ;
-	} physicsStruct;
-
-	vec3 x = this->getX();
-	vec3 v = this->getV();
-	vec3 a = this->getA();
-	vec3 o = this->getOrientation();
-	vec3 min = this->getLocalAABB().getMin();
-	vec3 max = this->getLocalAABB().getMax();
-	physicsStruct.orientationX = o.x;
-	physicsStruct.orientationY = o.y;
-	physicsStruct.orientationZ = o.z;
-	physicsStruct.positionX = x.x;
-	physicsStruct.positionY = x.y;
-	physicsStruct.positionZ = x.z;
-	physicsStruct.velocityX = v.x;
-	physicsStruct.velocityY = v.y;
-	physicsStruct.velocityZ = v.z;
-	physicsStruct.accelerationX = a.x;
-	physicsStruct.accelerationY = a.y;
-	physicsStruct.accelerationZ = a.z;
-
-	memcpy(buffer, &physicsStruct, sizeof(physicsStruct));
+int PhysicsObject::serialize(Serializer serializer, unsigned char *buffer) {
+	int next = 0;
+	next += (this->boundingBox)->serialize(serializer, buffer);
+	next += serializer.packFloat(&buffer[next], restitution);
+	next += serializer.packFloat(&buffer[next], mass);
+	next += serializer.packFloat(&buffer[next], inverseMass);
+	next += serializer.packFloat(&buffer[next], friction);
+	next += serializer.packFloat(&buffer[next], airRes);
+	next += (this->location)->serialize(serializer, &buffer[next]);
+	next += serializer.packFloat(&buffer[next], velocity.x);
+	next += serializer.packFloat(&buffer[next], velocity.y);
+	next += serializer.packFloat(&buffer[next], velocity.z);
+	next += serializer.packFloat(&buffer[next], acc.x);
+	next += serializer.packFloat(&buffer[next], acc.y);
+	next += serializer.packFloat(&buffer[next], acc.z);
+	next += serializer.packFloat(&buffer[next], orientation.x);
+	next += serializer.packFloat(&buffer[next], orientation.y);
+	next += serializer.packFloat(&buffer[next], orientation.z);
+	return next;
 }
 
-void PhysicsObject::deserialize(char * buffer){
-	struct {
-		float orientationX;
-		float orientationY;
-		float orientationZ;
-		float positionX;
-		float positionY;
-		float positionZ;
-		float velocityX;
-		float velocityY;
-		float velocityZ;
-		float accelerationX;
-		float accelerationY;
-		float accelerationZ;
-		float AABBMinX;
-		float AABBMinY;
-		float AABBMinZ;
-		float AABBMaxX;
-		float AABBMaxY;
-		float AABBMaxZ;
-	} physicsStruct;
-
-	memcpy(&physicsStruct, buffer, sizeof(physicsStruct));
-
-	setOrientation(vec3(physicsStruct.orientationX, physicsStruct.orientationY, physicsStruct.orientationZ));
-	setX(vec3(physicsStruct.positionX, physicsStruct.positionY, physicsStruct.positionZ));
-	setV(vec3(physicsStruct.velocityX, physicsStruct.velocityY, physicsStruct.velocityZ));
-	setA(vec3(physicsStruct.accelerationX, physicsStruct.accelerationY, physicsStruct.accelerationZ));
-	boundingBox = std::make_shared<AABB>(
-		vec3(physicsStruct.AABBMinX, physicsStruct.AABBMinY, physicsStruct.AABBMinZ),
-		vec3(physicsStruct.AABBMaxX, physicsStruct.AABBMaxY, physicsStruct.AABBMaxZ)
-		);	
+int PhysicsObject::deserialize(Serializer serializer, unsigned char *buffer) {
+	int next = 0;
+	(this->boundingBox) = std::make_shared<AABB>(serializer, buffer, next);
+	(this->restitution) = serializer.unpackFloat(&buffer[next], next);
+	(this->mass) = serializer.unpackFloat(&buffer[next], next);
+	(this->inverseMass) = serializer.unpackFloat(&buffer[next], next);
+	(this->friction) = serializer.unpackFloat(&buffer[next], next);
+	(this->airRes) = serializer.unpackFloat(&buffer[next], next);
+	(this->location) = std::make_shared<LocationComponent>(serializer, &buffer[next], next);
+	(this->velocity.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->velocity.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->velocity.z) = serializer.unpackFloat(&buffer[next], next);
+	(this->acc.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->acc.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->acc.z) = serializer.unpackFloat(&buffer[next], next);
+	(this->orientation.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->orientation.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->orientation.z) = serializer.unpackFloat(&buffer[next], next);
+	return next;
 }

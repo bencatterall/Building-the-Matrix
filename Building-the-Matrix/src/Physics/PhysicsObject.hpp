@@ -21,6 +21,9 @@ class PhysicsObject
 {
 public:
 	PhysicsObject(std::shared_ptr<LocationComponent>, const vertexVector);
+	PhysicsObject(unsigned char *serial, int& pointer) {
+		pointer += (this->deserialize(serial));
+	}
 	virtual ~PhysicsObject();
 	
 	const std::shared_ptr<AABB> getWorldAABB() const;
@@ -50,9 +53,10 @@ public:
 	void turnLeft(float);
 	void turnRight(float);
 
-	void deserialize(char * buffer);
-
-
+	int deserialize(unsigned char * buffer);
+	std::shared_ptr<LocationComponent> getLocationComponent() {
+		return this->location;
+	}
 protected:
 
 private:

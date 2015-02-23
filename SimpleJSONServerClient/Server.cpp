@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-//#include "../Building-the-Matrix/src/Physics/Simulator.hpp"
+#include "Physics/Simulator.hpp"
 
 /**
 ServerMain.cpp
@@ -16,7 +16,7 @@ Purpose: Controls a server instance bounded to arg[1] address and arg[2] port nu
 
 */
 
-UpdateManager updateManager;
+UpdateManager& updateManager = UpdateManager::getInstance();
 Socket mySocket;
 std::vector <Address> clients;
 std::vector <std::pair<Address, GameObjectGlobalID>> playerIDs;
@@ -53,16 +53,14 @@ void quit() {
 }
 
 void physics() {
+	auto timer = std::chrono::system_clock::now();
 	while (contMain) {
 		//TODO: RUN PHYSICS HERE
-		#ifdef SIMULATOR_H
-			Simulator & physicsSimulator = Simulator::getInstance();
-			// TODO: Choose proper timestep based on realtime
-			auto nextTime = std::chrono::system_clock::now();
-			std::chrono::duration<float> timestepDur = nextTime - timer;
-			timer = nextTime;
-			physicsSimulator.tick(timestepDur.count());
-		#endif
+		Simulator & physicsSimulator = Simulator::getInstance();
+		auto nextTime = std::chrono::system_clock::now();
+		std::chrono::duration<float> timestepDur = nextTime - timer;
+		timer = nextTime;
+		physicsSimulator.tick(timestepDur.count());
 	}
 }
 
@@ -164,8 +162,8 @@ int main(int argc, char **argv) {
 					//create their car for the game, generate a global ID too
 					id = updateManager.getNextObjectID();
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
-					std::shared_ptr<GameObject> p = std::make_shared<Player>(id);
-					p->userControllable = true;
+					Player player = Player(id);
+					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
 					updateManager.queueUpdate(p);
 				}
 				char data[] = "LOGIN ACCEPTED     ";
@@ -174,7 +172,7 @@ int main(int argc, char **argv) {
 				data[16] = idparts[1];
 				data[17] = idparts[2];
 				data[18] = idparts[3];
-				sender.sendMessage(recFrom, data,20);
+				sender.sendMessage(recFrom, (unsigned char *)data, 20);
 			}
 			//HANDLE LOGOUTS
 			else if (prefixMatch(message, "LOGOUT")) {
@@ -188,8 +186,8 @@ int main(int argc, char **argv) {
 						break;
 					}
 					else {
-						const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
-						sender.sendAck((*it), data);
+						//const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
+						//sender.sendAck((*it), data);
 					}
 				}
 				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {

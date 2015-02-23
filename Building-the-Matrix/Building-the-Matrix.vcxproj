@@ -71,6 +71,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SimpleJSONServerClient\Serializer.cpp" />
     <ClCompile Include="Dependencies\LodePNG\lodepng.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\Client\Address.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="src\Client\clientMain.cpp" />
     <ClCompile Include="src\Client\MessageConstants.cpp" />
     <ClCompile Include="src\Client\Socket.cpp" />
+    <ClCompile Include="src\Controls.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\Display.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -92,27 +94,28 @@
     <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
-    <ClCompile Include="src\Serializer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\UpdateManager.cpp" />
     <ClCompile Include="src\World.cpp" />
-    <ClCompile Include="tests\catch.cpp" />
+    <ClCompile Include="tests\Catch.cpp" />
     <ClCompile Include="tests\PhysicsTest.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
     <ClCompile Include="tests\TextureAtlasTest.cpp" />
     <ClCompile Include="tests\UpdateManagerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dependencies\Catch\catch.hpp" />
+    <ClInclude Include="..\SimpleJSONServerClient\Serializer.hpp" />
+    <ClInclude Include="Dependencies\Catch\Catch.hpp" />
     <ClInclude Include="src\Chunk.hpp" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Client.hpp" />
     <ClInclude Include="src\Client\MessageConstants.hpp" />
     <ClInclude Include="src\Client\Socket.hpp" />
     <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\Controls.hpp" />
     <ClInclude Include="src\Cube.hpp" />
     <ClInclude Include="src\Display.hpp" />
     <ClInclude Include="src\Game.hpp" />
@@ -126,7 +129,6 @@
     <ClInclude Include="src\Physics\Simulator.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />
-    <ClInclude Include="src\Serializer.hpp" />
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\SimplexNoise.hpp" />
     <ClInclude Include="src\Texture.hpp" />

@@ -147,23 +147,26 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Serializer.cpp">
-      <Filter>Source Files\Update Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UpdateManager.cpp">
-      <Filter>Source Files\Update Manager</Filter>
-    </ClCompile>
     <ClCompile Include="tests\UpdateManagerTest.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureAtlas.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="tests\catch.cpp">
+    <ClCompile Include="tests\Catch.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
     <ClCompile Include="tests\TextureAtlasTest.cpp">
       <Filter>Source Files\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UpdateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleJSONServerClient\Serializer.cpp">
+      <Filter>Source Files\Update Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,14 +242,17 @@
     <ClInclude Include="src\Player.hpp">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="src\Serializer.hpp">
-      <Filter>Header Files\Update Manager</Filter>
-    </ClInclude>
     <ClInclude Include="src\UpdateManager.hpp">
       <Filter>Header Files\Update Manager</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureAtlas.hpp">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SimpleJSONServerClient\Serializer.hpp">
+      <Filter>Header Files\Update Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls.hpp">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

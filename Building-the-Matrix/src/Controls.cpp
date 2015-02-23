@@ -46,7 +46,7 @@ void KeyboardControl::regKeyUnpress(char key) {
 }
 
 bool *KeyboardControl::getCurrentControls() {
-	bool *arr = new bool[ U_HELD, D_HELD, R_HELD, L_HELD ];
+	bool *arr = new bool[U_HELD, D_HELD, R_HELD, L_HELD];
 	return arr;
 }
 

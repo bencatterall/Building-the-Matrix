@@ -2,12 +2,14 @@
 #define LOCATION_COMPONENT
 
 #include "Common.hpp"
-
+#include "Serializer.hpp"
 #define GLM_FORCE_PURE
 #define GLM_FORCE_RADIANS
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
+#include "../Building-the-Matrix/Dependencies/glm/vec3.hpp"
+#include "../Building-the-Matrix/Dependencies/glm/mat4x4.hpp"
+#include "../Building-the-Matrix/Dependencies/glm/gtc/type_ptr.hpp"
 
+class Serializer;
 
 class LocationComponent {
 
@@ -28,6 +30,11 @@ class LocationComponent {
 	double scaleFactor = 1.0;
 
 public:
+
+	int serialize(Serializer serializer, unsigned char *buffer);
+
+	int deserialize(Serializer serializer, unsigned char *buffer);
+
 	LocationComponent(glm::vec3 pos = glm::vec3(0.0f,0.0f,0.0f), const glm::mat4x4 & rotationMat = glm::mat4x4(1.0f), double sf = 1.0) :
 		position(pos), rotationMatrix(rotationMat),
 		scaleFactor(sf)
@@ -35,6 +42,8 @@ public:
 
 	}
 
+	LocationComponent(const LocationComponent& other);
+	LocationComponent(Serializer serializer, unsigned char *buffer, int &next);
 
 	///
 	/// Get and set position
@@ -53,8 +62,6 @@ public:
 	///
 	void setScaleFactor(double sf) { scaleFactor = sf; }
 	double getScaleFactor() { return scaleFactor; } 
-
-
 };
 
 #endif

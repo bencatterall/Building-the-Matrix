@@ -19,6 +19,9 @@ public:
 	AABB(const vertexVector);
 	AABB(const GameObjectID);
 	AABB(const vec3, const vec3);
+	AABB::AABB(unsigned char *buffer, int &next){
+		next += (this->deserialize(buffer));
+	}
 	virtual ~AABB();
 
 	vec3 getMin() const;
@@ -31,6 +34,7 @@ public:
 	bool intersects(const AABB &) const;
 	std::shared_ptr <vertexVector> getFullBox() const;
 
+	int deserialize(unsigned char *buffer);
 protected:
 
 private:

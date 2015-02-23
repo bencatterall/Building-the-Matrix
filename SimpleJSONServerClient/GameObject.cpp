@@ -1,4 +1,5 @@
 #include "GameObject.hpp"
+#include "Serializer.hpp"
 
 GameObject::GameObject(GameObjectGlobalID id) {
 	(this->ID) = id;
@@ -14,39 +15,17 @@ GameObject::GameObject(GameObjectGlobalID id) {
 GameObject::GameObject(const GameObject& other) {
 	//copy
 	(this->ID) = other.ID;
-	(this->xrot) = other.xrot;
-	(this->yrot) = other.yrot;
-	(this->zrot) = other.zrot;
-	(this->xpos) = other.xpos;
-	(this->ypos) = other.ypos;
-	(this->zpos) = other.zpos;
+	(this->locComp) = other.locComp;
+	(this->physComp) = other.physComp;
 	(this->visible) = other.visible;
 	(this->renderable) = other.renderable;
 	(this->deleted) = other.deleted;
 	(this->userControllable) = other.userControllable;
 }
 
-/* GameObject::GameObject(const char *buffer) {
-	struct SerializedObject {
-		float xrot;
-		float yrot;
-		float zrot;
-		float xpos;
-		float ypos;
-		float zpos;
-		bool visible;
-		bool renderable;
-	} obj;
-	memcpy(obj, buffer, sizeof(obj));
-	xrot = obj.xrot;
-	xrot = obj.yrot;
-	zrot = obj.zrot;
-	xpos = obj.xpos;
-	ypos = obj.ypos;
-	zpos = obj.zpos;
-	visible = obj.visible;
-	renderable = obj.renderable;
-} */
+GameObject::GameObject(unsigned char *buffer, int &size) {
+	size += (this->deserialize(buffer));
+} 
 
 GameObject::GameObject() {}
 
@@ -56,29 +35,24 @@ GameObjectGlobalID GameObject::getID(){
 	return this->ID;
 }
 
-int GameObject::serialize(char* buffer) {
-	struct SerializedObject {
-		float xrot;
-		float yrot;
-		float zrot;
-		float xpos;
-		float ypos;
-		float zpos;
-		bool visible;
-		bool renderable;
-	} obj;
-	
-	obj.xrot = xrot;
-	obj.yrot = xrot;
-	obj.zrot = zrot;
-	obj.xpos = xpos;
-	obj.ypos = ypos;
-	obj.zpos = zpos;
-	obj.visible = visible;
-	obj.renderable = renderable;
-	// TODO: Check me
-	const void * objPointer = &obj;
-	//
-	memcpy(buffer, objPointer, sizeof(obj));
-	return sizeof(obj);
+//places serialized object in buffer and return the size as an int
+int GameObject::serialize(unsigned char* buffer) {
+	Serializer serializer = Serializer();
+	int next;
+	next = serializer.packInt(buffer,(this->ID));
+	next += (this->physComp)->serialize(serializer, &(buffer[next]));
+	next += serializer.packBool(&buffer[next], visible);
+	next += serializer.packBool(&buffer[next], renderable);
+	return next;
+}
+
+//places serialized values into object return the size of the buffer read as an int 
+int GameObject::deserialize(unsigned char* buffer) {
+	Serializer serializer = Serializer();
+	int next = 0;
+	(this->ID) = serializer.unpackInt(buffer,next);
+	(this->physComp) = std::make_shared<PhysicsObject>(serializer, &buffer[next], next);
+	(this->visible) = serializer.unpackBool(&buffer[next], next);
+	(this->renderable) = serializer.unpackBool(&buffer[next], next);
+	return next;
 }

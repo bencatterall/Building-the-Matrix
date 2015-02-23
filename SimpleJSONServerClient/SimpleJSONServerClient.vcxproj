@@ -48,6 +48,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,6 +82,7 @@
     <ClInclude Include="SafeMap.hpp" />
     <ClInclude Include="SafeQueue.hpp" />
     <ClInclude Include="Sender.hpp" />
+    <ClInclude Include="Serializer.hpp" />
     <ClInclude Include="Socket.hpp" />
     <ClInclude Include="Update.hpp" />
     <ClInclude Include="UpdateManager.hpp" />
@@ -98,6 +101,7 @@
     <ClCompile Include="SafeMap.cpp" />
     <ClCompile Include="SafeQueue.cpp" />
     <ClCompile Include="Sender.cpp" />
+    <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="Update.cpp" />

@@ -8,14 +8,14 @@
 class Message {
 	private:
 		Address client;
-		char *message;
+		unsigned char *message;
 		int messageSize;
 	public:
 		Message(Address client, std::map<GameObjectGlobalID, GameObject> message);
 		Message(Address client, std::string event);
-		Message(Address client, char *message,int length);
+		Message(Address client, unsigned char *message, int length);
 		Address getClient();
-		char* getMessage();
+		unsigned char* getMessage();
 		std::map<GameObjectGlobalID, GameObject> parseMessage();
 		int getMessageSize();
 };
