@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6C0A165D-1EB1-40C0-A60C-A2047EBFB653}</ProjectGuid>
+    <RootNamespace>Building-the-Matrix</RootNamespace>
+    <ProjectName>Building-the-Matrix</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>LibOVR/Include;LibOVR/Src;Dependencies;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>Dependencies\freeglut;Dependencies\GLFW;Dependencies\glew;LibOVR\Lib\Win32\VS2013;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;freeglut.lib;glew32.lib;glfw3.lib;glfw3.lib;libovrd.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>LibOVR/Include;LibOVR/Src;Dependencies;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>Dependencies\freeglut;Dependencies\GLFW;Dependencies\glew;LibOVR\Lib\Win32\VS2013;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;freeglut.lib;glew32.lib;glfw3.lib;glfw3.lib;libovr.lib;Winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\SimpleJSONServerClient\Serializer.cpp" />
+    <ClCompile Include="Dependencies\LodePNG\lodepng.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\Client\Address.cpp" />
+    <ClCompile Include="src\Client\Client.cpp" />
+    <ClCompile Include="src\Client\clientMain.cpp" />
+    <ClCompile Include="src\Client\MessageConstants.cpp" />
+    <ClCompile Include="src\Client\Socket.cpp" />
+    <ClCompile Include="src\Controls.cpp" />
+    <ClCompile Include="src\Cube.cpp" />
+    <ClCompile Include="src\Display.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\ImageLoader.cpp" />
+    <ClCompile Include="src\LocationComponent.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ObjectManager.cpp" />
+    <ClCompile Include="src\Physics\AABB.cpp" />
+    <ClCompile Include="src\Physics\PhysicsMaths.cpp" />
+    <ClCompile Include="src\Physics\PhysicsObject.cpp" />
+    <ClCompile Include="src\Physics\Simulator.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\RenderableComponent.cpp" />
+    <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\SimplexNoise.cpp" />
+    <ClCompile Include="src\TextRenderer.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TextureAtlas.cpp" />
+    <ClCompile Include="src\UpdateManager.cpp" />
+    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="tests\Catch.cpp" />
+    <ClCompile Include="tests\PhysicsTest.cpp" />
+    <ClCompile Include="tests\TestObjManager.cpp" />
+    <ClCompile Include="tests\TextureAtlasTest.cpp" />
+    <ClCompile Include="tests\UpdateManagerTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SimpleJSONServerClient\Serializer.hpp" />
+    <ClInclude Include="Dependencies\Catch\Catch.hpp" />
+    <ClInclude Include="src\Chunk.hpp" />
+    <ClInclude Include="src\Client\Address.hpp" />
+    <ClInclude Include="src\Client\Client.hpp" />
+    <ClInclude Include="src\Client\MessageConstants.hpp" />
+    <ClInclude Include="src\Client\Socket.hpp" />
+    <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\Controls.hpp" />
+    <ClInclude Include="src\Cube.hpp" />
+    <ClInclude Include="src\Display.hpp" />
+    <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\GameObject.hpp" />
+    <ClInclude Include="src\ImageLoader.hpp" />
+    <ClInclude Include="src\LocationComponent.hpp" />
+    <ClInclude Include="src\ObjectManager.hpp" />
+    <ClInclude Include="src\Physics\AABB.hpp" />
+    <ClInclude Include="src\Physics\PhysicsMaths.hpp" />
+    <ClInclude Include="src\Physics\PhysicsObject.hpp" />
+    <ClInclude Include="src\Physics\Simulator.hpp" />
+    <ClInclude Include="src\Player.hpp" />
+    <ClInclude Include="src\RenderableComponent.hpp" />
+    <ClInclude Include="src\shader.hpp" />
+    <ClInclude Include="src\SimplexNoise.hpp" />
+    <ClInclude Include="src\TextRenderer.hpp" />
+    <ClInclude Include="src\Texture.hpp" />
+    <ClInclude Include="src\TextureAtlas.hpp" />
+    <ClInclude Include="src\UpdateManager.hpp" />
+    <ClInclude Include="src\World.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_shader.fs" />
+    <None Include="default_shader.vs" />
+    <None Include="src\Building-the-Matrix.vcxproj" />
+    <None Include="src\Building-the-Matrix.vcxproj.filters" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Building-the-Matrix.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
