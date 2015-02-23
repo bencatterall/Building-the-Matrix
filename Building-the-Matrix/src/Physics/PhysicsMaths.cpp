@@ -180,27 +180,35 @@ namespace PhysicsMaths{
 
 	bool complexCollision(const GameObjectID a, const GameObjectID b){
 		ObjectManager & obj = ObjectManager::getInstance();
-		std::shared_ptr<PhysicsObject> aObj = obj.getObject(a)->getPhysicsComponent();
-		std::shared_ptr<PhysicsObject> bObj = obj.getObject(b)->getPhysicsComponent();
+		std::shared_ptr<GameObject> aObj = obj.getObject(a);
+		std::shared_ptr<GameObject> bObj = obj.getObject(b);
 		return complexCollision(aObj, bObj);
 	}
 
-	bool complexCollision(const std::shared_ptr<PhysicsObject> aObj, const std::shared_ptr<PhysicsObject> bObj){
+	bool complexCollision(const std::shared_ptr<GameObject> objectA, const std::shared_ptr<GameObject> objectB){
+		std::shared_ptr<PhysicsObject> aObj = objectA->getPhysicsComponent();
+		std::shared_ptr<PhysicsObject> bObj = objectB->getPhysicsComponent();
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
 		std::shared_ptr<vertexVector> bBox = bObj->getLocalAABB().getFullBox();
-		std::shared_ptr<vertexVector> aBoxWorld = aObj->getWorldAABB()->getFullBox();
-		std::shared_ptr<vertexVector> bBoxWorld = bObj->getWorldAABB()->getFullBox();;
+		glm::mat4x4 aTrans = glm::translate(glm::mat4x4(1.0f), aObj->getX());
+		glm::mat4x4 bTrans = glm::translate(glm::mat4x4(1.0f), bObj->getX());
+		aTrans *= objectA->getLocationComponent()->getRotationMatrix();aTrans *= objectA->getLocationComponent()->getRotationMatrix();
+		bTrans *= objectB->getLocationComponent()->getRotationMatrix();
+		std::shared_ptr<vertexVector> aBoxWorld = PhysicsMaths::translateVertexVector(aTrans, aBox);
+		std::shared_ptr<vertexVector> bBoxWorld = PhysicsMaths::translateVertexVector(bTrans, bBox);
 		
 		// Generate planes to check to see if they are seperated by that plane
 		for (size_t i = 0; i < 3; i++){
 			// Generate the normals of each plane
-			if (sat(glm::normalize(aBoxWorld->at(0) - aBoxWorld->at(1 << i)), aObj, bObj, aBoxWorld, bBoxWorld)){
+			if (sat(glm::normalize(aBoxWorld->at(0) - aBoxWorld->at((1 << (i+1)) - 1)), aObj, bObj, aBoxWorld, bBoxWorld)){
 				// If they are separated, the objects don't collide
 				return false;
 			}
 			// Generate the planes of each face
 			for (size_t j = 0; j < 3; j++){
-				vec3 vec = glm::cross(glm::normalize(aBoxWorld->at(0) - aBoxWorld->at(1 << i)), glm::normalize(bBoxWorld->at(0) - bBoxWorld->at(1 << j)));
+				vec3 vec = glm::cross(glm::normalize(aBoxWorld->at(0) - aBoxWorld->at((1 << (i + 1)) - 1)),
+										glm::normalize(bBoxWorld->at(0) - bBoxWorld->at((1 << (j + 1)) - 1)));
+				// If vec is 0 then they are aligned on this axis - can't use this plane normal
 				if (sat(vec, aObj, bObj, aBoxWorld, bBoxWorld)){
 					return false;
 				}
@@ -215,8 +223,11 @@ namespace PhysicsMaths{
 	// Return true if the plane specified by the vec3 parts the two PhysicsObjects
 	// Verbosely: If there exists a(n arbitrary) plane which has normal v 
 	// which separates the two objects, return true
-	bool sat(const vec3 & v, std::shared_ptr<PhysicsObject> physA, std::shared_ptr<PhysicsObject> physB, std::shared_ptr<vertexVector> aBoxWorld, std::shared_ptr<vertexVector> bBoxWorld){
-		// Note the projection of a onto b is (a.b/b.b)b -> which can be simplifiedto test only a.b
+	bool sat(const vec3 & v,
+		const std::shared_ptr<PhysicsObject> physA, const std::shared_ptr<PhysicsObject> physB,
+				std::shared_ptr<vertexVector> aBoxWorld, std::shared_ptr<vertexVector> bBoxWorld){
+		if (v == vec3()) return false;
+		// Note the projection of a onto b is (a.b/b.b)b -> which can be simplified to test only a.b for comparisons.
 		float maxA, maxB, minA, minB;
 		float a = glm::dot(v, aBoxWorld->at(0));
 		float b = glm::dot(v, bBoxWorld->at(0));
