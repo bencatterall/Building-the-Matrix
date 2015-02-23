@@ -38,7 +38,8 @@ namespace PhysicsMaths
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b);
 	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
-	void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
+	//void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
+	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map);
 	void handleCollision(GameObject &, GameObject &);
 	void stepObject(PhysicsObject &, float);
 
