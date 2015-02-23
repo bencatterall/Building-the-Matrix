@@ -73,11 +73,17 @@ namespace PhysicsMaths{
 		return true;
 	}
 
-	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
+	/*void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
 		UpdateManager& objMan = UpdateManager::getInstance();
-		std::map<GameObjectGlobalID, GameObject> map = objMan.getState();
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map = objMan.getState();
 		GameObject objA = *objMan.getGameObject(aID);
 		GameObject objB = *objMan.getGameObject(bID);
+		handleCollision(objA, objB);
+	}*/
+
+	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map){
+		GameObject objA = *((map.find(aID))->second);
+		GameObject objB = *((map.find(bID))->second);
 		handleCollision(objA, objB);
 	}
 
@@ -188,16 +194,24 @@ namespace PhysicsMaths{
 
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
 		UpdateManager & obj = UpdateManager::getInstance();
-		std::shared_ptr<PhysicsObject> aObj = obj.getGameObject(a)->physComp;
-		std::shared_ptr<PhysicsObject> bObj = obj.getGameObject(b)->physComp;
+		auto state = obj.getState();
+		state.at(a);
+		GameObject aObj = state.at(a);
+		GameObject bObj = state.at(b);
 		return complexCollision(aObj, bObj);
 	}
 
-	bool complexCollision(const std::shared_ptr<PhysicsObject> aObj, const std::shared_ptr<PhysicsObject> bObj){
+	bool complexCollision(const GameObject & objectA, GameObject & objectB){
+		std::shared_ptr<PhysicsObject> aObj = objectA.physComp;
+		std::shared_ptr<PhysicsObject> bObj = objectB.physComp;
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
 		std::shared_ptr<vertexVector> bBox = bObj->getLocalAABB().getFullBox();
-		std::shared_ptr<vertexVector> aBoxWorld = aObj->getWorldAABB()->getFullBox();
-		std::shared_ptr<vertexVector> bBoxWorld = bObj->getWorldAABB()->getFullBox();;
+		glm::mat4x4 aTrans = glm::translate(glm::mat4x4(1.0f), aObj->getX());
+		glm::mat4x4 bTrans = glm::translate(glm::mat4x4(1.0f), bObj->getX());
+		aTrans *= objectA.locComp->getRotationMatrix();
+		bTrans *= objectB.locComp->getRotationMatrix();
+		std::shared_ptr<vertexVector> aBoxWorld = PhysicsMaths::translateVertexVector(aTrans, aBox);
+		std::shared_ptr<vertexVector> bBoxWorld = PhysicsMaths::translateVertexVector(bTrans, bBox);
 		
 		// Generate planes to check to see if they are seperated by that plane
 		for (size_t i = 0; i < 3; i++){

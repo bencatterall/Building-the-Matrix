@@ -34,15 +34,10 @@ void broadcast() {
 	while (contMain) {
 		for (Address client : clients) {
 			//send snapshot back
-			std::map<GameObjectGlobalID, GameObject> toSend = updateManager.flushUpdates();
+			std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> toSend = updateManager.flushUpdates();
 			if (!toSend.empty()) {
-				std::map<GameObjectGlobalID, GameObject>::iterator it;
-				std::cout << "Sending snapshot: \n";
-				for (it = toSend.begin(); it != toSend.end(); it++) {
-					std::cout << "(" << (it->first) << ")\t";
-				}
+				std::cout << "Sending game snapshot \n";
 				sender.sendUpdateMessage(client, toSend);
-				std::cout << "\n";
 			}
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
