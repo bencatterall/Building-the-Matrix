@@ -93,7 +93,7 @@ bool Client::send(const char *data, int size) {
 
 //returns number of bytes read from packet in the buffer - if this function returns < 0 it means there was no packet to read
 //else it gives the number of bytes that were received
-int Client::receive(char *data, int size) {
+int Client::receive(unsigned char *data, int size) {
 	Address sender;
 	int bytes_read = (this->socket).receive(sender, (char *)data, size);
 	if (bytes_read) {

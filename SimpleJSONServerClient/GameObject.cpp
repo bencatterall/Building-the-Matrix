@@ -43,8 +43,6 @@ int GameObject::serialize(unsigned char* buffer) {
 	next += (this->physComp)->serialize(serializer, &(buffer[next]));
 	next += serializer.packBool(&buffer[next], visible);
 	next += serializer.packBool(&buffer[next], renderable);
-	next += serializer.packBool(&buffer[next], deleted);
-	next += serializer.packBool(&buffer[next], userControllable);
 	return next;
 }
 
@@ -56,7 +54,5 @@ int GameObject::deserialize(unsigned char* buffer) {
 	(this->physComp) = std::make_shared<PhysicsObject>(serializer, &buffer[next], next);
 	(this->visible) = serializer.unpackBool(&buffer[next], next);
 	(this->renderable) = serializer.unpackBool(&buffer[next], next);
-	(this->deleted) = serializer.unpackBool(&buffer[next], next);
-	(this->userControllable) = serializer.unpackBool(&buffer[next], next);
 	return next;
 }

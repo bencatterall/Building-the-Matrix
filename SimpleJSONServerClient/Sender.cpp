@@ -16,11 +16,18 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, Game
 	unsigned char *m = new unsigned char[1024];
 	int size = 0;
 	for (std::pair<GameObjectGlobalID, GameObject> go : message) {
+		bool deleted = go.second.deleted;
 		if (go.second.userControllable){
 			//SERIALIZE AS A PLAYER OBJECT
 			std::cout << "serialising a player object\n";
 			m[size] = 'P';
-			size++;
+			if (deleted) {
+				m[size + 1] = 'D';
+			}
+			else {
+				m[size + 1] = 'K';
+			}
+			size += 2;
 			Player *p = (Player *)&(go.second);
 			int psize;
 			psize = (p->serialize(&m[size]));
@@ -30,7 +37,13 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, Game
 		else {
 			std::cout << "serialising a game object\n";
 			m[size] = 'O';
-			size++;
+			if (deleted) {
+				m[size + 1] = 'D';
+			}
+			else {
+				m[size + 1] = 'K';
+			}
+			size += 2;
 			int gosize;
 			gosize = go.second.serialize(&m[size]);
 			std::cout << "game object size = " << gosize << "\n";

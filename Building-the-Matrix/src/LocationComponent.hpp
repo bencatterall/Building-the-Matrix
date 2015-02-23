@@ -4,6 +4,7 @@
 #include "Common.hpp"
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class LocationComponent {
 
@@ -28,6 +29,10 @@ public:
 		LocationComponent(glm::vec3(0.0, 0.0, 0.0), glm::mat4(1.0)) {
 	}
 
+	LocationComponent::LocationComponent(unsigned char *buffer, int &next){
+		next += (this->deserialize(buffer));
+	}
+
 	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat, double sf = 1.0) :
 		position(pos), rotationMatrix(rotationMat),
 		scaleFactor(sf)
@@ -35,6 +40,7 @@ public:
 
 	}
 
+	int deserialize(unsigned char *buffer);
 
 	///
 	/// Get and set position
