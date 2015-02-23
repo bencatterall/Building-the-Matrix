@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-#include "Physics\Simulator.hpp"
+#include "Physics/Simulator.hpp"
 
 /**
 ServerMain.cpp
