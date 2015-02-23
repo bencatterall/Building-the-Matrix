@@ -56,7 +56,6 @@ void UpdateManager::run() {
 				(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
 			}
 			(this->gameObjectsWorldState).put(u.getObjectID(),u.getEditedObject());
-			//NOTE:client will need to check for deletion too
 			(this->updatedObjectsForClients).put(u.getObjectID(), u.getEditedObject());
 		}
 	}
