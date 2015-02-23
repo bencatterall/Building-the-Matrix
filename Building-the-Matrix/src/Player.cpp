@@ -22,5 +22,6 @@ int Player::deserialize(unsigned char* buffer) {
 	(this->roll) = serializer.unpackFloat(&buffer[next], next);
 	(this->yaw) = serializer.unpackFloat(&buffer[next], next);
 	(this->score) = serializer.unpackInt(&buffer[next], next);
+	(this->locationComponent) = (this->physicsObject)->getLocationComponent();
 	return next;
 }
