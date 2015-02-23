@@ -23,7 +23,7 @@ GameObject::GameObject() :
 }
 
 int GameObject::deserialize(unsigned char* buffer){
-	Serializer serializer = Serializer();
+	Serializer serializer;
 	int next = 0;
 	(this->ID) = serializer.unpackInt(buffer, next);
 	(this->physicsObject) = std::make_shared<PhysicsObject>(&buffer[next], next);

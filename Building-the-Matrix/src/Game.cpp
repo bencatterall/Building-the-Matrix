@@ -9,9 +9,11 @@
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
+#include <string>
 #include "Player.hpp"
 #include "ObjectManager.hpp"
 #include "SimplexNoise.hpp"
+
 
 void Game::init() {
 	//Sahil: You can comment this out
@@ -40,7 +42,7 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 
 		std::shared_ptr<LocationComponent> locationComponent = objectPtr->getLocationComponent();
 		glm::vec3 objPos = locationComponent->getPosition();
-
+	
 		//Move object to world space 
 		glm::mat4 objWorldMatrix = glm::translate(glm::mat4(1.0), glm::vec3(objPos.x, objPos.y,objPos.z));
 
@@ -49,7 +51,7 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		glm::vec3 eyePos(playerPos.x, playerPos.y, playerPos.z);
 		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
 		objCameraMatrix = modelViewMatrix * objCameraMatrix;
-
+		std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
 		//Get the renderable component and bind in the shader
 		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
@@ -97,6 +99,8 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		renderableComponent->releaseTextures();
 		renderableComponent->releaseVBOs();
 		renderableComponent->releaseShader();
+		//Draw blue text at screen coordinates(100, 120), where(0, 0) is the top - left of the
+			// screen in an 18-point Helvetica font
 
 	}
 }

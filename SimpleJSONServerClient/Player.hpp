@@ -18,4 +18,6 @@ class Player : public GameObject {
 		bool *getKeysPressed();
 		int serialize(unsigned char* buffer);
 		int deserialize(unsigned char* buffer);
+		int getScore() const;
+		void modifyScore(int delta);
 };
