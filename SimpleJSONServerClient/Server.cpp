@@ -1,5 +1,6 @@
 #include "Socket.hpp"
 #include "Address.hpp"
+#include "ClientState.hpp"
 #include "UpdateManager.hpp"
 #include "Sender.hpp"
 #include "Player.hpp"
@@ -7,6 +8,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <map>
 #include <chrono>
 #include "Physics/Simulator.hpp"
 
@@ -20,6 +22,7 @@ UpdateManager& updateManager = UpdateManager::getInstance();
 Socket mySocket;
 std::vector <Address> clients;
 std::vector <std::pair<Address, GameObjectGlobalID>> playerIDs;
+std::map <Address, ClientState> clientStates;
 Sender sender;
 bool contMain;
 
@@ -61,6 +64,46 @@ void physics() {
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
+	}
+}
+
+void respond_logout_client(Address toLogout) {
+	for (auto it = clients.begin(); it < clients.end(); it++) {
+		if ((it->getAddress() == toLogout.getAddress()) && (it->getPort() == toLogout.getPort())) {
+			clients.erase(it);
+			std::cout << "removed from current connected clients \n";
+			break;
+		}
+		else {
+			//const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
+			//sender.sendAck((*it), data);
+		}
+	}
+	for (auto it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
+		if (((it2->first).getAddress() == toLogout.getAddress()) && ((it2->first).getPort() == toLogout.getPort())) {
+			updateManager.remove(it2->second);
+			playerIDs.erase(it2);
+			std::cout << "removed from current IDs \n";
+			break;
+		}
+	}
+}
+
+void check_client_timeouts() {
+	while (contMain) {
+		for(auto it = clientStates.begin(); it != clientStates.end(); ) {
+			if (it->second.timedOut()) {
+				// logout client with address it->first
+				std::cerr << "Client " << it->first.getHBOAddress() << " timed out - logging it out" << std::endl;
+				respond_logout_client(it->first);
+				it = clientStates.erase(it);
+			} else {
+				++it;
+			}
+
+		}
+		// loop through all clients and check if timed out
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 }
 
@@ -125,6 +168,9 @@ int main(int argc, char **argv) {
 
 	//start listener fo quitting
 	std::thread l_quit(quit);
+
+	// thread to monitor clients and terminate if timed out
+	std::thread t_timeout(check_client_timeouts);
 	
 	auto timer = std::chrono::system_clock::now();
 	//input loops in this thread
@@ -159,6 +205,7 @@ int main(int argc, char **argv) {
 				if (!copy) {
 					std::cout << "Added client to current list connected with address = " << recFrom.getHBOAddress() << " at port = " << recFrom.getHBOPort() << "\n";
 					clients.push_back(recFrom);
+					clientStates[recFrom] = ClientState(recFrom);
 					//create their car for the game, generate a global ID too
 					id = updateManager.getNextObjectID();
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
@@ -177,27 +224,8 @@ int main(int argc, char **argv) {
 			//HANDLE LOGOUTS
 			else if (prefixMatch(message, "LOGOUT")) {
 				std::cout << "Server received logout request \n";
-				std::vector<Address>::iterator it;
-				std::vector<std::pair<Address, GameObjectGlobalID>>::iterator it2;
-				for (it = clients.begin(); it < clients.end(); it++) {
-					if ((it->getAddress() == recFrom.getAddress()) && (it->getPort() == recFrom.getPort())) {
-						clients.erase(it);
-						std::cout << "removed from current connected clients \n";
-						break;
-					}
-					else {
-						//const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
-						//sender.sendAck((*it), data);
-					}
-				}
-				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
-					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
-						updateManager.remove(it2->second);
-						playerIDs.erase(it2);
-						std::cout << "removed from current IDs \n";
-						break;
-					}
-				}
+				respond_logout_client(recFrom);
+				clientStates.erase(recFrom);
 			}
 			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
 			else if (prefixMatch(message, "PRESSED")) {
@@ -212,6 +240,7 @@ int main(int argc, char **argv) {
 						break;
 					}
 				}
+				clientStates[recFrom].bump();
 			}
 			else if (prefixMatch(message, "UNPRESSED")) {
 				char key = buffer[10];
@@ -225,6 +254,7 @@ int main(int argc, char **argv) {
 						break;
 					}
 				}
+				clientStates[recFrom].bump();
 			}
 			//HANDLE HEAD ORIENTATION
 			else if (prefixMatch(message, "PRY")) {
@@ -243,9 +273,11 @@ int main(int argc, char **argv) {
 						break;
 					}
 				}
+				clientStates[recFrom].bump();
 			}
 			else {
 				std::cout << "Unknown message received\n";
+				clientStates[recFrom].bump();
 			}
 		}
 	}
@@ -260,6 +292,9 @@ int main(int argc, char **argv) {
 	
 	t_physics.join();
 	std::cout << "stopped receiver\n";
+
+	t_timeout.join();
+	std::cout << "stopped timeout checker\n";
 
 	updateManager.stop();
 	std::cout << "set update manager continue to false\n";
