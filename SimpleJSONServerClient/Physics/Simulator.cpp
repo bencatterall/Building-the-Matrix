@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
@@ -62,6 +64,7 @@ void Simulator::tick(float timestep){
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
 			if (it->second->userControllable){
+				std::cout << "Physics: Sent item";
 				objMan.queueUpdate(it->second);
 			}
 		}
