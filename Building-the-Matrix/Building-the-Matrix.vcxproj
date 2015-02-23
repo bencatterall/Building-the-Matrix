@@ -99,7 +99,7 @@
     <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\UpdateManager.cpp" />
     <ClCompile Include="src\World.cpp" />
-    <ClCompile Include="tests\catch.cpp" />
+    <ClCompile Include="tests\Catch.cpp" />
     <ClCompile Include="tests\PhysicsTest.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
     <ClCompile Include="tests\TextureAtlasTest.cpp" />
@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SimpleJSONServerClient\Serializer.hpp" />
-    <ClInclude Include="Dependencies\Catch\catch.hpp" />
+    <ClInclude Include="Dependencies\Catch\Catch.hpp" />
     <ClInclude Include="src\Chunk.hpp" />
     <ClInclude Include="src\Client\Address.hpp" />
     <ClInclude Include="src\Client\Client.hpp" />

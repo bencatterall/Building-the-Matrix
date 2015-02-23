@@ -153,7 +153,7 @@
     <ClCompile Include="src\TextureAtlas.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="tests\catch.cpp">
+    <ClCompile Include="tests\Catch.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
     <ClCompile Include="tests\TextureAtlasTest.cpp">
