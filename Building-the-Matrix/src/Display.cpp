@@ -4,6 +4,8 @@
 #include "JSON\UpdateManager.hpp"
 #include "Physics\Simulator.hpp"
 #include "../src/Common.hpp"
+#include "Serializer.hpp"
+#include "Player.hpp"
 
 #include <conio.h>
 #include <iostream>
@@ -363,7 +365,7 @@ void Display::run() {
 	//try login here
 	bool cont = true;
 	int attempts = 0;
-	char *response = new char[15];
+	unsigned char *response = new unsigned char[15];
 	while (cont && attempts < 5) {
 		if (client.sendLoginRequest()) {
 			std::cout << "login request sent\n";
@@ -411,14 +413,61 @@ void Display::run() {
 		//AT THE MOMENT THIS SENDS MESSAGES TOO FAST FOR THE SERVER TO HANDLE QUICKLY ENOUGH
 		//client.sendPitchRollYaw(getHeadOrientation());
 
+		Serializer serializer = Serializer();
 		//networking get updates;
-		//client.receive();
-		char *buffer = new char[1024];
-		if (client.receive(buffer,1024) >= 0) {
-			std::cout << std::string(buffer);
-			//use update from server
+		unsigned char *buffer = new unsigned char[1024];
+		int updateSize;
+		if ((updateSize = client.receive(buffer,1024)) >= 0) {
+			std::cout << "received update from server, size " << updateSize << "\n";
+			int pos = 0;
+			while (pos < updateSize) {
+				int temp;
+				int ID = serializer.unpackInt(&buffer[pos+1],temp);
+				bool toDelete = false;
+				if (buffer[pos + 1] == 'D') {
+					toDelete = true;
+				}
+				if (buffer[pos] == 'P') {
+					//player object
+					//BEN: IMPLEMENT EXISTS IN OBJECTMANAGER AND DEFAULTS FOR FIELDS THAT WON'T COME FROM THE SERVER
+					std::shared_ptr<Player> player;
+					if (objectManager.exists(ID)) {
+						player = std::dynamic_pointer_cast<Player>(objectManager.getObject(ID));
+					}
+					else {
+						float x, y, z = 0;
+						player = std::make_shared<Player>(x,y,z);
+					}
+					pos += 2;
+					if (!toDelete) {
+						pos += player->deserialize(&buffer[pos]);
+						objectManager.addObject(player);
+					}
+					else {
+						objectManager.removeObject(ID);
+					}
+				}
+				else {
+					//game object
+					std::shared_ptr<GameObject> object;
+					if (objectManager.exists(ID)) {
+						object = objectManager.getObject(ID);
+					}
+					else {
+						//BEN- should I give anything to constructor?
+						object = std::make_shared<GameObject>();
+					}
+					pos += 2;
+					if (!toDelete) {
+						pos += object->deserialize(&buffer[pos]);
+						objectManager.addObject(object);
+					}
+					else {
+						objectManager.removeObject(ID);
+					}
+				}
+			}
 
-			//update manager service updates
 			//updateManager.processUpdates()
 		}
 		else {

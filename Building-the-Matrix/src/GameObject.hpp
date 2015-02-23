@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H
 
 #include "Common.hpp"
+#include "Physics\PhysicsObject.hpp"
 #include <memory>
 
 class LocationComponent;
@@ -30,7 +31,8 @@ public:
 	///Objects are renderable by default
 	GameObject();
 	GameObject(bool renderable, bool visible);
-	~GameObject();
+	virtual ~GameObject();
+	int deserialize(unsigned char* buffer);
 
 	std::shared_ptr<LocationComponent> getLocationComponent() { return locationComponent;  }
 	std::shared_ptr<RenderableComponent> getRenderableComponent() { return renderableComponent; }
@@ -47,6 +49,9 @@ public:
 	}
 	GameObjectID getGlobalID() {
 		return globalID;
+	}
+	void setRenderable(bool renderable) {
+		this->renderable = renderable;
 	}
 };
 

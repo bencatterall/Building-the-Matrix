@@ -27,7 +27,7 @@ public:
 	bool sendLoginRequest();
 	bool sendLogout();
 	bool send(const char *data, int size);
-	int receive(char *data,int size);
+	int receive(unsigned char *data,int size);
     std::chrono::time_point<std::chrono::system_clock> getTimeLastUpdated() const;
     bool timedOut() const;
 };

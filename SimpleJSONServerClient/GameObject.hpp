@@ -6,7 +6,7 @@
 #include "CommonMinimal.hpp"
 #include "Controls.hpp"
 #include "LocationComponent.hpp"
-#include "Physics\PhysicsObject.hpp"
+#include "Physics/PhysicsObject.hpp"
 
 class GameObject {
 	public:

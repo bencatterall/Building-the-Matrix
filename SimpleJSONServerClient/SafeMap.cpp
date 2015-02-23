@@ -29,6 +29,7 @@ template<> void SafeMap<GameObjectGlobalID, GameObject>::put(GameObjectGlobalID 
 	(this->lock).unlock();
 }
 
+//TODO: RETURN POINTER IN THE MAP
 template<> std::map<GameObjectGlobalID, GameObject> SafeMap<GameObjectGlobalID, GameObject>::getSnapshot(bool flush) {
 	(this->lock).lock();
 	//return a copy of the map to send to the clients

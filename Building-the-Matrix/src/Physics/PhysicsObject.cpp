@@ -2,6 +2,7 @@
 #include "AABB.hpp"
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
+#include "../Serializer.hpp"
 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
@@ -141,7 +142,7 @@ void PhysicsObject::turnRight(float turnSpeed = TURN_SPEED){
 
 }
 
-void PhysicsObject::deserialize(char * buffer){
+/* void PhysicsObject::deserialize(char * buffer){
 	struct {
 		float orientationX;
 		float orientationY;
@@ -173,4 +174,26 @@ void PhysicsObject::deserialize(char * buffer){
 		vec3(physicsStruct.AABBMinX, physicsStruct.AABBMinY, physicsStruct.AABBMinZ),
 		vec3(physicsStruct.AABBMaxX, physicsStruct.AABBMaxY, physicsStruct.AABBMaxZ)
 		);
+} */
+
+int PhysicsObject::deserialize(unsigned char * buffer) {
+	Serializer serializer = Serializer();
+	int next = 0;
+	(this->boundingBox) = std::make_shared<AABB>(&buffer[next], next);
+	(this->restitution) = serializer.unpackFloat(&buffer[next], next);
+	(this->mass) = serializer.unpackFloat(&buffer[next], next);
+	(this->inverseMass) = serializer.unpackFloat(&buffer[next], next);
+	(this->friction) = serializer.unpackFloat(&buffer[next], next);
+	(this->airRes) = serializer.unpackFloat(&buffer[next], next);
+	(this->location) = std::make_shared<LocationComponent>(&buffer[next], next);
+	(this->velocity.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->velocity.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->velocity.z) = serializer.unpackFloat(&buffer[next], next);
+	(this->acc.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->acc.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->acc.z) = serializer.unpackFloat(&buffer[next], next);
+	(this->orientation.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->orientation.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->orientation.z) = serializer.unpackFloat(&buffer[next], next);
+	return next;
 }

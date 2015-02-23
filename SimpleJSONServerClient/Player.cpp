@@ -4,6 +4,9 @@ Player::Player(GameObjectGlobalID id) : GameObject(id) {
 	(this->userControllable) = true;
 	(this->score) = 0;
 	(this->deleted) = false;
+	(this->pitch) = 0;
+	(this->roll) = 0;
+	(this->yaw) = 0;
 }
 
 Player::Player(unsigned char *serial, int &size) {
@@ -47,8 +50,6 @@ int Player::serialize(unsigned char* buffer) {
 	}
 	next += serializer.packBool(&buffer[next], visible);
 	next += serializer.packBool(&buffer[next], renderable);
-	next += serializer.packBool(&buffer[next], deleted);
-	next += serializer.packBool(&buffer[next], userControllable);
 	next += control.serialize(serializer,&buffer[next]);
 	next += serializer.packFloat(&buffer[next], pitch);
 	next += serializer.packFloat(&buffer[next], roll);
@@ -65,8 +66,6 @@ int Player::deserialize(unsigned char* buffer) {
 	(this->physComp) = std::make_shared<PhysicsObject>(serializer, &buffer[next],next);
 	(this->visible) = serializer.unpackBool(&buffer[next], next);
 	(this->renderable) = serializer.unpackBool(&buffer[next], next);
-	(this->deleted) = serializer.unpackBool(&buffer[next], next);
-	(this->userControllable) = serializer.unpackBool(&buffer[next], next);
 	(this->control) = KeyboardControl(serializer,&buffer[next],next);
 	(this->pitch) = serializer.unpackFloat(&buffer[next], next);
 	(this->roll) = serializer.unpackFloat(&buffer[next], next);

@@ -165,6 +165,9 @@
     <ClCompile Include="..\SimpleJSONServerClient\Serializer.cpp">
       <Filter>Source Files\Update Manager</Filter>
     </ClCompile>
+    <ClCompile Include="src\Controls.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Catch\catch.hpp">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\SimpleJSONServerClient\Serializer.hpp">
       <Filter>Header Files\Update Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls.hpp">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

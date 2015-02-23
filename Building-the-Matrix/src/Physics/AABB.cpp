@@ -8,6 +8,7 @@
 #include "../RenderableComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
+#include "../Serializer.hpp"
 
 AABB::AABB(const vertexVector vertices)
 {
@@ -138,4 +139,16 @@ std::shared_ptr<vertexVector> AABB::getFullBox() const{
 			);
 	}
 	return fullBox;
+}
+
+int AABB::deserialize(unsigned char *buffer) {
+	Serializer serializer = Serializer();
+	int next = 0;
+	(this->min.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->min.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->min.z) = serializer.unpackFloat(&buffer[next], next);
+	(this->max.x) = serializer.unpackFloat(&buffer[next], next);
+	(this->max.y) = serializer.unpackFloat(&buffer[next], next);
+	(this->max.z) = serializer.unpackFloat(&buffer[next], next);
+	return next;
 }

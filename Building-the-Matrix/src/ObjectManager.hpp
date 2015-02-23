@@ -81,6 +81,12 @@ public:
 	const std::vector<GameObjectID> getObjects() {
 		return gameObjectIDs;
 	}
+
+	bool exists(GameObjectID) {
+		//BEN: TODO
+		return false;
+	}
+
 };
 
 #endif

@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-#include "Physics\Simulator.hpp"
+#include "Physics/Simulator.hpp"
 
 /**
 ServerMain.cpp
@@ -186,8 +186,8 @@ int main(int argc, char **argv) {
 						break;
 					}
 					else {
-						const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
-						sender.sendAck((*it), data);
+						//const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
+						//sender.sendAck((*it), data);
 					}
 				}
 				for (it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
