@@ -178,7 +178,7 @@ namespace PhysicsMaths{
 		return result;
 	}
 
-	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b){
+	bool complexCollision(const GameObjectID a, const GameObjectID b){
 		ObjectManager & obj = ObjectManager::getInstance();
 		std::shared_ptr<PhysicsObject> aObj = obj.getObject(a)->getPhysicsComponent();
 		std::shared_ptr<PhysicsObject> bObj = obj.getObject(b)->getPhysicsComponent();
