@@ -195,7 +195,7 @@ namespace PhysicsMaths{
 		return complexCollision(aObj, bObj);
 	}
 
-	bool complexCollision(const GameObject & objectA, GameObject & objectB){
+	bool complexCollision(const GameObject & objectA, const GameObject & objectB){
 		std::shared_ptr<PhysicsObject> aObj = objectA.physComp;
 		std::shared_ptr<PhysicsObject> bObj = objectB.physComp;
 		std::shared_ptr<vertexVector> aBox = aObj->getLocalAABB().getFullBox();
