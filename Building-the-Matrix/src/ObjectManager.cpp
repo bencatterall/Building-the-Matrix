@@ -30,6 +30,12 @@ std::shared_ptr<GameObject> ObjectManager::getObject(GameObjectID id){
 	}
 }
 
+bool ObjectManager::exists(GameObjectID id)
+{
+	//Find the object in the map
+	auto search = gameObjects.find(id);
+	return (search != gameObjects.end());
+}
 
 bool ObjectManager::removeObject(GameObjectID id) {
 	//Find it and then remove it

@@ -40,15 +40,12 @@ void Chunk::init() {
 	renderableComponent->setShader(shader);
 	renderableComponent->setTexture(texture);
 
-
 	//Map of cube types (GRASS, WATER etc) to a string identifer
 	std::map<int, std::string> cubeTypeToId;
 	cubeTypeToId.insert(std::make_pair<int, std::string>(1, std::string("grass")));
 	cubeTypeToId.insert(std::make_pair<int, std::string>(2, std::string("sand")));
 	cubeTypeToId.insert(std::make_pair<int, std::string>(3, std::string("stone")));
 	cubeTypeToId.insert(std::make_pair<int, std::string>(4, std::string("water")));
-
-
 
 	//The number of cubes we actually want to render
 	int numCubes = 0;
@@ -205,7 +202,12 @@ void Chunk::init() {
 				//We do if there is not a cube below
 				if (baseY -1 > 0) {
 					if (chunkData[baseX][baseY - 1][baseZ] == 0) {
-						setupFaceData(baseX, baseY - 1, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBottomFace, cubeBottomTextureCoords);
+						if (cubeTypeToId.at(chunkData[baseX][baseY][baseZ]) == "grass") {
+
+						}
+						else {
+							setupFaceData(baseX, baseY - 1, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBottomFace, cubeBottomTextureCoords);
+						}
 					}
 				}
 
