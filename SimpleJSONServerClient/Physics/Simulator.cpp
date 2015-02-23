@@ -58,6 +58,8 @@ void Simulator::tick(float timestep){
 					if (keys[3] && !keys[2]){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
+					vec3 X = physObj.getX();
+					std::cout << "Object position:" << X.x << " " << X.y << " " << X.z;
 				}
 			}
 		processCollisions(gameObjects);
