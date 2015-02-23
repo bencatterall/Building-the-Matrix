@@ -96,7 +96,7 @@ void Display::init() {
 		exit(EXIT_FAILURE);
 	}
 	glfwSetErrorCallback(glfwErrorCallback);
-	
+	int width = resolutionW, height = resolutionH;
 	//Create window based upon setup
 	if (extendedMode){
 		//Find our monitor
@@ -112,7 +112,6 @@ void Display::init() {
 		}
 
 		//provide hints to GLFW
-		int width = resolutionW, height = resolutionH;
 		if (nullptr != monitor) {
 			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
@@ -186,6 +185,12 @@ void Display::init() {
 	//we'll use a single frame buffer
 	//Window size bug has been found to be because of eye size being larger than the window size.
 	//Window sizes are correct but the framebuffer is larger, h
+	/*if (2 * eyeSize[0].w > width) {
+		eyeSize[0].w = width/2; eyeSize[1].w = width/2;
+	}
+	if (eyeSize[1].h > height) {
+		eyeSize[0].h = height; eyeSize[1].h = height;
+	}*/
 	frameBufferWidth = eyeSize[0].w + eyeSize[1].w;
 	frameBufferHeight = (eyeSize[0].h > eyeSize[1].h) ? eyeSize[0].h : eyeSize[1].h;
 	updateRenderTarget(frameBufferWidth, frameBufferHeight);
