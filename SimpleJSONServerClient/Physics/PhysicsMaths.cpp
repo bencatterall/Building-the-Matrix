@@ -2,6 +2,7 @@
 
 #include "../Common.hpp"
 #include "../GameObject.hpp"
+#include "../Player.hpp"
 #include "../LocationComponent.hpp"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
@@ -120,6 +121,21 @@ namespace PhysicsMaths{
 
 		vec3 u1 = glm::dot(physA.getV(), sDiffNormal) * sDiffNormal;
 		vec3 u2 = glm::dot(physB.getV(), sDiffNormal) * sDiffNormal;
+
+		// Scoring
+		if (objA.userControllable && objB.userControllable) {
+			Player playerA = (Player&) objA;
+			Player playerB = (Player&) objB;
+			float speed_diff = glm::length(physA.getV()) - glm::length(physB.getV());
+			// increase score of fastest player
+			// TODO: score increase to depend on difference in speeds
+			if (speed_diff > 0) {
+				playerA.modifyScore(+1);
+			} else {
+				playerB.modifyScore(+1);
+			}
+		}
+
 		vec3 u1rejection = physA.getV() - u1;
 		vec3 u2rejection = physB.getV() - u2;
 
