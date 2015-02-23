@@ -66,11 +66,23 @@ void PhysicsObject::setX(vec3 &newPos){
 	location->setPosition(newPos);
 }
 
+void PhysicsObject::setX(vec3 &&newPos){
+	location->setPosition(newPos);
+}
+
 void PhysicsObject::setV(vec3 &newVelocity){
 	velocity = vec3(newVelocity);
 }
 
+void PhysicsObject::setV(vec3 &&newVelocity){
+	velocity = vec3(newVelocity);
+}
+
 void PhysicsObject::setA(vec3 &newAcc){
+	acc = vec3(newAcc);
+}
+
+void PhysicsObject::setA(vec3 &&newAcc){
 	acc = vec3(newAcc);
 }
 
