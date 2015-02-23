@@ -24,7 +24,13 @@ template<> void SafeMap<GameObjectGlobalID, GameObject>::deleteEntry(GameObjectG
 
 template<> void SafeMap<GameObjectGlobalID, GameObject>::put(GameObjectGlobalID id, std::shared_ptr<GameObject> object) {
 	(this->lock).lock();
-	(this->map).insert(std::pair<GameObjectGlobalID, std::shared_ptr<GameObject>>(id, object));
+	auto iter = (this->map).insert(std::pair<GameObjectGlobalID, std::shared_ptr<GameObject>>(id, object));
+	if (!iter.second) {
+		//already existed
+		//update the pointer
+		this->map.at(id) = object;
+		std::cout << "DUPLICATE" << std::endl;
+	}
 	std::cout << "thread inserted " << id << "\n";
 	(this->lock).unlock();
 }

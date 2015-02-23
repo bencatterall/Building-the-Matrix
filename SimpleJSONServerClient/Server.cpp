@@ -40,7 +40,7 @@ void broadcast() {
 				sender.sendUpdateMessage(client, toSend);
 			}
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }
 
@@ -59,6 +59,7 @@ void physics() {
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
 

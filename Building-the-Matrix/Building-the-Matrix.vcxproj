@@ -96,6 +96,7 @@
     <ClCompile Include="src\RenderableComponent.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\SimplexNoise.cpp" />
+    <ClCompile Include="src\TextRenderer.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\UpdateManager.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="src\RenderableComponent.hpp" />
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\SimplexNoise.hpp" />
+    <ClInclude Include="src\TextRenderer.hpp" />
     <ClInclude Include="src\Texture.hpp" />
     <ClInclude Include="src\TextureAtlas.hpp" />
     <ClInclude Include="src\UpdateManager.hpp" />
