@@ -57,15 +57,19 @@ void Simulator::tick(float timestep){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
 				}
-				objMan.queueUpdate(it->second);
 			}
 		processCollisions(gameObjects);
+		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			if (it->second->userControllable){
+				objMan.queueUpdate(it->second);
+			}
+		}
 	}
 }
 
 void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects){
-
-
+	UpdateManager & objMan = UpdateManager::getInstance();
 	// O(n^2) collision check
 	//THIS WAS CRASHING WHEN GAME OBJECTS SIZE WAS 0
 	if (gameObjects.size() > 0) {
@@ -78,16 +82,14 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 			std::shared_ptr<GameObject> gameObj = (it->second);
 			PhysicsObject currentObj = *(gameObj->physComp);
 			//for (size_t = i; j < gameObjects.size(); j++)
-			for (it2 = it; it2 != gameObjects.end(); it2++)
+			for ((it2 = it)++; it2 != gameObjects.end(); it2++)
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
 				if (PhysicsMaths::simpleCollision(currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
-					UpdateManager::getInstance().queueUpdate(gameObj2);
 				}
 			}
-			UpdateManager::getInstance().queueUpdate(gameObj);
 		}
 	}
 }
