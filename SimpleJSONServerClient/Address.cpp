@@ -51,3 +51,7 @@ std::string Address::getHBOAddress() const {
 unsigned short Address::getHBOPort() const {
 	return ntohs(this->port);
 }
+
+bool Address::operator<(Address other) const {
+	return this->getAddress() < other.getAddress();
+}

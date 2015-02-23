@@ -73,11 +73,17 @@ namespace PhysicsMaths{
 		return true;
 	}
 
-	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
+	/*void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
 		UpdateManager& objMan = UpdateManager::getInstance();
-		std::map<GameObjectGlobalID, GameObject> map = objMan.getState();
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map = objMan.getState();
 		GameObject objA = *objMan.getGameObject(aID);
 		GameObject objB = *objMan.getGameObject(bID);
+		handleCollision(objA, objB);
+	}*/
+
+	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map){
+		GameObject objA = *((map.find(aID))->second);
+		GameObject objB = *((map.find(bID))->second);
 		handleCollision(objA, objB);
 	}
 

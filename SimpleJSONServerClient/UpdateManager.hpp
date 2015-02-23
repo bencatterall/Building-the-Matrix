@@ -23,8 +23,8 @@ class UpdateManager {
 		//for physics to call
 		void queueUpdate(std::shared_ptr<GameObject> object);
 		void remove(GameObjectGlobalID id);
-		std::map<GameObjectGlobalID, GameObject> flushUpdates();
-		std::map<GameObjectGlobalID, GameObject> getState();
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> flushUpdates();
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> getState();
 		std::shared_ptr<GameObject> getGameObject(GameObjectGlobalID id);
 		GameObjectGlobalID getNextObjectID();
 		void run();

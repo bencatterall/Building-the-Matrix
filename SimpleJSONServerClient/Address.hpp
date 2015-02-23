@@ -30,5 +30,6 @@ class Address {
 		std::string getHBOAddress() const;
 		unsigned short getPort() const;
 		unsigned short getHBOPort() const;
+		bool operator<(Address other) const;
 };
 #endif

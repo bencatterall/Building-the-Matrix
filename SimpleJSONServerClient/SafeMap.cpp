@@ -30,29 +30,29 @@ template<> void SafeMap<GameObjectGlobalID, GameObject>::put(GameObjectGlobalID 
 }
 
 //TODO: RETURN POINTER IN THE MAP
-template<> std::map<GameObjectGlobalID, GameObject> SafeMap<GameObjectGlobalID, GameObject>::getSnapshot(bool flush) {
+template<> std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> SafeMap<GameObjectGlobalID, GameObject>::getSnapshot(bool flush) {
 	(this->lock).lock();
 	//return a copy of the map to send to the clients
 	std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> m = (this->map);
-	std::map<GameObjectGlobalID, GameObject> staticMap;
+	std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> newMap;
 	std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
 	for (it = m.begin(); it != m.end(); it++) {
-		GameObject copy;
+		std::shared_ptr<GameObject> copy;
 		if ((it->second)->userControllable) {
 			//is really a Player object so copy that
-			std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>((it->second));
-			copy = Player(*player);
+			std::shared_ptr<Player> playerOrig = std::dynamic_pointer_cast<Player>(it->second);
+			copy = std::make_shared<Player>(*playerOrig);
 		}
 		else {
 			//copy the Game Object
-			copy = GameObject(*(it->second));
+			copy = std::make_shared<GameObject>(*(it->second));
 		}
-		staticMap.insert(std::pair<GameObjectGlobalID, GameObject>(it->first, copy));;
+		newMap.insert(std::pair<GameObjectGlobalID, std::shared_ptr<GameObject>>(it->first, copy));
 	}
 	if (flush) {
 		//flush map
 		(this->map) = std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>();
 	}
 	(this->lock).unlock();
-	return staticMap;
+	return newMap;
 }
