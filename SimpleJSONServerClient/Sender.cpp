@@ -12,12 +12,12 @@ void Sender::setSocket(Socket *s) {
 	(this->serverSocket) = *s;
 }
 
-void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, GameObject> message) {
+void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> message) {
 	unsigned char *m = new unsigned char[1024];
 	int size = 0;
-	for (std::pair<GameObjectGlobalID, GameObject> go : message) {
-		bool deleted = go.second.deleted;
-		if (go.second.userControllable){
+	for (std::pair<GameObjectGlobalID, std::shared_ptr<GameObject>> go : message) {
+		bool deleted = go.second->deleted;
+		if (go.second->userControllable){
 			//SERIALIZE AS A PLAYER OBJECT
 			std::cout << "serialising a player object\n";
 			m[size] = 'P';
@@ -28,7 +28,7 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, Game
 				m[size + 1] = 'K';
 			}
 			size += 2;
-			Player *p = (Player *)&(go.second);
+			std::shared_ptr<Player> p = std::dynamic_pointer_cast<Player>(go.second);
 			int psize;
 			psize = (p->serialize(&m[size]));
 			std::cout << "player object size = " << psize << "\n";
@@ -45,7 +45,7 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, Game
 			}
 			size += 2;
 			int gosize;
-			gosize = go.second.serialize(&m[size]);
+			gosize = (go.second)->serialize(&m[size]);
 			std::cout << "game object size = " << gosize << "\n";
 			size += gosize;
 		}
@@ -53,10 +53,6 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, Game
 	std::cout << "total map size = " << size << "\n";
 	
 	Message mess = Message(client,m,size);
-	//TEMP
-	int size2= 0;
-	Player deserialized = Player(&m[1],size2);
-	std::cout << "deserialized " << size2 << " bytes\n";
 	(this->toSend).pushToEnd(mess);
 }
 

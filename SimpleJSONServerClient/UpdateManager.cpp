@@ -36,11 +36,11 @@ void UpdateManager::remove(GameObjectGlobalID id) {
 	(this->pendingUpdates).pushToEnd(Update(o->getID(), o));
 }
 
-std::map<GameObjectGlobalID, GameObject> UpdateManager::flushUpdates() {
+std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> UpdateManager::flushUpdates() {
 	return (this->updatedObjectsForClients).getSnapshot(true);
 }
 
-std::map<GameObjectGlobalID, GameObject> UpdateManager::getState() {
+std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> UpdateManager::getState() {
 	return (this->gameObjectsWorldState).getSnapshot(false);
 }
 

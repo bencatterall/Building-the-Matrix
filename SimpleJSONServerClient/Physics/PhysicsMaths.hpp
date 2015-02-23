@@ -34,11 +34,13 @@ namespace PhysicsMaths
 	bool simpleCollision(const AABB &, const AABB &);
 	bool simpleCollision(const PhysicsObject, const PhysicsObject);
 	bool simpleCollision(const GameObjectGlobalID a, const GameObjectGlobalID b);
-	bool complexCollision(const std::shared_ptr<PhysicsObject>, const std::shared_ptr<PhysicsObject>);
+
+	bool complexCollision(const GameObject &, const GameObject &);
 	bool complexCollision(const GameObjectGlobalID a, const GameObjectGlobalID b);
 	bool sat(const vec3 &, std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>, std::shared_ptr<vertexVector>, std::shared_ptr<vertexVector>);
 
-	void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
+	//void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
+	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map);
 	void handleCollision(GameObject &, GameObject &);
 	void stepObject(PhysicsObject &, float);
 

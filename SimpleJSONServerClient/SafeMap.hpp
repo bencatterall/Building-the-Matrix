@@ -19,6 +19,6 @@ class SafeMap {
 		std::shared_ptr<V> get(K key);
 		void deleteEntry(K key);
 		void put(K key, std::shared_ptr<V> value);
-		std::map<K, V> getSnapshot(bool flush);
+		std::map<K, std::shared_ptr<V>> getSnapshot(bool flush);
 };
 #endif

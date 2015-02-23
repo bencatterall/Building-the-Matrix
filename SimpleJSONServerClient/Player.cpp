@@ -77,3 +77,11 @@ int Player::deserialize(unsigned char* buffer) {
 bool* Player::getKeysPressed(){
 	return control.getCurrentControls();
 }
+
+int Player::getScore() const {
+	return score;
+}
+
+void Player::modifyScore(int delta) {
+	score += delta;
+}
