@@ -9,7 +9,8 @@ PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& 
 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
-	restitution(1.0f), velocity(vec3())
+	restitution(1.0f), velocity(vec3()), 
+	orientation(vec3(0,1,0))
 {
 	if (locationComp == nullptr){
 		locationComp = std::make_shared<LocationComponent>();
