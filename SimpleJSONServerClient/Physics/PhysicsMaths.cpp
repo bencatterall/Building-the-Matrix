@@ -311,11 +311,27 @@ namespace PhysicsMaths{
 
 
 	void reversePlayer(std::shared_ptr<PhysicsObject> phys){
+#ifdef COMPLEX_PHYSICS
 		vec3 dir = phys->getOrientation();
 		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Adjust arbitrary constant according to playtesting
 		phys->setA(A + dir*(-2.0f-speed));
+#else
+vec3 dir = phys->getOrientation();
+vec3 A = phys->getA(), V = phys->getV();
+if (glm::dot(dir, V) < 0) { // go faster
+	if (glm::length(V) > 5){ //max speed
+		phys->setA(vec3());
+	}
+	else{ //speed up
+		phys->setA(glm::normalize(A - dir));
+	}
+}
+else{
+	phys->setA(glm::normalize(A - dir));
+}
+#endif
 	}
 
 	void turnLeft(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
