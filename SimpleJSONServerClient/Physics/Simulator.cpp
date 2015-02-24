@@ -65,7 +65,11 @@ void Simulator::tick(float timestep){
 					}
 					if (left && right && up && down){
 						vec3 X = gameObj->physComp->getX();
+						vec3 V = gameObj->physComp->getV();
+						vec3 A = gameObj->physComp->getA();
 						std::cout << "Object position:" << X.x << " " << X.y << " " << X.z << "\n";
+						std::cout << "Object velocity:" << V.x << " " << V.y << " " << V.z << "\n";
+						std::cout << "Object acceleration:" << A.x << " " << A.y << " " << A.z << "\n";
 					}	
 				}
 			}
