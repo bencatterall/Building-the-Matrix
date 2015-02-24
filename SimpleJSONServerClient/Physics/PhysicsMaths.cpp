@@ -297,7 +297,7 @@ namespace PhysicsMaths{
 		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys->setA(A + glm::normalize(dir)*(-2.0f-speed));
+		phys->setA(A + dir*(-2.0f-speed));
 	}
 
 	void turnLeft(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
