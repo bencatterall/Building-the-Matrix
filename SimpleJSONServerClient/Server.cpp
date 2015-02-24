@@ -236,6 +236,7 @@ int main(int argc, char **argv) {
 				}
 				for (auto it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
 					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
+						//edit remove to prevent bug
 						updateManager.remove(it2->second);
 						playerIDs.erase(it2);
 						std::cout << "removed from current IDs \n";

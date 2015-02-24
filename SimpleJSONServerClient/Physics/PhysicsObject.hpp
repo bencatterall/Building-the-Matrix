@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-#define TURN_SPEED 0.02f
+#define TURN_SPEED 0.0002f
 
 class AABB;
 class LocationComponent;
