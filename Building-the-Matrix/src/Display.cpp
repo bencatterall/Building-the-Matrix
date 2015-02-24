@@ -364,10 +364,11 @@ void Display::run() {
 	//Create objects
 	
 	try {
-		client.setAddresses(Address(std::string("172.17.211.1"), 9898), Address(std::string("172.17.211.172"), 9899));
-	}
-	//client.setAddresses(Address(std::string("172.17.210.17"), 9898), Address(std::string("172.17.211.172"), 9899));
+		client.setAddresses(Address(std::string("127.0.0.1"), 9898), Address(std::string("127.0.0.1"), 9899));
+	//	client.setAddresses(Address(std::string("172.17.210.17"), 9898), Address(std::string("172.17.211.172"), 9899));
 
+	}
+	
 	catch (...){
 		std::cout << "instantiating client failed";
 	}

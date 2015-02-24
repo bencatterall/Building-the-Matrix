@@ -73,7 +73,7 @@ bool ObjectManager::removeObject(GameObjectID id) {
 	}
 	else {
 		//There is very likely a bug somewhere as an invalid ID has been used
-		assert(search != gameObjects.end());
-		exit(EXIT_FAILURE);
+		//assert(search != gameObjects.end());
+		//exit(EXIT_FAILURE);
 	}
 };

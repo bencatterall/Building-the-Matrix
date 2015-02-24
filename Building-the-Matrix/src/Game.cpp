@@ -13,7 +13,7 @@
 #include "Player.hpp"
 #include "ObjectManager.hpp"
 #include "SimplexNoise.hpp"
-
+#include "Cube.hpp"
 
 void Game::init() {
 	//Sahil: You can comment this out
@@ -24,6 +24,8 @@ void Game::init() {
 	for (int i = 0; i < numChunks; ++i) {
 		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
 	}
+	objManager.addObject(std::make_shared<Cube>(glm::vec3(0.0f, 30.0f, 0.0f)));
+
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
@@ -51,7 +53,7 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		glm::vec3 eyePos(playerPos.x, playerPos.y, playerPos.z);
 		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
 		objCameraMatrix = modelViewMatrix * objCameraMatrix;
-		std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
+		//std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
 		//Get the renderable component and bind in the shader
 		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();
