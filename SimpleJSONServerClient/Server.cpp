@@ -36,7 +36,7 @@ void broadcast() {
 			//send snapshot back
 			std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> toSend = updateManager.flushUpdates();
 			if (!toSend.empty()) {
-				std::cout << "Sending game snapshot \n";
+				//std::cout << "Sending game snapshot \n";
 				sender.sendUpdateMessage(client, toSend);
 			}
 		}
@@ -59,7 +59,6 @@ void physics() {
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
 
@@ -67,7 +66,7 @@ void respond_logout_client(Address toLogout) {
 	for (auto it = clients.begin(); it < clients.end(); it++) {
 		if ((it->getAddress() == toLogout.getAddress()) && (it->getPort() == toLogout.getPort())) {
 			clients.erase(it);
-			std::cout << "removed from current connected clients \n";
+			//std::cout << "removed from current connected clients \n";
 			break;
 		}
 		else {
@@ -79,7 +78,7 @@ void respond_logout_client(Address toLogout) {
 		if (((it2->first).getAddress() == toLogout.getAddress()) && ((it2->first).getPort() == toLogout.getPort())) {
 			updateManager.remove(it2->second);
 			playerIDs.erase(it2);
-			std::cout << "removed from current IDs \n";
+			//std::cout << "removed from current IDs \n";
 			break;
 		}
 	}
@@ -220,19 +219,38 @@ int main(int argc, char **argv) {
 			//HANDLE LOGOUTS
 			else if (prefixMatch(message, "LOGOUT")) {
 				std::cout << "Server received logout request \n";
-				respond_logout_client(recFrom);
-				clientStates.erase(recFrom);
+				//respond_logout_client(recFrom);
+				for (auto it = clients.begin(); it < clients.end(); it++) {
+					if ((it->getAddress() == recFrom.getAddress()) && (it->getPort() == recFrom.getPort())) {
+						clients.erase(it);
+						std::cout << "removed from current connected clients \n";
+						break;
+					}
+					else {
+						//const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
+						//sender.sendAck((*it), data);
+					}
+				}
+				for (auto it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
+					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
+						updateManager.remove(it2->second);
+						playerIDs.erase(it2);
+						std::cout << "removed from current IDs \n";
+						break;
+					}
+				}
+				//clientStates.erase(recFrom);
 			}
 			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
 			else if (prefixMatch(message, "PRESSED")) {
 				char key = buffer[8];
-				std::cout << "User pressed " << key << "\n";
+				//std::cout << "User pressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
 						player->keyPressed(key);
-						updateManager.queueUpdate(player);
+						//updateManager.queueUpdate(player);
 						break;
 					}
 				}
@@ -240,13 +258,13 @@ int main(int argc, char **argv) {
 			}
 			else if (prefixMatch(message, "UNPRESSED")) {
 				char key = buffer[10];
-				std::cout << "User unpressed " << key << "\n";
+				//std::cout << "User unpressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
 						player->keyUnpressed(key);
-						updateManager.queueUpdate(player);
+						//updateManager.queueUpdate(player);
 						break;
 					}
 				}
@@ -265,7 +283,7 @@ int main(int argc, char **argv) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
 						player->setPRY(pry[0], pry[1], pry[2]);
-						updateManager.queueUpdate(player);
+						//updateManager.queueUpdate(player);
 						break;
 					}
 				}

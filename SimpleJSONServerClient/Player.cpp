@@ -78,10 +78,46 @@ bool* Player::getKeysPressed(){
 	return control.getCurrentControls();
 }
 
+bool Player::getUp() {
+	return (this->control).getUp();
+}
+
+bool Player::getDown() {
+	return (this->control).getDown();
+}
+
+bool Player::getLeft() {
+	return (this->control).getLeft();
+}
+
+bool Player::getRight() {
+	return (this->control).getRight();
+}
+
 int Player::getScore() const {
 	return score;
 }
 
 void Player::modifyScore(int delta) {
 	score += delta;
+}
+
+float Player::getPitch() {
+	return (this->pitch);
+}
+
+float Player::getRoll() {
+	return (this->roll);
+}
+
+float Player::getYaw() {
+	return (this->yaw);
+}
+
+void Player::setControl(KeyboardControl control) {
+	this->control = control;
+}
+
+KeyboardControl Player::getControl() {
+	return (this->control);
 }

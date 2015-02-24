@@ -12,9 +12,9 @@ Message::Message(Address client, unsigned char *message, int length){
 }
 
 Message::Message(Address client, std::string event) {
-	std::cout << "event was " << event << "\n";
+	//std::cout << "event was " << event << "\n";
 	if (event.compare("A FELLOW PLAYER HAS LEFT THE GAME")==0){
-		std::cout << "sending A FELLOW PLAYER HAS LEFT THE GAME\n";
+		//std::cout << "sending A FELLOW PLAYER HAS LEFT THE GAME\n";
 		(this->client) = client;
 		(this->message) = (unsigned char *)"A FELLOW PLAYER HAS LEFT THE GAME\0";
 		(this->messageSize) = 38;
