@@ -59,7 +59,7 @@ void physics() {
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }
 
@@ -88,6 +88,8 @@ void respond_logout_client(Address toLogout) {
 void check_client_timeouts() {
 	while (contMain) {
 		for(auto it = clientStates.begin(); it != clientStates.end(); ) {
+			//TODO: Reimplemenet
+			/*
 			if (it->second.timedOut()) {
 				// logout client with address it->first
 				std::cerr << "Client " << it->first.getHBOAddress() << " timed out - logging it out" << std::endl;
@@ -96,7 +98,7 @@ void check_client_timeouts() {
 			} else {
 				++it;
 			}
-
+			*/
 		}
 		// loop through all clients and check if timed out
 		std::this_thread::sleep_for(std::chrono::seconds(1));
