@@ -284,17 +284,17 @@ namespace PhysicsMaths{
 
 	void acceleratePlayer(std::shared_ptr<PhysicsObject> phys){
 		vec3 dir = phys->getOrientation();
-		float speed = glm::length(dir);
+		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Consider further mechanisms for determining power
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys->setA(A + glm::normalize(dir)*(5.0f - speed));
+		phys->setA(A + dir*(5.0f - speed));
 	}
 
 
 	void reversePlayer(std::shared_ptr<PhysicsObject> phys){
 		vec3 dir = phys->getOrientation();
-		float speed = glm::length(dir);
+		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Adjust arbitrary constant according to playtesting
 		phys->setA(A + glm::normalize(dir)*(-2.0f-speed));
@@ -325,10 +325,5 @@ namespace PhysicsMaths{
 			sin(xRad) * cos(yRad),
 			sin(yRad)
 			);
-	}
-
-	vec3 convertDirectiontoYPR(const vec3 direction){
-		//TODO Implement me
-		return glm::normalize(direction);
 	}
 }
