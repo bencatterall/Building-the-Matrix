@@ -103,6 +103,7 @@ namespace PhysicsMaths{
 		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 1.0f));
 
 		// Calculate relative velocity and position
+		if (aCen == bCen) return;
 		vec3 sDiff = aCen - bCen;
 		vec3 sDiffNormal = glm::normalize(sDiff);
 		vec3 vDiff = physA.getV() - physB.getV();
@@ -300,11 +301,19 @@ namespace PhysicsMaths{
 				phys->setA(vec3());
 			}
 			else{ //speed up
-				phys->setA(glm::normalize(A + dir));
+				vec3 newA = A - dir;
+				if (newA != vec3()){
+					newA = glm::normalize(A - dir);
+				}
+				phys->setA(newA);
 			}
 		}
 		else{
-			phys->setA(glm::normalize(A + dir));
+			vec3 newA = A + dir;
+			if (newA != vec3()){
+				newA = glm::normalize(newA);
+			}
+			phys->setA(newA);
 		}
 #endif
 	}
@@ -326,22 +335,18 @@ if (glm::dot(dir, V) < 0) { // go faster
 	}
 	else{ //speed up
 		vec3 newA = A - dir;
-		if (newA == vec3()){
-			phys->setA(vec3());
+		if (newA != vec3()){
+			newA = glm::normalize(A - dir);
 		}
-		else{
-			phys->setA(glm::normalize(A - dir));
-		}
+		phys->setA(newA);
 	}
 }
 else{
 	vec3 newA = A - dir;
-	if (newA == vec3()){
-		phys->setA(vec3());
+	if (newA != vec3()){
+		newA = glm::normalize(A - dir);
 	}
-	else{
-		phys->setA(glm::normalize(A - dir));
-	}
+	phys->setA(newA);
 	
 }
 #endif

@@ -115,7 +115,11 @@ const vec3 PhysicsObject::getOrientation() const{
 }
 
 void PhysicsObject::setOrientation(vec3 & v){
-	orientation = glm::normalize(v);
+	vec3 newOrientation = v;
+	if (newOrientation != vec3()){
+		newOrientation = glm::normalize(v);
+	}
+	orientation = glm::normalize(newOrientation);
 }
 
 void PhysicsObject::setMass(const float mass){
