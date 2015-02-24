@@ -45,28 +45,34 @@ void Simulator::tick(float timestep){
 				PhysicsMaths::stepObject(physObj, THRESHOLD);
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
-					bool *keys = player->getKeysPressed();
-					if (keys[0] && !keys[1]){
+					bool up = player->getUp();
+					bool down = player->getDown();
+					bool left = player->getLeft();
+					bool right = player->getRight();
+					if (up | down| left | right) {
+						std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
+					}
+					if (up && !down){
 						PhysicsMaths::acceleratePlayer(gameObj->physComp);
 					}
-					if (keys[1] && !keys[0]){
+					if (down && !up){
 						PhysicsMaths::reversePlayer(gameObj->physComp);
 					}
-					if (keys[2] && !keys[3]){
+					if (right && !left){
 						PhysicsMaths::turnRight(gameObj->physComp);
 					}
-					if (keys[3] && !keys[2]){
+					if (left && !right){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
 					vec3 X = physObj.getX();
-					std::cout << "Object position:" << X.x << " " << X.y << " " << X.z;
+					//std::cout << "Object position:" << X.x << " " << X.y << " " << X.z;
 				}
 			}
 		processCollisions(gameObjects);
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
 			if (it->second->userControllable){
-				std::cout << "Physics: Sent item";
+				//std::cout << "Physics: Sent item";
 				objMan.queueUpdate(it->second);
 			}
 		}
