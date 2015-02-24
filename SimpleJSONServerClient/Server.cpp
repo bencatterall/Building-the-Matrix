@@ -40,7 +40,7 @@ void broadcast() {
 				sender.sendUpdateMessage(client, toSend);
 			}
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }
 
