@@ -158,31 +158,31 @@ namespace PhysicsMaths{
 		physB.setV(u2rejection + v2);
 	}
 
-	void stepObject(PhysicsObject & physObj, float timestep){
-		vec3 delS = UATtoS(physObj.getV(), physObj.getA(), timestep);
-		physObj.setX(physObj.getX() + delS);
-		vec3 newV = UATtoV(physObj.getV(), physObj.getA(), timestep);
-		vec3 acc = physObj.getA();
+	void stepObject(std::shared_ptr<PhysicsObject> physObj, float timestep){
+		vec3 delS = UATtoS(physObj->getV(), physObj->getA(), timestep);
+		physObj->setX(physObj->getX() + delS);
+		vec3 newV = UATtoV(physObj->getV(), physObj->getA(), timestep);
+		vec3 acc = physObj->getA();
 		// Drag calculations
 		float newVLength = glm::length(newV);
 		// If we are speeding up
 		if (glm::dot(acc, newV) > 0){
-			acc = acc - (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * 1.0f * newV;
+			acc = acc - (physObj->getQuadDrag()*newVLength + physObj->getLinDrag()) * 1.0f * newV;
 			if (glm::dot(acc, newV) < 0){
-				physObj.setA(vec3());
+				physObj->setA(vec3());
 			}
 			else{
-				physObj.setA(acc);
+				physObj->setA(acc);
 			}
 		}
 		else{
 			// If we are slowing down
 			if (glm::dot(acc, newV) < 0){
-				acc = acc + (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * 1.0f * newV;
-				physObj.setA(vec3());
+				acc = acc + (physObj->getQuadDrag()*newVLength + physObj->getLinDrag()) * 1.0f * newV;
+				physObj->setA(vec3());
 			}
 		}
-		physObj.setV(newV);
+		physObj->setV(newV);
 	}
 
 
@@ -284,17 +284,17 @@ namespace PhysicsMaths{
 
 	void acceleratePlayer(std::shared_ptr<PhysicsObject> phys){
 		vec3 dir = phys->getOrientation();
-		float speed = glm::length(dir);
+		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Consider further mechanisms for determining power
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys->setA(A + glm::normalize(dir)*(5.0f - speed));
+		phys->setA(A + dir*(5.0f - speed));
 	}
 
 
 	void reversePlayer(std::shared_ptr<PhysicsObject> phys){
 		vec3 dir = phys->getOrientation();
-		float speed = glm::length(dir);
+		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Adjust arbitrary constant according to playtesting
 		phys->setA(A + glm::normalize(dir)*(-2.0f-speed));
@@ -325,10 +325,5 @@ namespace PhysicsMaths{
 			sin(xRad) * cos(yRad),
 			sin(yRad)
 			);
-	}
-
-	vec3 convertDirectiontoYPR(const vec3 direction){
-		//TODO Implement me
-		return glm::normalize(direction);
 	}
 }
