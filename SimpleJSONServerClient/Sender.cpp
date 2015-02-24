@@ -19,7 +19,7 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std:
 		bool deleted = go.second->deleted;
 		if (go.second->userControllable){
 			//SERIALIZE AS A PLAYER OBJECT
-			std::cout << "serialising a player object\n";
+			//std::cout << "serialising a player object\n";
 			m[size] = 'P';
 			if (deleted) {
 				m[size + 1] = 'D';
@@ -31,11 +31,11 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std:
 			std::shared_ptr<Player> p = std::dynamic_pointer_cast<Player>(go.second);
 			int psize;
 			psize = (p->serialize(&m[size]));
-			std::cout << "player object size = " << psize << "\n";
+			//std::cout << "player object size = " << psize << "\n";
 			size += psize;
 		}
 		else {
-			std::cout << "serialising a game object\n";
+			//std::cout << "serialising a game object\n";
 			m[size] = 'O';
 			if (deleted) {
 				m[size + 1] = 'D';
@@ -46,11 +46,11 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std:
 			size += 2;
 			int gosize;
 			gosize = (go.second)->serialize(&m[size]);
-			std::cout << "game object size = " << gosize << "\n";
+			//std::cout << "game object size = " << gosize << "\n";
 			size += gosize;
 		}
 	}
-	std::cout << "total map size = " << size << "\n";
+	//std::cout << "total map size = " << size << "\n";
 	
 	Message mess = Message(client,m,size);
 	(this->toSend).pushToEnd(mess);

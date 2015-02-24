@@ -1,3 +1,5 @@
+#define TEST
+
 #include "Socket.hpp"
 #include "Address.hpp"
 #include "ClientState.hpp"
@@ -36,7 +38,7 @@ void broadcast() {
 			//send snapshot back
 			std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> toSend = updateManager.flushUpdates();
 			if (!toSend.empty()) {
-				std::cout << "Sending game snapshot \n";
+				//std::cout << "Sending game snapshot \n";
 				sender.sendUpdateMessage(client, toSend);
 			}
 		}
@@ -59,7 +61,6 @@ void physics() {
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
 
@@ -67,7 +68,7 @@ void respond_logout_client(Address toLogout) {
 	for (auto it = clients.begin(); it < clients.end(); it++) {
 		if ((it->getAddress() == toLogout.getAddress()) && (it->getPort() == toLogout.getPort())) {
 			clients.erase(it);
-			std::cout << "removed from current connected clients \n";
+			//std::cout << "removed from current connected clients \n";
 			break;
 		}
 		else {
@@ -79,7 +80,7 @@ void respond_logout_client(Address toLogout) {
 		if (((it2->first).getAddress() == toLogout.getAddress()) && ((it2->first).getPort() == toLogout.getPort())) {
 			updateManager.remove(it2->second);
 			playerIDs.erase(it2);
-			std::cout << "removed from current IDs \n";
+			//std::cout << "removed from current IDs \n";
 			break;
 		}
 	}
@@ -88,6 +89,8 @@ void respond_logout_client(Address toLogout) {
 void check_client_timeouts() {
 	while (contMain) {
 		for(auto it = clientStates.begin(); it != clientStates.end(); ) {
+			//TODO: Reimplemenet
+			/*
 			if (it->second.timedOut()) {
 				// logout client with address it->first
 				std::cerr << "Client " << it->first.getHBOAddress() << " timed out - logging it out" << std::endl;
@@ -96,13 +99,13 @@ void check_client_timeouts() {
 			} else {
 				++it;
 			}
-
+			*/
 		}
 		// loop through all clients and check if timed out
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 }
-
+#ifndef TEST
 int main(int argc, char **argv) {
 	//setup server to run on port
 	//expect IP address to be the localhost of the machine: "127.0.0.1"
@@ -211,28 +214,49 @@ int main(int argc, char **argv) {
 				}
 				char data[] = "LOGIN ACCEPTED     ";
 				char *idparts = (char*)&id;
-				data[15] = idparts[0];
-				data[16] = idparts[1];
-				data[17] = idparts[2];
-				data[18] = idparts[3];
+				//TODO: serialize using serializer
+				data[15] = idparts[3];
+				data[16] = idparts[2];
+				data[17] = idparts[1];
+				data[18] = idparts[0];
 				sender.sendMessage(recFrom, (unsigned char *)data, 20);
 			}
 			//HANDLE LOGOUTS
 			else if (prefixMatch(message, "LOGOUT")) {
 				std::cout << "Server received logout request \n";
-				respond_logout_client(recFrom);
-				clientStates.erase(recFrom);
+				//respond_logout_client(recFrom);
+				for (auto it = clients.begin(); it < clients.end(); it++) {
+					if ((it->getAddress() == recFrom.getAddress()) && (it->getPort() == recFrom.getPort())) {
+						clients.erase(it);
+						std::cout << "removed from current connected clients \n";
+						break;
+					}
+					else {
+						//const char data[] = "A FELLOW PLAYER HAS LEFT THE GAME";
+						//sender.sendAck((*it), data);
+					}
+				}
+				for (auto it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
+					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
+						//edit remove to prevent bug
+						updateManager.remove(it2->second);
+						playerIDs.erase(it2);
+						std::cout << "removed from current IDs \n";
+						break;
+					}
+				}
+				//clientStates.erase(recFrom);
 			}
 			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
 			else if (prefixMatch(message, "PRESSED")) {
 				char key = buffer[8];
-				std::cout << "User pressed " << key << "\n";
+				//std::cout << "User pressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
 						player->keyPressed(key);
-						updateManager.queueUpdate(player);
+						//updateManager.queueUpdate(player);
 						break;
 					}
 				}
@@ -240,13 +264,13 @@ int main(int argc, char **argv) {
 			}
 			else if (prefixMatch(message, "UNPRESSED")) {
 				char key = buffer[10];
-				std::cout << "User unpressed " << key << "\n";
+				//std::cout << "User unpressed " << key << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
 						player->keyUnpressed(key);
-						updateManager.queueUpdate(player);
+						//updateManager.queueUpdate(player);
 						break;
 					}
 				}
@@ -265,7 +289,7 @@ int main(int argc, char **argv) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
 						player->setPRY(pry[0], pry[1], pry[2]);
-						updateManager.queueUpdate(player);
+						//updateManager.queueUpdate(player);
 						break;
 					}
 				}
@@ -304,3 +328,4 @@ int main(int argc, char **argv) {
 
 	std::cout << "server killed";
 }
+#endif

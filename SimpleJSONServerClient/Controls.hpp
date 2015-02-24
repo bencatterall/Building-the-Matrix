@@ -18,6 +18,7 @@ class KeyboardControl {
 	public:
 		KeyboardControl(Serializer serializer, unsigned char *buffer, int &size);
 		KeyboardControl();
+		KeyboardControl(bool up,bool down,bool left,bool right);
 		~KeyboardControl();
 		KeyboardControl(const KeyboardControl& other);
 		void regKeyPress(char key);
@@ -25,5 +26,9 @@ class KeyboardControl {
 		bool *getCurrentControls();
 		int serialize(Serializer serializer, unsigned char *buffer);
 		int deserialize(Serializer serializer, unsigned char *buffer);
+		bool getUp();
+		bool getDown();
+		bool getLeft();
+		bool getRight();
 };
 #endif

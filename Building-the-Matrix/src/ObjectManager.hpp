@@ -18,6 +18,7 @@ class ObjectManager {
 	///
 	std::map<GameObjectID, std::shared_ptr<GameObject>> gameObjects;
 
+	std::map<GameObjectGlobalID, GameObjectID> gameObjectsGlobalToLocal;
 	///
 	/// Cache of GameObjectIDs
 	///
@@ -59,7 +60,8 @@ public:
 		}
 		return index;
 	}
-
+	GameObjectID getObjectLocalFromGlobalID(GameObjectGlobalID id);
+	bool setObjectGlobal(GameObjectGlobalID globalID, GameObjectID localID);
 	///
 	/// Add an object to the Object Manager
 	///

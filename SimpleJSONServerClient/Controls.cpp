@@ -1,6 +1,11 @@
 #include "Controls.hpp"
 
-KeyboardControl::KeyboardControl() {}
+KeyboardControl::KeyboardControl() {
+	(this->U_HELD) = false;
+	(this->D_HELD) = false;
+	(this->L_HELD) = false;
+	(this->R_HELD) = false;
+}
 
 KeyboardControl::~KeyboardControl() {}
 
@@ -66,4 +71,20 @@ int KeyboardControl::deserialize(Serializer serializer, unsigned char *buffer) {
 	(this->R_HELD) = serializer.unpackBool(&buffer[next], next);
 	(this->L_HELD) = serializer.unpackBool(&buffer[next], next);
 	return next;
+}
+
+bool KeyboardControl::getUp() {
+	return (this->U_HELD);
+}
+
+bool KeyboardControl::getDown() {
+	return (this->D_HELD);
+}
+
+bool KeyboardControl::getLeft() {
+	return (this->L_HELD);
+}
+
+bool KeyboardControl::getRight() {
+	return (this->R_HELD);
 }

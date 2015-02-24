@@ -24,14 +24,12 @@ void Game::init() {
 	for (int i = 0; i < numChunks; ++i) {
 		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
 	}
-	float xPos = 0.0f, yPos = 50.0f, zPos = -60.0;
-	player = std::make_shared<Player>(xPos, yPos, zPos);
-	objManager.addObject(player);
-
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 
+	if (!player)
+		return;
 	//Render all objects
 	ObjectManager& objManager = ObjectManager::getInstance();
 	std::vector<GameObjectID> objects = objManager.getObjects();
@@ -51,7 +49,7 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		glm::vec3 eyePos(playerPos.x, playerPos.y, playerPos.z);
 		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
 		objCameraMatrix = modelViewMatrix * objCameraMatrix;
-		std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
+		//std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
 		//Get the renderable component and bind in the shader
 		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();

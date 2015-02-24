@@ -4,6 +4,7 @@
 int LocationComponent::deserialize(unsigned char *buffer) {
 	Serializer serializer = Serializer();
 	int next = 0;
+	(this->position).x++;
 	(this->position).x = serializer.unpackFloat(buffer, next);
 	(this->position).y = serializer.unpackFloat(&buffer[next], next);
 	(this->position).z = serializer.unpackFloat(&buffer[next], next);

@@ -18,8 +18,8 @@ template<> std::shared_ptr<GameObject> SafeMap<GameObjectGlobalID, GameObject>::
 template<> void SafeMap<GameObjectGlobalID, GameObject>::deleteEntry(GameObjectGlobalID id) {
 	(this->lock).lock();
 	(this->map).erase(id);
-	std::cout << "thread deleted " << id << "\n";
 	(this->lock).unlock();
+	std::cout << "thread deleted " << id << "\n";
 }
 
 template<> void SafeMap<GameObjectGlobalID, GameObject>::put(GameObjectGlobalID id, std::shared_ptr<GameObject> object) {
@@ -29,13 +29,10 @@ template<> void SafeMap<GameObjectGlobalID, GameObject>::put(GameObjectGlobalID 
 		//already existed
 		//update the pointer
 		this->map.at(id) = object;
-		std::cout << "DUPLICATE" << std::endl;
 	}
-	std::cout << "thread inserted " << id << "\n";
 	(this->lock).unlock();
 }
 
-//TODO: RETURN POINTER IN THE MAP
 template<> std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> SafeMap<GameObjectGlobalID, GameObject>::getSnapshot(bool flush) {
 	(this->lock).lock();
 	//return a copy of the map to send to the clients
@@ -61,4 +58,12 @@ template<> std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> SafeMap<Gam
 	}
 	(this->lock).unlock();
 	return newMap;
+}
+
+template<> int SafeMap<GameObjectGlobalID, GameObject>::count(GameObjectGlobalID key) {
+	int exists;
+	(this->lock).lock();
+	exists = (this->map).count(key);
+	(this->lock).unlock();
+	return exists;
 }
