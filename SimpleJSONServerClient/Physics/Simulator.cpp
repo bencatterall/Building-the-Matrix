@@ -41,8 +41,7 @@ void Simulator::tick(float timestep){
 				//GameObject & gameObj = gameObjects.at(i);
 				std::shared_ptr<GameObject> gameObj = (it->second);
 				//PhysicsObject physObj = *gameObj.physComp;
-				PhysicsObject physObj = *(gameObj->physComp);
-				PhysicsMaths::stepObject(physObj, THRESHOLD);
+				PhysicsMaths::stepObject(gameObj->physComp, THRESHOLD);
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
 					bool up = player->getUp();
@@ -64,7 +63,7 @@ void Simulator::tick(float timestep){
 					if (left && !right){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
-					vec3 X = physObj.getX();
+					vec3 X = gameObj->physComp->getX();
 					//std::cout << "Object position:" << X.x << " " << X.y << " " << X.z;
 				}
 			}

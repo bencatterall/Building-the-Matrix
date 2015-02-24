@@ -158,31 +158,31 @@ namespace PhysicsMaths{
 		physB.setV(u2rejection + v2);
 	}
 
-	void stepObject(PhysicsObject & physObj, float timestep){
-		vec3 delS = UATtoS(physObj.getV(), physObj.getA(), timestep);
-		physObj.setX(physObj.getX() + delS);
-		vec3 newV = UATtoV(physObj.getV(), physObj.getA(), timestep);
-		vec3 acc = physObj.getA();
+	void stepObject(std::shared_ptr<PhysicsObject> physObj, float timestep){
+		vec3 delS = UATtoS(physObj->getV(), physObj->getA(), timestep);
+		physObj->setX(physObj->getX() + delS);
+		vec3 newV = UATtoV(physObj->getV(), physObj->getA(), timestep);
+		vec3 acc = physObj->getA();
 		// Drag calculations
 		float newVLength = glm::length(newV);
 		// If we are speeding up
 		if (glm::dot(acc, newV) > 0){
-			acc = acc - (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * 1.0f * newV;
+			acc = acc - (physObj->getQuadDrag()*newVLength + physObj->getLinDrag()) * 1.0f * newV;
 			if (glm::dot(acc, newV) < 0){
-				physObj.setA(vec3());
+				physObj->setA(vec3());
 			}
 			else{
-				physObj.setA(acc);
+				physObj->setA(acc);
 			}
 		}
 		else{
 			// If we are slowing down
 			if (glm::dot(acc, newV) < 0){
-				acc = acc + (physObj.getQuadDrag()*newVLength + physObj.getLinDrag()) * 1.0f * newV;
-				physObj.setA(vec3());
+				acc = acc + (physObj->getQuadDrag()*newVLength + physObj->getLinDrag()) * 1.0f * newV;
+				physObj->setA(vec3());
 			}
 		}
-		physObj.setV(newV);
+		physObj->setV(newV);
 	}
 
 

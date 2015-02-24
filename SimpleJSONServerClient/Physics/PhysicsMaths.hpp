@@ -42,7 +42,7 @@ namespace PhysicsMaths
 	//void handleCollision(GameObjectGlobalID, GameObjectGlobalID);
 	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map);
 	void handleCollision(GameObject &, GameObject &);
-	void stepObject(PhysicsObject &, float);
+	void stepObject(std::shared_ptr<PhysicsObject>, float);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> data);
 

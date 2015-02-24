@@ -87,6 +87,8 @@ void respond_logout_client(Address toLogout) {
 void check_client_timeouts() {
 	while (contMain) {
 		for(auto it = clientStates.begin(); it != clientStates.end(); ) {
+			//TODO: Reimplemenet
+			/*
 			if (it->second.timedOut()) {
 				// logout client with address it->first
 				std::cerr << "Client " << it->first.getHBOAddress() << " timed out - logging it out" << std::endl;
@@ -95,7 +97,7 @@ void check_client_timeouts() {
 			} else {
 				++it;
 			}
-
+			*/
 		}
 		// loop through all clients and check if timed out
 		std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -210,10 +212,11 @@ int main(int argc, char **argv) {
 				}
 				char data[] = "LOGIN ACCEPTED     ";
 				char *idparts = (char*)&id;
-				data[15] = idparts[0];
-				data[16] = idparts[1];
-				data[17] = idparts[2];
-				data[18] = idparts[3];
+				//TODO: serialize using serializer
+				data[15] = idparts[3];
+				data[16] = idparts[2];
+				data[17] = idparts[1];
+				data[18] = idparts[0];
 				sender.sendMessage(recFrom, (unsigned char *)data, 20);
 			}
 			//HANDLE LOGOUTS

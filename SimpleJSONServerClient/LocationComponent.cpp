@@ -2,7 +2,7 @@
 
 int LocationComponent::serialize(Serializer serializer, unsigned char *buffer) {
 	int next = 0;
-	next += serializer.packFloat(buffer,position.x);
+	next += serializer.packFloat(buffer,position.x++);
 	next += serializer.packFloat(&buffer[next], position.y);
 	next += serializer.packFloat(&buffer[next], position.z);
 	float *floats = glm::value_ptr(rotationMatrix);
