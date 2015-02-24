@@ -48,7 +48,7 @@ void Simulator::tick(float timestep){
 					bool down = player->getDown();
 					bool left = player->getLeft();
 					bool right = player->getRight();
-					if (up | down| left | right) {
+					if (up || down || left || right) {
 						std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
 					}
 					if (up && !down){
@@ -63,8 +63,10 @@ void Simulator::tick(float timestep){
 					if (left && !right){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
-					vec3 X = gameObj->physComp->getX();
-					//std::cout << "Object position:" << X.x << " " << X.y << " " << X.z;
+					if (left && right && up && down){
+						vec3 X = gameObj->physComp->getX();
+						std::cout << "Object position:" << X.x << " " << X.y << " " << X.z << "\n";
+					}	
 				}
 			}
 		processCollisions(gameObjects);
