@@ -24,14 +24,12 @@ void Game::init() {
 	for (int i = 0; i < numChunks; ++i) {
 		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
 	}
-	float xPos = 0.0f, yPos = 50.0f, zPos = -60.0;
-	player = std::make_shared<Player>(xPos, yPos, zPos);
-	objManager.addObject(player);
-
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 
+	if (!player)
+		return;
 	//Render all objects
 	ObjectManager& objManager = ObjectManager::getInstance();
 	std::vector<GameObjectID> objects = objManager.getObjects();

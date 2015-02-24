@@ -6,6 +6,7 @@
 #include "../src/Common.hpp"
 #include "Serializer.hpp"
 #include "Player.hpp"
+#include "Game.hpp"
 
 #include <conio.h>
 #include <iostream>
@@ -369,6 +370,8 @@ void Display::run() {
 		std::cout << "instantiating client failed";
 	}
 	//try login here
+	Serializer serializer;
+	int userID;
 	bool cont = true;
 	int attempts = 0;
 	unsigned char *response = new unsigned char[15];
@@ -382,6 +385,8 @@ void Display::run() {
 			std::cout << "received " << message << "\n";
 			if (message.compare(0, 14, "LOGIN ACCEPTED") == 0) {
 				//successful
+				int p = 15;
+				userID = serializer.unpackInt(&response[p], p);
 				std::cout << "login to game server successful\n";
 				cont = false;
 			}
@@ -419,7 +424,7 @@ void Display::run() {
 		//AT THE MOMENT THIS SENDS MESSAGES TOO FAST FOR THE SERVER TO HANDLE QUICKLY ENOUGH
 		//client.sendPitchRollYaw(getHeadOrientation());
 
-		Serializer serializer = Serializer();
+		
 		//networking get updates;
 		unsigned char *buffer = new unsigned char[1024];
 		int updateSize;
@@ -428,7 +433,8 @@ void Display::run() {
 			int pos = 0;
 			while (pos < updateSize) {
 				int temp;
-				int ID = serializer.unpackInt(&buffer[pos+1],temp);
+				int globalID = serializer.unpackInt(&buffer[pos+1],temp);
+				int localID = objectManager.getObjectLocalFromGlobalID(globalID);
 				bool toDelete = false;
 				if (buffer[pos + 1] == 'D') {
 					toDelete = true;
@@ -436,27 +442,38 @@ void Display::run() {
 				if (buffer[pos] == 'P') {
 					//player object
 					std::shared_ptr<Player> player;
-					if (objectManager.exists(ID)) {
-						player = std::dynamic_pointer_cast<Player>(objectManager.getObject(ID));
+					if (objectManager.exists(localID)) {
+						player = std::dynamic_pointer_cast<Player>(objectManager.getObject(localID));
 					}
 					else {
 						float x, y, z = 0.0f;
 						player = std::make_shared<Player>(x,y,z);
+						player->setGlobalID(userID);
+						objectManager.setObjectGlobal(userID, player->getID());
+						//If this is the current player
+						if (globalID == userID) {
+							//TODO: Remove this HACK
+							Display* disp = (Display*)this;
+							(dynamic_cast<Game*>(disp))->player = player;
+						}
 					}
 					pos += 2;
 					if (!toDelete) {
 						pos += player->deserialize(&buffer[pos]);
-						objectManager.addObject(player);
+						if (!objectManager.exists(localID)) {
+							objectManager.addObject(player);
+						}
 					}
 					else {
-						objectManager.removeObject(ID);
+						objectManager.removeObject(localID);
 					}
+
 				}
 				else {
 					//game object
 					std::shared_ptr<GameObject> object;
-					if (objectManager.exists(ID)) {
-						object = objectManager.getObject(ID);
+					if (objectManager.exists(localID)) {
+						object = objectManager.getObject(localID);
 					}
 					else {
 						object = std::make_shared<GameObject>();
@@ -464,10 +481,12 @@ void Display::run() {
 					pos += 2;
 					if (!toDelete) {
 						pos += object->deserialize(&buffer[pos]);
-						objectManager.addObject(object);
+						if (!objectManager.exists(localID)) {
+							objectManager.addObject(object);
+						}
 					}
 					else {
-						objectManager.removeObject(ID);
+						objectManager.removeObject(localID);
 					}
 				}
 			}

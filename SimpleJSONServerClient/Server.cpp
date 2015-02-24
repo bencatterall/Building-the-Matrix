@@ -212,10 +212,11 @@ int main(int argc, char **argv) {
 				}
 				char data[] = "LOGIN ACCEPTED     ";
 				char *idparts = (char*)&id;
-				data[15] = idparts[0];
-				data[16] = idparts[1];
-				data[17] = idparts[2];
-				data[18] = idparts[3];
+				//TODO: serialize using serializer
+				data[15] = idparts[3];
+				data[16] = idparts[2];
+				data[17] = idparts[1];
+				data[18] = idparts[0];
 				sender.sendMessage(recFrom, (unsigned char *)data, 20);
 			}
 			//HANDLE LOGOUTS

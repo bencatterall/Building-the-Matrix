@@ -47,7 +47,7 @@ class Display {
 	void findHeadOrientation();
 public:
 	Display();
-	~Display();
+	virtual ~Display();
 	void updateRenderTarget(int width, int height);
 	void Output();
 	void convertQuaternionToMatrix(const float* quat, float* mat);
