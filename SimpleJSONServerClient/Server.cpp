@@ -1,3 +1,5 @@
+#define TEST
+
 #include "Socket.hpp"
 #include "Address.hpp"
 #include "ClientState.hpp"
@@ -103,7 +105,7 @@ void check_client_timeouts() {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 }
-
+#ifndef TEST
 int main(int argc, char **argv) {
 	//setup server to run on port
 	//expect IP address to be the localhost of the machine: "127.0.0.1"
@@ -325,3 +327,4 @@ int main(int argc, char **argv) {
 
 	std::cout << "server killed";
 }
+#endif

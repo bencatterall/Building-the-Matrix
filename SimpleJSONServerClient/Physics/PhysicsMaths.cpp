@@ -325,11 +325,24 @@ if (glm::dot(dir, V) < 0) { // go faster
 		phys->setA(vec3());
 	}
 	else{ //speed up
-		phys->setA(glm::normalize(A - dir));
+		vec3 newA = A - dir;
+		if (newA == vec3()){
+			phys->setA(vec3());
+		}
+		else{
+			phys->setA(glm::normalize(A - dir));
+		}
 	}
 }
 else{
-	phys->setA(glm::normalize(A - dir));
+	vec3 newA = A - dir;
+	if (newA == vec3()){
+		phys->setA(vec3());
+	}
+	else{
+		phys->setA(glm::normalize(A - dir));
+	}
+	
 }
 #endif
 	}

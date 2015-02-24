@@ -33,14 +33,10 @@ void Simulator::tick(float timestep){
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects = objMan.getState();
 
 		// Step by THRESHOLD
-		//THIS WAS CRASHING WHEN GAME OBJECTS SIZE WAS 0
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
-		//for (size_t i = 0; i < gameObjects.size(); i++)
 		for (it = gameObjects.begin(); it != gameObjects.end();it++)
 			{
-				//GameObject & gameObj = gameObjects.at(i);
 				std::shared_ptr<GameObject> gameObj = (it->second);
-				//PhysicsObject physObj = *gameObj.physComp;
 				PhysicsMaths::stepObject(gameObj->physComp, THRESHOLD);
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
@@ -87,17 +83,13 @@ void Simulator::tick(float timestep){
 void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects){
 	UpdateManager & objMan = UpdateManager::getInstance();
 	// O(n^2) collision check
-	//THIS WAS CRASHING WHEN GAME OBJECTS SIZE WAS 0
 	if (gameObjects.size() > 0) {
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it2;
-		//for (size_t i = 0; i < gameObjects.size(); i++)
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
-			//GameObject & gameObj = gameObjects.at(i);
 			std::shared_ptr<GameObject> gameObj = (it->second);
 			PhysicsObject currentObj = *(gameObj->physComp);
-			//for (size_t = i; j < gameObjects.size(); j++)
 			for ((it2 = it)++; it2 != gameObjects.end(); it2++)
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
