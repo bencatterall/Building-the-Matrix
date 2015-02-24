@@ -109,7 +109,7 @@ float PhysicsObject::getQuadDrag() const{
 
 const vec3 PhysicsObject::getOrientation() const{
 	if (orientation == vec3()){
-		return vec3(0,0,1);
+		return vec3(0,0,-1);
 	}
 	return orientation;
 }

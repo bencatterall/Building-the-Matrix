@@ -162,6 +162,7 @@ namespace PhysicsMaths{
 		vec3 delS = UATtoS(physObj->getV(), physObj->getA(), timestep);
 		physObj->setX(physObj->getX() + delS);
 		vec3 newV = UATtoV(physObj->getV(), physObj->getA(), timestep);
+#ifdef COMPLEX_PHYSICS
 		vec3 acc = physObj->getA();
 		// Drag calculations
 		float newVLength = glm::length(newV);
@@ -182,6 +183,7 @@ namespace PhysicsMaths{
 				physObj->setA(vec3());
 			}
 		}
+#endif //COMPLEX_PHYSICS
 		physObj->setV(newV);
 	}
 
@@ -283,12 +285,28 @@ namespace PhysicsMaths{
 	}
 
 	void acceleratePlayer(std::shared_ptr<PhysicsObject> phys){
+#ifdef COMPLEX_PHYSICS
 		vec3 dir = phys->getOrientation();
 		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Consider further mechanisms for determining power
 		// TODO: Adjust arbitrary constant according to playtesting
 		phys->setA(A + dir*(5.0f - speed));
+#else
+		vec3 dir = phys->getOrientation();
+		vec3 A = phys->getA(), V = phys->getV();
+		if (glm::dot(dir, V) > 0) { // go faster
+			if (glm::length(V) > 5){ //max speed
+				phys->setA(vec3());
+			}
+			else{ //speed up
+				phys->setA(glm::normalize(A + dir));
+			}
+		}
+		else{
+			phys->setA(glm::normalize(A + dir));
+		}
+#endif
 	}
 
 
@@ -297,7 +315,7 @@ namespace PhysicsMaths{
 		float speed = glm::length(phys->getV());
 		vec3 A = phys->getA();
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys->setA(A + glm::normalize(dir)*(-2.0f-speed));
+		phys->setA(A + dir*(-2.0f-speed));
 	}
 
 	void turnLeft(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
