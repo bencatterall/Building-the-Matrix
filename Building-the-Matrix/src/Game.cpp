@@ -49,7 +49,7 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		glm::vec3 eyePos(playerPos.x, playerPos.y, playerPos.z);
 		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
 		objCameraMatrix = modelViewMatrix * objCameraMatrix;
-		std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
+		//std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
 		//Get the renderable component and bind in the shader
 		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();

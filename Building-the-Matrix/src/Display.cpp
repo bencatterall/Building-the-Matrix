@@ -433,7 +433,7 @@ void Display::run() {
 			int pos = 0;
 			while (pos < updateSize) {
 				int temp;
-				int globalID = serializer.unpackInt(&buffer[pos+1],temp);
+				int globalID = serializer.unpackInt(&buffer[pos+2],temp);
 				int localID = objectManager.getObjectLocalFromGlobalID(globalID);
 				bool toDelete = false;
 				if (buffer[pos + 1] == 'D') {

@@ -15,8 +15,9 @@ GameObjectID ObjectManager::getObjectLocalFromGlobalID(GameObjectGlobalID id) {
 	}
 	else {
 		//There is very likely a bug somewhere as an invalid ID has been used
-		assert(search != gameObjectsGlobalToLocal.end());
-		exit(EXIT_FAILURE);
+		//assert(search != gameObjectsGlobalToLocal.end());
+		//exit(EXIT_FAILURE);
+		return 0; // NO ID
 	}
 }
 
@@ -55,6 +56,8 @@ std::shared_ptr<GameObject> ObjectManager::getObject(GameObjectID id){
 
 bool ObjectManager::exists(GameObjectID id)
 {
+	if (id == 0)
+		return false;
 	//Find the object in the map
 	auto search = gameObjects.find(id);
 	return (search != gameObjects.end());
