@@ -35,7 +35,6 @@ template<> void SafeQueue<Update>::pushToEnd(Update update) {
 	(this->lock).lock();
 	(this->queue).push(update);
 	(this->lock).unlock();
-	std::cout << "pushed element to pending updates queue, size now " << (this->queue).size() << "\n";
 }
 
 template<> SafeQueue<Message>::SafeQueue() {
@@ -62,7 +61,6 @@ template<> Message SafeQueue<Message>::popFromFront() {
 		Message u = (this->queue).front();
 		(this->queue).pop();
 		(this->lock).unlock();
-		std::cout << "popped element from messages to send queue, size now " << (this->queue).size() << "\n";
 		return u;
 	}
 }
@@ -71,5 +69,5 @@ template<> void SafeQueue<Message>::pushToEnd(Message message) {
 	(this->lock).lock();
 	(this->queue).push(message);
 	(this->lock).unlock();
-	std::cout << "pushed element to messages to send queue, size now " << (this->queue).size() << "\n";
+	//std::cout << "pushed element to messages to send queue, size now " << (this->queue).size() << "\n";
 }

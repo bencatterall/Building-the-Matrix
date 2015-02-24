@@ -1,4 +1,5 @@
 #include "UpdateManager.hpp"
+#include "Player.hpp"
 #include <iostream>
 
 UpdateManager::UpdateManager() {
@@ -26,7 +27,7 @@ GameObjectGlobalID UpdateManager::getNextObjectID() {
 UpdateManager::~UpdateManager(){}
 
 void UpdateManager::queueUpdate(std::shared_ptr<GameObject> object) {
-	std::cout << "pushed new edit\n";
+	//std::cout << "pushed new edit\n";
 	(this->pendingUpdates).pushToEnd(Update(object->getID(), object));
 }
 
@@ -54,6 +55,14 @@ void UpdateManager::run() {
 			Update u = (this->pendingUpdates).popFromFront();
 			if ((u.getEditedObject())->deleted) {
 				(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
+			}
+			if ((this->gameObjectsWorldState).count(u.getObjectID()) == 1) {
+				if (u.getEditedObject()->userControllable) {
+					std::shared_ptr<Player> old = std::dynamic_pointer_cast<Player>((this->gameObjectsWorldState).get(u.getObjectID()));
+					std::shared_ptr<Player> newObj = std::dynamic_pointer_cast<Player>(u.getEditedObject());
+					newObj->setPRY(old->getPitch(), old->getRoll(), old->getYaw());
+					newObj->setControl(old->getControl());
+				}
 			}
 			(this->gameObjectsWorldState).put(u.getObjectID(),u.getEditedObject());
 			(this->updatedObjectsForClients).put(u.getObjectID(), u.getEditedObject());

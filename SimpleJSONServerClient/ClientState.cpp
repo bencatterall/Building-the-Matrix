@@ -1,10 +1,10 @@
 #include "ClientState.hpp"
 
-ClientState::ClientState(): timeout(6) {
+ClientState::ClientState(): timeout(10000) {
     this->bump();
 }
 
-ClientState::ClientState(Address address) : client_address(address), timeout(6) {
+ClientState::ClientState(Address address) : client_address(address), timeout(10000) {
     this->bump();
 }
 
