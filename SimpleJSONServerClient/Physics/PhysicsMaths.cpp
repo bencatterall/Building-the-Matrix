@@ -356,10 +356,17 @@ else{
 }
 #endif
 	}
-
+#define SMALL_COS 0.999876632481660598638907127731252174499277787538006150898362f
+#define SMALL_SIN 0.015707317311820675753295353309906770086948450733778946832100f
+#define USE_SMALL_TRIGS
 	void turnLeft(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
-		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
-		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
+#ifdef USE_SMALL_TRIGS
+		Quaternion rot = Quaternion(SMALL_COS, 0.0f, SMALL_SIN, 0.0f);
+#else
+		Quaternion rot = Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f)
+#endif
+		turnObject(phys, rot, &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, rot, &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
