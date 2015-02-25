@@ -207,7 +207,8 @@ int main(int argc, char **argv) {
 					id = updateManager.getNextObjectID();
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
 					Player player = Player(id);
-					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
+					std::shared_ptr<GameObject> p = std::make_shared<Player>(player); 
+					
 					updateManager.queueUpdate(p);
 				}
 				char data[] = "LOGIN ACCEPTED     ";

@@ -203,7 +203,7 @@ void Chunk::init() {
 				if (baseY -1 > 0) {
 					if (chunkData[baseX][baseY - 1][baseZ] == 0) {
 						if (cubeTypeToId.at(chunkData[baseX][baseY][baseZ]) == "grass") {
-
+							setupFaceData(baseX, baseY - 1, baseZ, xPos, yPos, zPos, &numVertices, "stone", texture, cubeBottomFace, cubeBottomTextureCoords);
 						}
 						else {
 							setupFaceData(baseX, baseY - 1, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBottomFace, cubeBottomTextureCoords);
@@ -216,7 +216,13 @@ void Chunk::init() {
 				//We do if there is not a cube in front
 				if (baseZ + 1 < zLength) {
 					if (chunkData[baseX][baseY][baseZ + 1] == 0) {
-						setupFaceData(baseX, baseY, baseZ + 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeFrontFace, cubeFrontTextureCoords);
+						if (cubeTypeToId.at(chunkData[baseX][baseY][baseZ]) == "grass") {
+							setupFaceData(baseX, baseY, baseZ + 1, xPos, yPos, zPos, &numVertices, "stone", texture, cubeFrontFace, cubeFrontTextureCoords);
+						}
+						else {
+							setupFaceData(baseX, baseY, baseZ + 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeFrontFace, cubeFrontTextureCoords);
+						}
+						//setupFaceData(baseX, baseY, baseZ + 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeFrontFace, cubeFrontTextureCoords);
 					}
 				}
 
@@ -225,7 +231,13 @@ void Chunk::init() {
 				//We do if there is not a cube behind
 				if (baseZ - 1 > 0) {
 					if (chunkData[baseX][baseY][baseZ - 1] == 0) {
-						setupFaceData(baseX, baseY, baseZ - 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBackFace, cubeBackTextureCoords);
+						if (cubeTypeToId.at(chunkData[baseX][baseY][baseZ]) == "grass") {
+							setupFaceData(baseX, baseY, baseZ - 1, xPos, yPos, zPos, &numVertices, "stone", texture, cubeBackFace, cubeBackTextureCoords);
+						}
+						else {
+							setupFaceData(baseX, baseY, baseZ - 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBackFace, cubeBackTextureCoords);
+						}
+						//setupFaceData(baseX, baseY, baseZ - 1, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeBackFace, cubeBackTextureCoords);
 					}
 				}
 
@@ -234,7 +246,13 @@ void Chunk::init() {
 				//We do if there is not a cube to the left
 				if (baseX - 1 > 0) {
 					if (chunkData[baseX - 1][baseY][baseZ] == 0) {
-						setupFaceData(baseX - 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeLeftFace, cubeLeftTextureCoords);
+						if (cubeTypeToId.at(chunkData[baseX][baseY][baseZ]) == "grass") {
+							setupFaceData(baseX - 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, "stone", texture, cubeLeftFace, cubeLeftTextureCoords);
+						}
+						else {
+							setupFaceData(baseX - 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeLeftFace, cubeLeftTextureCoords);
+						}
+						//setupFaceData(baseX - 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeLeftFace, cubeLeftTextureCoords);
 					}
 				}
 
@@ -243,7 +261,13 @@ void Chunk::init() {
 				//We do if there is not a cube to the right
 				if (baseX + 1 < xLength) {
 					if (chunkData[baseX+1][baseY][baseZ] == 0) {
-						setupFaceData(baseX + 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeRightFace, cubeRightTextureCoords);
+						if (cubeTypeToId.at(chunkData[baseX][baseY][baseZ]) == "grass") {
+							setupFaceData(baseX + 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, "stone", texture, cubeRightFace, cubeRightTextureCoords);
+						}
+						else {
+							setupFaceData(baseX + 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeRightFace, cubeRightTextureCoords);
+						}
+						//setupFaceData(baseX + 1, baseY, baseZ, xPos, yPos, zPos, &numVertices, cubeTypeToId.at(chunkData[baseX][baseY][baseZ]), texture, cubeRightFace, cubeRightTextureCoords);
 					}
 				}
 				/*	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
