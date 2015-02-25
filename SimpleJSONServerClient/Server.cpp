@@ -207,6 +207,7 @@ int main(int argc, char **argv) {
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
 					Player player = Player(id);
 					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
+					p->locComp->setPosition(glm::vec3(0.0f,50.0f,0.0f));
 					updateManager.queueUpdate(p);
 				}
 				char data[] = "LOGIN ACCEPTED     ";

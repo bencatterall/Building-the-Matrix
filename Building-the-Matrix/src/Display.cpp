@@ -364,7 +364,7 @@ void Display::run() {
 	//Create objects
 	
 	try {
-		client.setAddresses(Address(std::string("127.0.0.1"), 9898), Address(std::string("127.0.0.1"), 9899));
+		client.setAddresses(Address(std::string("192.168.1.1"), 9898), Address(std::string("192.168.1.1"), 9899));
 	}
 	catch (...){
 		std::cout << "instantiating client failed";
@@ -446,7 +446,7 @@ void Display::run() {
 						player = std::dynamic_pointer_cast<Player>(objectManager.getObject(localID));
 					}
 					else {
-						float x, y, z = 0.0f;
+						float x = 0.0f, y = 0.0f, z = 0.0f;
 						player = std::make_shared<Player>(x,y,z);
 						player->setGlobalID(userID);
 						objectManager.setObjectGlobal(userID, player->getID());

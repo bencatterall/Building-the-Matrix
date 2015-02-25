@@ -49,7 +49,7 @@ void Simulator::tick(float timestep){
 					bool left = player->getLeft();
 					bool right = player->getRight();
 					if (up || down || left || right) {
-						std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
+						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
 					}
 					if (up && !down){
 						PhysicsMaths::acceleratePlayer(gameObj->physComp);
