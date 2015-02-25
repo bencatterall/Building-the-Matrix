@@ -1,4 +1,4 @@
-#define TEST
+//#define TEST
 #ifdef TEST
 #include "../../Building-The-Matrix/Dependencies/Catch/catch.hpp"
 #include "../Player.hpp"
