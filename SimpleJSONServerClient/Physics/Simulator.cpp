@@ -77,13 +77,8 @@ void Simulator::tick(float timestep){
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
 			if (it->second->userControllable){
-				if (it->second->deleted){
-					//std::cout << "Ignored deleted item"
-				}
-				else{
-					//std::cout << "Physics: Sent item";
-					objMan.queueUpdate(it->second);
-				}
+				//std::cout << "Physics: Sent item";
+				objMan.queueUpdate(it->second);
 			}
 		}
 	}

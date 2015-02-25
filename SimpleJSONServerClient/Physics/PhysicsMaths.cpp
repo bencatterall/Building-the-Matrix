@@ -371,7 +371,13 @@ else{
 	}
 
 	void turnRight(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
-		turnLeft(phys, -turnSpeed);
+#ifdef USE_SMALL_TRIGS
+		Quaternion rot = Quaternion(SMALL_COS, 0.0f, -SMALL_SIN, 0.0f);
+#else
+		Quaternion rot = Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f)
+#endif
+			turnObject(phys, rot, &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, rot, &PhysicsObject::getV, &PhysicsObject::setV);
 	}
 
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
