@@ -301,9 +301,9 @@ namespace PhysicsMaths{
 				phys->setA(vec3());
 			}
 			else{ //speed up
-				vec3 newA = A - dir;
+				vec3 newA = A + dir;
 				if (newA != vec3()){
-					newA = glm::normalize(A - dir);
+					newA = glm::normalize(newA);
 				}
 				phys->setA(newA);
 			}
