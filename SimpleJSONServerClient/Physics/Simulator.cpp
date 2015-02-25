@@ -36,6 +36,10 @@ void Simulator::tick(float timestep){
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
 		for (it = gameObjects.begin(); it != gameObjects.end();it++)
 			{
+			if (it->second->deleted){
+				//std::cout << "Ignored deleted item"
+				continue;
+			}
 				std::shared_ptr<GameObject> gameObj = (it->second);
 				PhysicsMaths::stepObject(gameObj->physComp, THRESHOLD);
 				if (gameObj->userControllable){
