@@ -296,11 +296,15 @@ namespace PhysicsMaths{
 #else
 		vec3 dir = phys->getOrientation();
 		vec3 A = phys->getA(), V = phys->getV();
-		if (glm::dot(dir, V) > 0) { // go faster
-			if (glm::length(V) > 5){ //max speed
+		// If we are moving forwards
+		if (glm::dot(dir, V) > 0) {
+			// If we are max speed
+			if (glm::length(V) > 5){
+				// Stop accelerating.
 				phys->setA(vec3());
 			}
-			else{ //speed up
+			else{ 
+				//We aren't at max speed yet, accelerate
 				vec3 newA = A + dir;
 				if (newA != vec3()){
 					newA = glm::normalize(newA);
@@ -309,6 +313,7 @@ namespace PhysicsMaths{
 			}
 		}
 		else{
+			// We are moving backwards - accelerate forwards
 			vec3 newA = A + dir;
 			if (newA != vec3()){
 				newA = glm::normalize(newA);
