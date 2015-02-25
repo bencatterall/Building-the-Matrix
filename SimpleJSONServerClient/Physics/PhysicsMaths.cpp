@@ -103,6 +103,7 @@ namespace PhysicsMaths{
 		bCen = vec3(matB * glm::vec4(bCen.x, bCen.y, bCen.z, 1.0f));
 
 		// Calculate relative velocity and position
+		if (aCen == bCen) return;
 		vec3 sDiff = aCen - bCen;
 		vec3 sDiffNormal = glm::normalize(sDiff);
 		vec3 vDiff = physA.getV() - physB.getV();
@@ -295,16 +296,29 @@ namespace PhysicsMaths{
 #else
 		vec3 dir = phys->getOrientation();
 		vec3 A = phys->getA(), V = phys->getV();
-		if (glm::dot(dir, V) > 0) { // go faster
-			if (glm::length(V) > 5){ //max speed
+		// If we are moving forwards
+		if (glm::dot(dir, V) > 0) {
+			// If we are max speed
+			if (glm::length(V) > 5){
+				// Stop accelerating.
 				phys->setA(vec3());
 			}
-			else{ //speed up
-				phys->setA(glm::normalize(A + dir));
+			else{ 
+				//We aren't at max speed yet, accelerate
+				vec3 newA = A + dir;
+				if (newA != vec3()){
+					newA = glm::normalize(newA);
+				}
+				phys->setA(newA);
 			}
 		}
 		else{
-			phys->setA(glm::normalize(A + dir));
+			// We are moving backwards - accelerate forwards
+			vec3 newA = A + dir;
+			if (newA != vec3()){
+				newA = glm::normalize(newA);
+			}
+			phys->setA(newA);
 		}
 #endif
 	}
@@ -325,23 +339,45 @@ if (glm::dot(dir, V) < 0) { // go faster
 		phys->setA(vec3());
 	}
 	else{ //speed up
-		phys->setA(glm::normalize(A - dir));
+		vec3 newA = A - dir;
+		if (newA != vec3()){
+			newA = glm::normalize(A - dir);
+		}
+		phys->setA(newA);
 	}
 }
 else{
-	phys->setA(glm::normalize(A - dir));
+	vec3 newA = A - dir;
+	if (newA != vec3()){
+		newA = glm::normalize(A - dir);
+	}
+	phys->setA(newA);
+	
 }
 #endif
 	}
-
+#define SMALL_COS 0.999876632481660598638907127731252174499277787538006150898362f
+#define SMALL_SIN 0.015707317311820675753295353309906770086948450733778946832100f
+#define USE_SMALL_TRIGS
 	void turnLeft(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
-		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
-		turnObject(phys, Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
+#ifdef USE_SMALL_TRIGS
+		Quaternion rot = Quaternion(SMALL_COS, 0.0f, SMALL_SIN, 0.0f);
+#else
+		Quaternion rot = Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f)
+#endif
+		turnObject(phys, rot, &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, rot, &PhysicsObject::getV, &PhysicsObject::setV);
 
 	}
 
 	void turnRight(std::shared_ptr<PhysicsObject> phys, float turnSpeed){
-		turnLeft(phys, -turnSpeed);
+#ifdef USE_SMALL_TRIGS
+		Quaternion rot = Quaternion(SMALL_COS, 0.0f, -SMALL_SIN, 0.0f);
+#else
+		Quaternion rot = Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f)
+#endif
+			turnObject(phys, rot, &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+		turnObject(phys, rot, &PhysicsObject::getV, &PhysicsObject::setV);
 	}
 
 	void turnObject(std::shared_ptr<PhysicsObject> phys, Quaternion rotator, const vec3 (PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){

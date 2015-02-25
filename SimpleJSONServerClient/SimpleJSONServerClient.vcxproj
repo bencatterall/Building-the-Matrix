@@ -95,6 +95,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="LocationComponent.cpp" />
     <ClCompile Include="Message.cpp" />
+    <ClCompile Include="Physics\PhysTest.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Physics\AABB.cpp" />
     <ClCompile Include="Physics\PhysicsMaths.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="Catch.cpp" />
     <ClCompile Include="Update.cpp" />
     <ClCompile Include="UpdateManager.cpp" />
   </ItemGroup>

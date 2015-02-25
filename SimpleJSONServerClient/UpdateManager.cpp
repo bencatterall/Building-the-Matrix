@@ -54,7 +54,9 @@ void UpdateManager::run() {
 		if (!(this->pendingUpdates).isEmpty()) {
 			Update u = (this->pendingUpdates).popFromFront();
 			if ((u.getEditedObject())->deleted) {
-				(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
+				if ((this->gameObjectsWorldState).count(u.getObjectID()) != 0) {
+					(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
+				}
 			}
 			if ((this->gameObjectsWorldState).count(u.getObjectID()) == 1) {
 				if (u.getEditedObject()->userControllable) {
@@ -62,6 +64,7 @@ void UpdateManager::run() {
 					std::shared_ptr<Player> newObj = std::dynamic_pointer_cast<Player>(u.getEditedObject());
 					newObj->setPRY(old->getPitch(), old->getRoll(), old->getYaw());
 					newObj->setControl(old->getControl());
+					newObj->deleted = (old->deleted);
 				}
 			}
 			(this->gameObjectsWorldState).put(u.getObjectID(),u.getEditedObject());

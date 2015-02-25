@@ -10,7 +10,7 @@ PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3()), 
-	orientation(vec3(0,1,0)), friction(0.0f), airRes(0.0f)
+	orientation(vec3(0,0,-1)), friction(0.0f), airRes(0.0f)
 {
 	if (locationComp == nullptr){
 		locationComp = std::make_shared<LocationComponent>();
@@ -115,7 +115,11 @@ const vec3 PhysicsObject::getOrientation() const{
 }
 
 void PhysicsObject::setOrientation(vec3 & v){
-	orientation = glm::normalize(v);
+	vec3 newOrientation = v;
+	if (newOrientation != vec3()){
+		newOrientation = glm::normalize(v);
+	}
+	orientation = glm::normalize(newOrientation);
 }
 
 void PhysicsObject::setMass(const float mass){

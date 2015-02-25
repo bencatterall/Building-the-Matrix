@@ -1,3 +1,5 @@
+//#define TEST
+
 #include "Socket.hpp"
 #include "Address.hpp"
 #include "ClientState.hpp"
@@ -87,8 +89,6 @@ void respond_logout_client(Address toLogout) {
 void check_client_timeouts() {
 	while (contMain) {
 		for(auto it = clientStates.begin(); it != clientStates.end(); ) {
-			//TODO: Reimplemenet
-			/*
 			if (it->second.timedOut()) {
 				// logout client with address it->first
 				std::cerr << "Client " << it->first.getHBOAddress() << " timed out - logging it out" << std::endl;
@@ -97,13 +97,12 @@ void check_client_timeouts() {
 			} else {
 				++it;
 			}
-			*/
 		}
 		// loop through all clients and check if timed out
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 }
-
+#ifndef TEST
 int main(int argc, char **argv) {
 	//setup server to run on port
 	//expect IP address to be the localhost of the machine: "127.0.0.1"
@@ -237,6 +236,7 @@ int main(int argc, char **argv) {
 				}
 				for (auto it2 = playerIDs.begin(); it2 < playerIDs.end(); it2++) {
 					if (((it2->first).getAddress() == recFrom.getAddress()) && ((it2->first).getPort() == recFrom.getPort())) {
+						//edit remove to prevent bug
 						updateManager.remove(it2->second);
 						playerIDs.erase(it2);
 						std::cout << "removed from current IDs \n";
@@ -326,3 +326,4 @@ int main(int argc, char **argv) {
 
 	std::cout << "server killed";
 }
+#endif
