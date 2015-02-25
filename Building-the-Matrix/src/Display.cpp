@@ -364,7 +364,7 @@ void Display::run() {
 	//Create objects
 	
 	try {
-		client.setAddresses(Address(std::string("192.168.1.1"), 9898), Address(std::string("192.168.1.1"), 9899));
+		client.setAddresses(Address(std::string("127.0.0.1"), 9898), Address(std::string("127.0.0.1"), 9899));
 	}
 	
 	catch (...){
@@ -449,8 +449,9 @@ void Display::run() {
 					else {
 						float x = 0.0f, y = 50.0f, z = 0.0f;
 						player = std::make_shared<Player>(x,y,z);
-						player->setGlobalID(userID);
-						objectManager.setObjectGlobal(userID, player->getID());
+						player->setGlobalID(globalID);
+						objectManager.setObjectGlobal(globalID, objectManager.getNextID());
+						player->setID(objectManager.getObjectLocalFromGlobalID(globalID));
 						//If this is the current player
 						if (globalID == userID) {
 							//TODO: Remove this HACK
@@ -506,7 +507,15 @@ void Display::run() {
 		//client.send(); // maybe called by updatemanager
 
 		//render game
-		render();
+		//TODO: REMOVE THIS HACK TOO
+		Display* disp = (Display*)this;
+		Game *g = (dynamic_cast<Game*>(disp));
+		if (g->getPlayer()) {
+			render();
+		}
+		else {
+			std::cout << "Player not instantiated yet \n";
+		}
 	}
 }
 

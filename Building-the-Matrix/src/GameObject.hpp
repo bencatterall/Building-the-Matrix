@@ -50,6 +50,10 @@ public:
 	GameObjectID getGlobalID() {
 		return globalID;
 	}
+	void setID(GameObjectID id) {
+		(this->ID) = id;
+	}
+
 	void setRenderable(bool renderable) {
 		this->renderable = renderable;
 	}

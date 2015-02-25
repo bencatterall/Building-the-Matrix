@@ -79,7 +79,9 @@ void Simulator::tick(float timestep){
 		{
 			if (it->second->userControllable){
 				//std::cout << "Physics: Sent item";
-				objMan.queueUpdate(it->second);
+				if (!it->second->deleted){
+					objMan.queueUpdate(it->second);
+				}
 			}
 		}
 	}
