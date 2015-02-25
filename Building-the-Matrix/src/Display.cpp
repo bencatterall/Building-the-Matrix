@@ -366,6 +366,7 @@ void Display::run() {
 	try {
 		client.setAddresses(Address(std::string("192.168.1.1"), 9898), Address(std::string("192.168.1.1"), 9899));
 	}
+	
 	catch (...){
 		std::cout << "instantiating client failed";
 	}
@@ -429,7 +430,7 @@ void Display::run() {
 		unsigned char *buffer = new unsigned char[1024];
 		int updateSize;
 		if ((updateSize = client.receive(buffer,1024)) >= 0) {
-			std::cout << "received update from server, size " << updateSize << "\n";
+			//std::cout << "received update from server, size " << updateSize << "\n";
 			int pos = 0;
 			while (pos < updateSize) {
 				int temp;
@@ -446,7 +447,7 @@ void Display::run() {
 						player = std::dynamic_pointer_cast<Player>(objectManager.getObject(localID));
 					}
 					else {
-						float x = 0.0f, y = 0.0f, z = 0.0f;
+						float x = 0.0f, y = 50.0f, z = 0.0f;
 						player = std::make_shared<Player>(x,y,z);
 						player->setGlobalID(userID);
 						objectManager.setObjectGlobal(userID, player->getID());

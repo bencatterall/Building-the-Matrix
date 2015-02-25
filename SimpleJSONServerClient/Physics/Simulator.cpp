@@ -48,6 +48,7 @@ void Simulator::tick(float timestep){
 					bool down = player->getDown();
 					bool left = player->getLeft();
 					bool right = player->getRight();
+
 					if (up || down || left || right) {
 						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
 					}

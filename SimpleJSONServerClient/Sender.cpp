@@ -28,7 +28,10 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std:
 				m[size + 1] = 'K';
 			}
 			size += 2;
+
 			std::shared_ptr<Player> p = std::dynamic_pointer_cast<Player>(go.second);
+			glm::vec3 pos = p->locComp->getPosition();
+		//	std::cout << "BObject position:" << pos.x << " " << pos.y << " " << pos.z << std::endl;
 			int psize;
 			psize = (p->serialize(&m[size]));
 			//std::cout << "player object size = " << psize << "\n";

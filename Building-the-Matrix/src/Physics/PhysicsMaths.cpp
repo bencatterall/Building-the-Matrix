@@ -297,6 +297,9 @@ namespace PhysicsMaths{
 		(*phys.*setter)(updated);
 	}
 
+	///
+	///Needs in degress
+	///
 	vec3 convertYPRtoDirection(const vec3 YPR){
 		float xRad = YPR.x * PI / 180.0f, yRad = YPR.y * PI / 180.0f;
 		return vec3(

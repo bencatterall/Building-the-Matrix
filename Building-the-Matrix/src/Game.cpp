@@ -13,7 +13,7 @@
 #include "Player.hpp"
 #include "ObjectManager.hpp"
 #include "SimplexNoise.hpp"
-
+#include "Cube.hpp"
 
 void Game::init() {
 	//Sahil: You can comment this out
@@ -24,12 +24,16 @@ void Game::init() {
 	for (int i = 0; i < numChunks; ++i) {
 		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
 	}
+	objManager.addObject(std::make_shared<Cube>(glm::vec3(0.0f, 30.0f, 0.0f)));
+
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
-
+	/*
 	if (!player)
 		return;
+		//handle no player formserver
+		*/
 	//Render all objects
 	ObjectManager& objManager = ObjectManager::getInstance();
 	std::vector<GameObjectID> objects = objManager.getObjects();
