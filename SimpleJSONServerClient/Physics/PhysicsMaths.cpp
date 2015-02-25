@@ -285,6 +285,7 @@ namespace PhysicsMaths{
 		return (maxA < minB || maxB < minA);
 	}
 
+#define MAX_SPEED 10.0f
 	void acceleratePlayer(std::shared_ptr<PhysicsObject> phys){
 #ifdef COMPLEX_PHYSICS
 		vec3 dir = phys->getOrientation();
@@ -292,14 +293,14 @@ namespace PhysicsMaths{
 		vec3 A = phys->getA();
 		// TODO: Consider further mechanisms for determining power
 		// TODO: Adjust arbitrary constant according to playtesting
-		phys->setA(A + dir*(5.0f - speed));
+		phys->setA(A + dir*(MAX_SPEED - speed));
 #else
 		vec3 dir = phys->getOrientation();
 		vec3 A = phys->getA(), V = phys->getV();
 		// If we are moving forwards
 		if (glm::dot(dir, V) > 0) {
 			// If we are max speed
-			if (glm::length(V) > 5){
+			if (glm::length(V) > MAX_SPEED){
 				// Stop accelerating.
 				phys->setA(vec3());
 			}
@@ -335,7 +336,7 @@ namespace PhysicsMaths{
 vec3 dir = phys->getOrientation();
 vec3 A = phys->getA(), V = phys->getV();
 if (glm::dot(dir, V) < 0) { // go faster
-	if (glm::length(V) > 5){ //max speed
+	if (glm::length(V) > MAX_SPEED){ //max speed
 		phys->setA(vec3());
 	}
 	else{ //speed up
