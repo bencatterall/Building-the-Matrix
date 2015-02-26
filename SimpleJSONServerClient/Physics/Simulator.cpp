@@ -11,7 +11,7 @@
 #define THRESHOLD 0.02f
 
 Simulator::Simulator() :
-	accumulator(0)
+accumulator(0), tickCount(0)
 {
 }
 
@@ -29,6 +29,7 @@ void Simulator::tick(float timestep){
 	UpdateManager& objMan = UpdateManager::getInstance();
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
+		tickCount++;
 		accumulator -= THRESHOLD;
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects = objMan.getState();
 
@@ -97,11 +98,13 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 		{
 			std::shared_ptr<GameObject> gameObj = (it->second);
 			PhysicsObject currentObj = *(gameObj->physComp);
-			for ((it2 = it)++; it2 != gameObjects.end(); it2++)
+			it2 = it;
+			for (it2++; it2 != gameObjects.end(); it2++)
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
 				if (PhysicsMaths::simpleCollision(currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
+					std::cout << "Collision!";
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
 			}

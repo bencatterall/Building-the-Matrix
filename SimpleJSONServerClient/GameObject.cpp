@@ -9,8 +9,9 @@ GameObject::GameObject(GameObjectGlobalID id) {
 	(this->deleted) = false;
 	this->locComp = std::make_shared<LocationComponent>();
 	std::vector<vec3> tmpVec = std::vector<vec3>();
-	tmpVec.emplace_back(-10.0f, -10.0f, -10.0f);
-	tmpVec.emplace_back(10.0f, 10.0f, 10.0f);
+	tmpVec.resize(2);
+	tmpVec.at(0) = vec3(-10.0f, -10.0f, -10.0f);
+	tmpVec.at(1) = vec3(10.0f, 10.0f, 10.0f);
 	this->physComp = std::make_shared<PhysicsObject>(locComp, tmpVec);
 }
 

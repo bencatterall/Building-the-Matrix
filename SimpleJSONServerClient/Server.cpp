@@ -59,6 +59,12 @@ void physics() {
 		std::chrono::duration<float> timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
+		while (physicsSimulator.tickCount > 100){
+			std::cout << "2 Physics seconds has passed\n";
+			physicsSimulator.tickCount -= 100;
+		}
+		// Try to avoid being too fast
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }
 
@@ -115,6 +121,7 @@ int main(int argc, char **argv) {
 	int acc = 0;
 	int IPValues[4];
 	size_t pos = 0;
+	float playerZpos = 0.0f;
 	while ((pos = IP.find('.')) != std::string::npos) {
 		IPValues[acc] = atoi((IP.substr(0, pos)).c_str());
 		IP = IP.substr(pos + 1, (IP.length() - (pos + 1)));
@@ -205,7 +212,8 @@ int main(int argc, char **argv) {
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
 					Player player = Player(id);
 					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
-					p->locComp->setPosition(glm::vec3(0.0f,50.0f,0.0f));
+					p->locComp->setPosition(glm::vec3(0.0f,50.0f,playerZpos));
+					playerZpos += 25.0f;
 					updateManager.queueUpdate(p);
 				}
 				char data[] = "LOGIN ACCEPTED     ";

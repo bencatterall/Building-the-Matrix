@@ -67,11 +67,11 @@ vec3 AABB::getCenter() const{
 }
 
 float AABB::getXSpan() const{
-	return max.x-min.x;
+	return max.x - min.x;
 }
 
 float AABB::getYSpan() const{
-	return max.z - min.z;
+	return max.y - min.y;
 }
 
 float AABB::getZSpan() const{
