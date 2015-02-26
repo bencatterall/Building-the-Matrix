@@ -11,7 +11,7 @@ class Simulator
 public:
 	static Simulator & getInstance();
 	void tick(float);
-
+	int tickCount;
 protected:
 
 private:
