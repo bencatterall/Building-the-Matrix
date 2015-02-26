@@ -308,7 +308,7 @@ namespace PhysicsMaths{
 				//We aren't at max speed yet, accelerate
 				vec3 newA = A + dir;
 				if (newA != vec3()){
-					newA = glm::normalize(newA);
+					newA = glm::normalize(newA) * 5.0f;
 				}
 				phys->setA(newA);
 			}
