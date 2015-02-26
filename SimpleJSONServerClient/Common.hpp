@@ -1,6 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
-/*
+
 #ifndef PLATFORM
 
 #define PLATFORM_WINDOWS  1
@@ -20,7 +20,7 @@
 #if PLATFORM == PLATFORM_WINDOWS
 #include <Windows.h>
 #endif
-
+/*
 // Enable tests
 //#define TEST
 //#define TEST_GRAPHICS
