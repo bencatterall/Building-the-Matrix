@@ -34,13 +34,11 @@ bool prefixMatch(std::string message, std::string prefix) {
 
 void broadcast() {
 	while (contMain) {
-		for (Address client : clients) {
-			//send snapshot back
-			std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> toSend = updateManager.flushUpdates();
-			if (!toSend.empty()) {
-				//std::cout << "Sending game snapshot \n";
-				sender.sendUpdateMessage(client, toSend);
-			}
+		//send snapshot back
+		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> toSend = updateManager.flushUpdates();
+		if (!toSend.empty()) {
+			//std::cout << "Sending game snapshot \n";
+			sender.sendUpdateMessage(clients, toSend);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}

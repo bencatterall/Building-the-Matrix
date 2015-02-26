@@ -12,7 +12,7 @@ void Sender::setSocket(Socket *s) {
 	(this->serverSocket) = *s;
 }
 
-void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> message) {
+void Sender::sendUpdateMessage(std::vector <Address> addresses, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> message) {
 	unsigned char *m = new unsigned char[1024];
 	int size = 0;
 	for (std::pair<GameObjectGlobalID, std::shared_ptr<GameObject>> go : message) {
@@ -54,9 +54,11 @@ void Sender::sendUpdateMessage(Address client, std::map<GameObjectGlobalID, std:
 		}
 	}
 	//std::cout << "total map size = " << size << "\n";
-	
-	Message mess = Message(client,m,size);
-	(this->toSend).pushToEnd(mess);
+	std::vector<Address>::iterator it;
+	for (it = addresses.begin(); it != addresses.end(); it++) {
+		Message mess = Message(*it, m, size);
+		(this->toSend).pushToEnd(mess);
+	}
 }
 
 void Sender::sendAck(Address client, std::string event) {

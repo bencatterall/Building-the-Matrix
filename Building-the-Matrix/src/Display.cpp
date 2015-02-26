@@ -364,7 +364,7 @@ void Display::run() {
 	//Create objects
 	
 	try {
-		client.setAddresses(Address(std::string("127.0.0.1"), 9898), Address(std::string("127.0.0.1"), 9899));
+		client.setAddresses(Address(std::string("192.168.1.1"), 9898), Address(std::string("192.168.1.3"), 9899));
 	}
 	
 	catch (...){
