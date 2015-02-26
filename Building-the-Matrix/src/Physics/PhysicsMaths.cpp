@@ -20,7 +20,7 @@ namespace PhysicsMaths{
 	}
 
 	// Simple first order approximation to motion given U, A, T.
-	vec3 PhysicsMaths::UATtoS(const vec3 U, const vec3 A, float T){
+	vec3 UATtoS(const vec3 U, const vec3 A, float T){
 		vec3 vec = vec3();
 		vec = (U + (A * T) * 0.5f) * T;
 		return vec;
