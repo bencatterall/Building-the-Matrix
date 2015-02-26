@@ -173,7 +173,6 @@ int main(int argc, char **argv) {
 	// thread to monitor clients and terminate if timed out
 	std::thread t_timeout(check_client_timeouts);
 	
-	auto timer = std::chrono::system_clock::now();
 	//input loops in this thread
 	while (contMain) {
 		//try to receive updates
