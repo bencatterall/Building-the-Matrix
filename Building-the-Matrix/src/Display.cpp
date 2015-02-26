@@ -478,7 +478,10 @@ void Display::run() {
 						object = objectManager.getObject(localID);
 					}
 					else {
+						objectManager.setObjectGlobal(globalID, objectManager.getNextID());
 						object = std::make_shared<GameObject>();
+						object->setGlobalID(globalID);
+						object->setID(objectManager.getObjectLocalFromGlobalID(globalID));
 					}
 					pos += 2;
 					if (!toDelete) {
