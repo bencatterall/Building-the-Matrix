@@ -17,9 +17,6 @@
 
 #endif // PLATFORM
 
-#if PLATFORM == PLATFORM_WINDOWS
-#include <Windows.h>
-#endif
 /*
 // Enable tests
 //#define TEST
@@ -31,7 +28,7 @@
 // Enable debug mode
 #define DEBUG
 
-#define  INTEL_X86
+#define INTEL_X86
 
 #include "CommonMinimal.hpp"
 
