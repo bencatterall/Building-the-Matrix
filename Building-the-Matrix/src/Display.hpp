@@ -9,12 +9,12 @@
 //We need access to the native window handle so we need some native functions
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
-#include "..\Dependencies\GLFW\glfw3native.h"
+#include "../Dependencies/GLFW/glfw3native.h"
 
 #define OVR_OS_WIN32
 #include "OVR_CAPI.h"
 #include "OVR_CAPI_GL.h"
-#include "Kernel\OVR_Math.h"
+#include "Kernel/OVR_Math.h"
 
 #include <glm/glm.hpp>
 

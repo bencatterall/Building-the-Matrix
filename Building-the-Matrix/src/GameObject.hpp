@@ -2,7 +2,7 @@
 #define GAME_OBJECT_H
 
 #include "Common.hpp"
-#include "Physics\PhysicsObject.hpp"
+#include "Physics/PhysicsObject.hpp"
 #include <memory>
 
 class LocationComponent;
