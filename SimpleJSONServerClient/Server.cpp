@@ -60,7 +60,7 @@ void physics() {
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
 		while (physicsSimulator.tickCount > 100){
-			std::cout << "2 Physics seconds has passed\n";
+			// std::cout << "2 Physics seconds has passed\n";
 			physicsSimulator.tickCount -= 100;
 		}
 		// Try to avoid being too fast

@@ -50,8 +50,14 @@ void Simulator::tick(float timestep){
 					bool left = player->getLeft();
 					bool right = player->getRight();
 
+					// Pressing anything
 					if (up || down || left || right) {
 						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
+					}
+					// Pressing nothing
+					else{
+						gameObj->physComp->setA(vec3());
+						gameObj->physComp->setV(gameObj->physComp->getV()*(1.0f - gameObj->physComp->getLinDrag()));
 					}
 					if (up && !down){
 						PhysicsMaths::acceleratePlayer(gameObj->physComp);
@@ -89,7 +95,6 @@ void Simulator::tick(float timestep){
 }
 
 void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects){
-	UpdateManager & objMan = UpdateManager::getInstance();
 	// O(n^2) collision check
 	if (gameObjects.size() > 0) {
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
@@ -104,7 +109,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
 				if (PhysicsMaths::simpleCollision(currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
-					std::cout << "Collision!";
+					std::cout << "Collision between " << it->second->ID << " and " << it2->second->ID << "\n";
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
 			}

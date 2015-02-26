@@ -60,16 +60,16 @@ namespace PhysicsMaths{
 		
 		// If there exists a gap in the direction of a principal axis, then
 		// there exists a plane normal to that axis which separates them.
-		float xGap = vec3Difference.x - (a.getXSpan() + b.getXSpan()) * 0.5f;
-		if (xGap > 0.0f){
+		float xGap = abs(vec3Difference.x) - (a.getXSpan() + b.getXSpan()) * 0.5f;
+		if (xGap >= 0.0f){
 			return false;
 		}
-		float yGap = vec3Difference.y - (a.getYSpan() + b.getYSpan()) * 0.5f;
-		if (yGap > 0.0f){
+		float yGap = abs(vec3Difference.y) - (a.getYSpan() + b.getYSpan()) * 0.5f;
+		if (yGap >= 0.0f){
 			return false;
 		}
-		float zGap = vec3Difference.z - (a.getZSpan() + b.getZSpan()) * 0.5f;
-		if (zGap > 0.0f){
+		float zGap = abs(vec3Difference.z) - (a.getZSpan() + b.getZSpan()) * 0.5f;
+		if (zGap >= 0.0f){
 			return false;
 		}
 		return true;
@@ -91,10 +91,10 @@ namespace PhysicsMaths{
 
 	void handleCollision(GameObject& objA, GameObject& objB){
 
-		PhysicsObject physA = *objA.physComp;
-		PhysicsObject physB = *objB.physComp;
-		vec3 aCen = physA.getLocalAABB().getCenter();
-		vec3 bCen = physB.getLocalAABB().getCenter();
+		std::shared_ptr<PhysicsObject> physA = objA.physComp;
+		std::shared_ptr<PhysicsObject> physB = objB.physComp;
+		vec3 aCen = physA->getLocalAABB().getCenter();
+		vec3 bCen = physB->getLocalAABB().getCenter();
 
 		// Transform these to world space
 		glm::mat4 matA = glm::translate(glm::mat4x4(1.0f), objA.locComp->getPosition());
@@ -106,7 +106,7 @@ namespace PhysicsMaths{
 		if (aCen == bCen) return;
 		vec3 sDiff = aCen - bCen;
 		vec3 sDiffNormal = glm::normalize(sDiff);
-		vec3 vDiff = physA.getV() - physB.getV();
+		vec3 vDiff = physA->getV() - physB->getV();
 
 		// Calculate relative velocity along normal direction
 		float velDelAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
@@ -116,19 +116,19 @@ namespace PhysicsMaths{
 			return;
 		}
 		// Choose minimal restitution
-		float e = ((physA.getRest() < physB.getRest()) ? physA : physB).getRest();
+		float e = ((physA->getRest() < physB->getRest()) ? physA : physB)->getRest();
 
-		float m1 = physA.getMass();
-		float m2 = physB.getMass();
+		float m1 = physA->getMass();
+		float m2 = physB->getMass();
 
-		vec3 u1 = glm::dot(physA.getV(), sDiffNormal) * sDiffNormal;
-		vec3 u2 = glm::dot(physB.getV(), sDiffNormal) * sDiffNormal;
+		vec3 u1 = glm::dot(physA->getV(), sDiffNormal) * sDiffNormal;
+		vec3 u2 = glm::dot(physB->getV(), sDiffNormal) * sDiffNormal;
 
 		// Scoring
 		if (objA.userControllable && objB.userControllable) {
 			Player playerA = (Player&) objA;
 			Player playerB = (Player&) objB;
-			float speed_diff = glm::length(physA.getV()) - glm::length(physB.getV());
+			float speed_diff = glm::length(physA->getV()) - glm::length(physB->getV());
 			// increase score of fastest player
 			// TODO: score increase to depend on difference in speeds
 			if (speed_diff > 0) {
@@ -138,25 +138,25 @@ namespace PhysicsMaths{
 			}
 		}
 
-		vec3 u1rejection = physA.getV() - u1;
-		vec3 u2rejection = physB.getV() - u2;
+		vec3 u1rejection = physA->getV() - u1;
+		vec3 u2rejection = physB->getV() - u2;
 
 		if (m1 == 0 && m2 == 0) return;
 
 		if (m1 == 0){
-			physB.setV(-e * u2);
+			physB->setV(-e * u2);
 			return;
 		}
 		if (m2 == 0){
-			physA.setV(-e * u1);
+			physA->setV(-e * u1);
 			return;
 		}
 
 		vec3 v1 = (m1 * u1 + m2 * (u2 - e * velDelAlongCollisionNormal * sDiffNormal)) / (m1 + m2);
 		vec3 v2 = v1 + e * velDelAlongCollisionNormal * sDiffNormal;
 
-		physA.setV(u1rejection + v1);
-		physB.setV(u2rejection + v2);
+		physA->setV(u1rejection + v1);
+		physB->setV(u2rejection + v2);
 	}
 
 	void stepObject(std::shared_ptr<PhysicsObject> physObj, float timestep){

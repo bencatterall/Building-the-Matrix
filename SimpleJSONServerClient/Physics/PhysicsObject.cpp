@@ -10,7 +10,7 @@ PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3()), 
-	orientation(vec3(0,0,-1)), friction(0.0f), airRes(0.0f)
+	orientation(vec3(0,0,-1)), friction(0.001f), airRes(0.0f)
 {
 	if (locationComp == nullptr){
 		locationComp = std::make_shared<LocationComponent>();
@@ -43,7 +43,6 @@ const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
 	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(translateMatrix, fullBox);
 	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(*worldSpace);
 	return worldBox;
-	return std::shared_ptr<AABB>();
 }
 
 // TODO: Refactor me
