@@ -19,7 +19,7 @@ public:
 	AABB(const vertexVector);
 	AABB(const GameObjectID);
 	AABB(const vec3, const vec3);
-	AABB::AABB(unsigned char *buffer, int &next){
+	AABB(unsigned char *buffer, int &next){
 		next += (this->deserialize(buffer));
 	}
 	virtual ~AABB();
