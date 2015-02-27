@@ -95,6 +95,7 @@
     </ClInclude>
     <ClInclude Include="..\Building-the-Matrix\src\SimplexNoise.hpp">
       <Filter>Header Files\Physics\World</Filter>
+	</ClInclude>
     <ClInclude Include="CubeSize.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
