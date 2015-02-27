@@ -1,8 +1,8 @@
 #include "Cube.hpp"
 #include "LocationComponent.hpp"
 #include "RenderableComponent.hpp"
-#include "Physics\PhysicsObject.hpp"
-#include "Physics\PhysicsMaths.hpp"
+#include "Physics/PhysicsObject.hpp"
+#include "Physics/PhysicsMaths.hpp"
 #include "shader.hpp"	
 
 Cube::Cube(glm::vec3 pos) {

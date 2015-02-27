@@ -21,8 +21,8 @@ public:
 	Client();
 	void setAddresses(Address client, Address server);
 	~Client();
-	bool sendKeyPress(char key);
-	bool sendKeyUnpress(char key);
+	bool sendKeyPress(int key);
+	bool sendKeyUnpress(int key);
 	bool sendPitchRollYaw(glm::vec3 pry);
 	bool sendLoginRequest();
 	bool sendLogout();

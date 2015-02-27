@@ -34,7 +34,10 @@ void UpdateManager::queueUpdate(std::shared_ptr<GameObject> object) {
 void UpdateManager::remove(GameObjectGlobalID id) {
 	std::shared_ptr<GameObject> o = (this->gameObjectsWorldState).get(id);
 	o->deleted = true;
-	(this->pendingUpdates).pushToEnd(Update(o->getID(), o));
+	(this->updatedObjectsForClients).put(id, o);
+	if ((this->gameObjectsWorldState).count(id) != 0) {
+		(this->gameObjectsWorldState).deleteEntry(id);
+	}
 }
 
 std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> UpdateManager::flushUpdates() {
@@ -53,13 +56,8 @@ void UpdateManager::run() {
 	while (this->cont) {
 		if (!(this->pendingUpdates).isEmpty()) {
 			Update u = (this->pendingUpdates).popFromFront();
-			if ((u.getEditedObject())->deleted) {
-				if ((this->gameObjectsWorldState).count(u.getObjectID()) != 0) {
-					(this->gameObjectsWorldState).deleteEntry(u.getObjectID());
-				}
-			}
 			if ((this->gameObjectsWorldState).count(u.getObjectID()) == 1) {
-				if (u.getEditedObject()->userControllable) {
+				if (u.getEditedObject()->userControllable && !u.getEditedObject()->deleted) {
 					std::shared_ptr<Player> old = std::dynamic_pointer_cast<Player>((this->gameObjectsWorldState).get(u.getObjectID()));
 					std::shared_ptr<Player> newObj = std::dynamic_pointer_cast<Player>(u.getEditedObject());
 					newObj->setPRY(old->getPitch(), old->getRoll(), old->getYaw());
@@ -67,8 +65,11 @@ void UpdateManager::run() {
 					newObj->deleted = (old->deleted);
 				}
 			}
-			(this->gameObjectsWorldState).put(u.getObjectID(),u.getEditedObject());
-			(this->updatedObjectsForClients).put(u.getObjectID(), u.getEditedObject());
+			if (!u.getEditedObject()->deleted) {
+				(this->gameObjectsWorldState).put(u.getObjectID(), u.getEditedObject());
+				(this->updatedObjectsForClients).put(u.getObjectID(), u.getEditedObject());
+			}
+			else {}
 		}
 	}
 }

@@ -2,7 +2,6 @@
 #define PHYSICS_MATHS_H
 
 #include "../CommonMinimal.hpp"
-#include "../../Building-the-Matrix/Dependencies/glew/glew.h"
 #include "../../Building-the-Matrix/Dependencies/GLFW/glfw3.h"
 #define GLM_FORCE_PURE
 #define GLM_FORCE_RADIANS
@@ -10,8 +9,8 @@
 #include "../../Building-the-Matrix/Dependencies/glm/gtc/matrix_transform.hpp"
 #include <vector>
 #include <memory>
-
 #include "PhysicsObject.hpp"
+
 
 #define PI 3.14159265358979323846f
 

@@ -73,6 +73,7 @@
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="CommonMinimal.hpp" />
     <ClInclude Include="Controls.hpp" />
+    <ClInclude Include="CubeSize.hpp" />
     <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="LocationComponent.hpp" />
     <ClInclude Include="Message.hpp" />

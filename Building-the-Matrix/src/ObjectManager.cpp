@@ -65,15 +65,17 @@ bool ObjectManager::exists(GameObjectID id)
 
 bool ObjectManager::removeObject(GameObjectID id) {
 	//Find it and then remove it
-	auto search = gameObjects.find(id);
-	if(search != gameObjects.end()) {
-		gameObjectIDs.erase(std::remove(gameObjectIDs.begin(), gameObjectIDs.end(), id), gameObjectIDs.end());
-		gameObjects.erase(search);
-		return true;
-	}
-	else {
-		//There is very likely a bug somewhere as an invalid ID has been used
-		//assert(search != gameObjects.end());
-		//exit(EXIT_FAILURE);
+	if (exists(id)) {
+		auto search = gameObjects.find(id);
+		if (search != gameObjects.end()) {
+			gameObjectIDs.erase(std::remove(gameObjectIDs.begin(), gameObjectIDs.end(), id), gameObjectIDs.end());
+			gameObjects.erase(search);
+			return true;
+		}
+		else {
+			//There is very likely a bug somewhere as an invalid ID has been used
+			//assert(search != gameObjects.end());
+			//exit(EXIT_FAILURE);
+		}
 	}
 };

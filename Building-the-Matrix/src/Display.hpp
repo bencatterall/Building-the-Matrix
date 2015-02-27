@@ -7,14 +7,16 @@
 
 
 //We need access to the native window handle so we need some native functions
+#if PLATFORM == PLATFORM_WINDOWS
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
-#include "..\Dependencies\GLFW\glfw3native.h"
+#include "../Dependencies/GLFW/glfw3native.h"
 
 #define OVR_OS_WIN32
+#endif
 #include "OVR_CAPI.h"
 #include "OVR_CAPI_GL.h"
-#include "Kernel\OVR_Math.h"
+#include "Kernel/OVR_Math.h"
 
 #include <glm/glm.hpp>
 
@@ -51,7 +53,7 @@ public:
 	void updateRenderTarget(int width, int height);
 	void Output();
 	void convertQuaternionToMatrix(const float* quat, float* mat);
-	void run(void);
+	void run(std::string remote_IP, int remote_port, std::string local_IP, int local_port);
 
 	///
 	/// Call code to begin the render sequence

@@ -26,7 +26,7 @@ Player::Player(const Player& other) : GameObject(other) {
 	(this->score) = other.score;
 }
 
-void Player::keyPressed(char key) {
+void Player::keyPressed(int key) {
 	(this->control).regKeyPress(key);
 }
 
@@ -36,7 +36,7 @@ void Player::setPRY(float pitch, float roll, float yaw) {
 	(this->yaw) = yaw;
 }
 
-void Player::keyUnpressed(char key) {
+void Player::keyUnpressed(int key) {
 	(this->control).regKeyUnpress(key);
 }
 
@@ -74,9 +74,9 @@ int Player::deserialize(unsigned char* buffer) {
 	return next;
 }
 
-bool* Player::getKeysPressed(){
-	return control.getCurrentControls();
-}
+// bool* Player::getKeysPressed(){
+// 	return control.getCurrentControls();
+// }
 
 bool Player::getUp() {
 	return (this->control).getUp();
@@ -92,6 +92,10 @@ bool Player::getLeft() {
 
 bool Player::getRight() {
 	return (this->control).getRight();
+}
+
+bool Player::getKey(unsigned int keycode){
+	return this->control.getKey(keycode);
 }
 
 int Player::getScore() const {
