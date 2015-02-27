@@ -393,6 +393,7 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 	float dt = 0.0f;
 	double lastTime = glfwGetTime();
 	int numFrames = 0;
+	float count = 0.0;
 	//game loop
 	while (!glfwWindowShouldClose(window)) {
 
@@ -493,6 +494,8 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 		//send updates to server
 		//client.send(); // maybe called by updatemanager
 
+		//send PRY
+		//client.sendPitchRollYaw(getHeadOrientation());
 		//render game
 		//TODO: REMOVE THIS HACK TOO
 		Display* disp = (Display*)this;
