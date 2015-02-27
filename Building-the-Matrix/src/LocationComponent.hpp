@@ -33,6 +33,11 @@ public:
 		next += (this->deserialize(buffer));
 	}
 
+	LocationComponent(glm::vec3 pos) :
+		position(pos) {
+
+	}
+
 	LocationComponent(glm::vec3 pos, glm::mat4 rotationMat, double sf = 1.0) :
 		position(pos), rotationMatrix(rotationMat),
 		scaleFactor(sf)
