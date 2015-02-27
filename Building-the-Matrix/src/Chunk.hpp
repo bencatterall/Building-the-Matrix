@@ -45,7 +45,6 @@ class Chunk : public GameObject{
 	static const GLfloat cubeTopTextureCoords[6 * 2];
 	static const GLfloat cubeBottomTextureCoords[6 * 2];
 
-
 	static const GLfloat cubeColours[4 * 36];
 
 	///

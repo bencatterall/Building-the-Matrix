@@ -6,14 +6,18 @@
 #include "Physics/PhysicsObject.hpp"
 #include "Serializer.hpp"
 
-GameObject::GameObject(bool renderable, bool visible) :
+GameObject::GameObject(glm::vec3 worldlLoc) :
+	GameObject(true, true, worldlLoc) {
+}
+
+GameObject::GameObject(bool renderable, bool visible, glm::vec3 worldLoc) :
 	renderable(renderable), visible(visible) {
 	//Get a GUID from the ObjectManager
 	this->ID = ObjectManager::getNextID();
 
 	if (renderable) {
 		this->renderableComponent = std::make_shared<RenderableComponent>();
-		this->locationComponent = std::make_shared<LocationComponent>();
+		this->locationComponent = std::make_shared<LocationComponent>(worldLoc);
 	}
 }
 
