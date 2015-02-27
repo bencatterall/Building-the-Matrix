@@ -1,5 +1,6 @@
 #ifndef CONTROL_H
 #define CONTROL_H
+#include <vector>
 #include <string>
 #include "Serializer.hpp"
 
@@ -7,23 +8,16 @@ class Serializer;
 
 class KeyboardControl {
 	private:
-		//up is down -> accelerate
-		bool U_HELD;
-		//down is down -> brake;
-		bool D_HELD;
-		//right is down -> turn right
-		bool R_HELD;
-		//left is down -> turn left
-		bool L_HELD;
+		std::vector<bool> keys_held;
 	public:
 		KeyboardControl(Serializer serializer, unsigned char *buffer, int &size);
 		KeyboardControl();
 		KeyboardControl(bool up,bool down,bool left,bool right);
 		~KeyboardControl();
 		KeyboardControl(const KeyboardControl& other);
-		void regKeyPress(char key);
-		void regKeyUnpress(char key);
-		bool *getCurrentControls();
+		void regKeyPress(int key);
+		void regKeyUnpress(int key);
+		std::vector<bool> getCurrentControls();
 		int serialize(Serializer serializer, unsigned char *buffer);
 		int deserialize(Serializer serializer, unsigned char *buffer);
 		bool getUp();

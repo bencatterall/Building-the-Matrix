@@ -16,9 +16,9 @@ class Player : public GameObject {
 		float getPitch();
 		float getRoll();
 		float getYaw();
-		void keyPressed(char key);
-		void keyUnpressed(char key);
-		bool *getKeysPressed();
+		void keyPressed(int key);
+		void keyUnpressed(int key);
+		// bool *getKeysPressed();
 		int serialize(unsigned char* buffer);
 		int deserialize(unsigned char* buffer);
 		void setControl(KeyboardControl control);

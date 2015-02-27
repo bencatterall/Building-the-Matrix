@@ -22,8 +22,8 @@ class GameObject {
 	public:
 		GameObject(GameObjectGlobalID id);
 		GameObject(unsigned char *buffer, int &size); // for unserialization
-		void keyPressed(char key);
-		void keyUnpressed(char key);
+		void keyPressed(int key);
+		void keyUnpressed(int key);
 		GameObject(const GameObject& other);
 		GameObject();
 		virtual ~GameObject();

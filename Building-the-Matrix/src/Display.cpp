@@ -36,29 +36,12 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 	//handle user input
 	//TODO: local movement needed, rather than just getting server to move us
-	if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-		client.sendKeyPress('u');
-	}
-	if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
-		client.sendKeyUnpress('u');
-	}
-	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-		client.sendKeyPress('d');
-	}
-	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
-		client.sendKeyUnpress('d');
-	}
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
-		client.sendKeyPress('l');
-	}
-	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
-		client.sendKeyUnpress('l');
-	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
-		client.sendKeyPress('r');
-	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
-		client.sendKeyUnpress('r');
+	if (key != GLFW_KEY_UNKNOWN && key <= GLFW_KEY_LAST) {
+		if (action == GFLW_PRESS) {
+			client.sendKeyPress(key)
+		} else {
+			client.sendKeyUnpress(key);
+		}
 	}
 }
 
@@ -109,12 +92,13 @@ void Display::init() {
 		GLFWmonitor** monitors = glfwGetMonitors(&count);
 
 		GLFWmonitor *monitor = nullptr;
+#if PLATFORM == PLATFORM_WINDOWS
 		for (int i = 0; i < count; i++) {
-			//native Win32 funciton in glfw3native, used on windows to get a monitor
+			//native Win32 function in glfw3native, used on windows to get a monitor
 			if (strcmp(glfwGetWin32Monitor(monitors[i]), hmd->DisplayDeviceName) == 0)
 				monitor = monitors[i];
 		}
-
+#endif
 		//provide hints to GLFW
 		if (nullptr != monitor) {
 			const GLFWvidmode* mode = glfwGetVideoMode(monitor);

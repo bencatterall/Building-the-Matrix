@@ -55,22 +55,22 @@ Client::~Client() {
 	}
 }
 
-bool Client::sendKeyPress(char key) {
-	const char *data = constants.keyPressMessage(key);
-	std::cout << key << " pressed\n";
+bool Client::sendKeyPress(int key) {
+	const unsigned char *data = constants.keyPressMessage(key);
+	std::cout << "Key " << key << " pressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), data, 10));
+	a = ((this->socket).sendSingle((this->server), (const char*)data, 7 + sizeof(uint32_t) + 1));
 	(this->lock).unlock();
 	return a;
 }
 
-bool Client::sendKeyUnpress(char key) {
-	const char *data = constants.keyUnpressMessage(key);
+bool Client::sendKeyUnpress(int key) {
+	const unsigned char *data = constants.keyUnpressMessage(key);
 	std::cout << key << " unpressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), data, 12));
+	a = ((this->socket).sendSingle((this->server), (const char*)data, 9 + sizeof(uint32_t) + 1));
 	(this->lock).unlock();
 	return a;
 }
