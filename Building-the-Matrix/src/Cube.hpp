@@ -44,7 +44,7 @@ class Cube : public GameObject {
 	static const GLfloat cubeColours[4 * 36];
 	static const GLfloat cubeTextureCoords[36 * 2];
 public:
-	Cube(glm::vec3 pos);
+	Cube(glm::vec3 pos, float sf);
 	//TODO:
 	//Fix this hack
 	std::vector<GLfloat> cubeVertexData;

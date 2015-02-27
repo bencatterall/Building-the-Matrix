@@ -1,12 +1,14 @@
 #include "GameObject.hpp"
 #include "Cube.hpp"
+#include "Chunk.hpp"
 #include "Player.hpp"
 
 #include <glm/glm.hpp>
 
 Player::Player(float xPos, float yPos, float zPos) : 
 	GameObject(glm::vec3(xPos, yPos, zPos)) { 
-
+	headCube = std::make_shared<Cube>(glm::vec3(xPos, yPos + Chunk::getCubeSize(), zPos), (float)Chunk::getCubeSize()/5.0f);
+	vehicleCube = std::make_shared<Cube>(glm::vec3(xPos, yPos, zPos), (float)Chunk::getCubeSize());
 }
 
 //places serialized values into object return the size of the buffer read as an int 

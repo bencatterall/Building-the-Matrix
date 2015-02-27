@@ -1,11 +1,15 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <memory>
+
 #include "Cube.hpp"
 #include "GameObject.hpp"
 #include "Controls.hpp"
 
 class Player : public GameObject {
+	std::shared_ptr<Cube> headCube;
+	std::shared_ptr<Cube> vehicleCube;
 public:
 	KeyboardControl control;
 	float pitch;
