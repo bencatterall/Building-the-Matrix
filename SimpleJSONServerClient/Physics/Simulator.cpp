@@ -134,8 +134,8 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				vectorAABB.at(1) = vec3(chunk->getCubeSize());
 				vec3 pos = chunk->getCubeCenter(currentObj->getX());
 				GameObject tmpObj = GameObject();
+				tmpObj.locComp = std::make_shared<LocationComponent>(pos);
 				auto tmpTerrain = std::make_shared<PhysicsObject>(tmpObj.locComp, vectorAABB);
-				tmpTerrain->setX(pos);
 				tmpTerrain->setMass(0.0f);
 				tmpObj.physComp = tmpTerrain;
 				std::cout << "Collision between " << it->second->ID << " and terrain\n";
