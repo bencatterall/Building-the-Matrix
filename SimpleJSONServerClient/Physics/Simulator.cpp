@@ -126,8 +126,9 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				vectorAABB.at(1) = vec3(-CUBE_SIZE);
 				vec3 pos = vec3(); // cubeCenter
 				GameObject tmpObj = GameObject();
-				PhysicsObject tmpTerrain = PhysicsObject(tmpObj.locComp, vectorAABB);
-				tmpTerrain.setX(pos);
+				auto tmpTerrain = std::make_shared<PhysicsObject>(tmpObj.locComp, vectorAABB);
+				tmpTerrain->setX(pos);
+				tmpObj.physComp = tmpTerrain;
 				std::cout << "Collision between " << it->second->ID << " and terrain\n";
 				PhysicsMaths::handleCollision(*gameObj, tmpObj);
 			}
