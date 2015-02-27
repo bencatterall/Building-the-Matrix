@@ -29,4 +29,5 @@ class Player : public GameObject {
 		bool getDown();
 		bool getLeft();
 		bool getRight();
+		bool getKey(unsigned int);
 };

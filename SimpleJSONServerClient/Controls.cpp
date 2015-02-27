@@ -16,11 +16,13 @@ KeyboardControl::KeyboardControl(Serializer serializer, unsigned char *buffer, i
 }
 
 void KeyboardControl::regKeyPress(int key) {
-	keys_held[key] = true;
+	if (key < 0 || key >= GLFW_KEY_LAST) return;
+	keys_held.at(key) = true;
 }
 
 void KeyboardControl::regKeyUnpress(int key) {
-	keys_held[key] = false;
+	if (key < 0 || key >= GLFW_KEY_LAST) return;
+	keys_held.at(key) = false;
 }
 
 std::vector<bool> KeyboardControl::getCurrentControls() {
@@ -29,9 +31,9 @@ std::vector<bool> KeyboardControl::getCurrentControls() {
 
 int KeyboardControl::serialize(Serializer serializer, unsigned char *buffer) {
 	int next = 0;
-	for (int i = 0; i < keys_held.size(); i += sizeof(uint32_t)) {
+	for (size_t i = 0; i < keys_held.size(); i += sizeof(uint32_t)) {
 		std::bitset<sizeof(uint32_t)> bset;
-		for (int j = 0; j < sizeof(uint32_t); j++) {
+		for (size_t j = 0; j < sizeof(uint32_t); j++) {
 			if (keys_held[i + j]) {
 				bset.set(j);
 			}
@@ -43,28 +45,35 @@ int KeyboardControl::serialize(Serializer serializer, unsigned char *buffer) {
 
 int KeyboardControl::deserialize(Serializer serializer, unsigned char *buffer) {
 	int next = 0;
-	for (int i = 0; i < keys_held.size(); i += sizeof(uint32_t)) {
+	for (size_t i = 0; i < keys_held.size(); i += sizeof(uint32_t)) {
 		int curr_key = serializer.unpackBool(&buffer[next], next);
 		std::bitset<sizeof(uint32_t)> bset(curr_key);
-		for (int j = 0; j < sizeof(uint32_t); j++) {
-			keys_held[i + j] = bset.test(j);
+		for (size_t j = 0; j < sizeof(uint32_t); j++) {
+			keys_held.at(i + j) = bset.test(j);
 		}
 	}
 	return next;
 }
 
-bool KeyboardControl::getUp() {
+bool KeyboardControl::getUp() const{
 	return keys_held[GLFW_KEY_UP];
 }
 
-bool KeyboardControl::getDown() {
+bool KeyboardControl::getDown() const{
 	return keys_held[GLFW_KEY_DOWN];
 }
 
-bool KeyboardControl::getLeft() {
+bool KeyboardControl::getLeft() const{
 	return keys_held[GLFW_KEY_LEFT];
 }
 
-bool KeyboardControl::getRight() {
+bool KeyboardControl::getRight() const{
 	return keys_held[GLFW_KEY_RIGHT];
+}
+
+bool KeyboardControl::getKey(unsigned int keycode) const{
+	if (keycode >= 512){
+		return false;
+	}
+	return keys_held[keycode];
 }

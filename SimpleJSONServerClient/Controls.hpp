@@ -20,9 +20,10 @@ class KeyboardControl {
 		std::vector<bool> getCurrentControls();
 		int serialize(Serializer serializer, unsigned char *buffer);
 		int deserialize(Serializer serializer, unsigned char *buffer);
-		bool getUp();
-		bool getDown();
-		bool getLeft();
-		bool getRight();
+		bool getUp() const;
+		bool getDown() const;
+		bool getLeft() const;
+		bool getRight() const;
+		bool getKey(unsigned int) const;
 };
 #endif

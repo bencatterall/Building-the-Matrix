@@ -94,6 +94,10 @@ bool Player::getRight() {
 	return (this->control).getRight();
 }
 
+bool Player::getKey(unsigned int keycode){
+	return this->control.getKey(keycode);
+}
+
 int Player::getScore() const {
 	return score;
 }
