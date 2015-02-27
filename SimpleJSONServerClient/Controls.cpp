@@ -1,6 +1,6 @@
 #include "Controls.hpp"
 // for keyboard constants
-#include "GLFW/glfw3.h"
+#include "../Building-the-Matrix/Dependencies/GLFW/glfw3.h"
 #include <bitset>
 
 KeyboardControl::KeyboardControl(): keys_held(512, false) {}

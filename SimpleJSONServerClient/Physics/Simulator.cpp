@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "GLFW/glfw3.h"
+#include "../../Building-the-Matrix/Dependencies/GLFW/glfw3.h"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
@@ -120,7 +120,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
 			}
-			if (true){ // cubeAt()
+			if (false){ // cubeAt()
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
 				vectorAABB.at(0) = vec3(CUBE_SIZE);
 				vectorAABB.at(1) = vec3(-CUBE_SIZE);
@@ -128,7 +128,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				GameObject tmpObj = GameObject();
 				PhysicsObject tmpTerrain = PhysicsObject(tmpObj.locComp, vectorAABB);
 				tmpTerrain.setX(pos);
-				std::cout << "Collision between " << it->second->ID << " and " << it2->second->ID << "\n";
+				std::cout << "Collision between " << it->second->ID << " and terrain\n";
 				PhysicsMaths::handleCollision(*gameObj, tmpObj);
 			}
 		}
