@@ -60,7 +60,7 @@ bool Client::sendKeyPress(int key) {
 	std::cout << "Key " << key << " pressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), (const char*)data, 7 + sizeof(uint32_t) + 1));
+	a = ((this->socket).sendSingle((this->server), (const char*)data, 7 + 1 + sizeof(uint32_t) + 1));
 	(this->lock).unlock();
 	return a;
 }
@@ -70,7 +70,7 @@ bool Client::sendKeyUnpress(int key) {
 	std::cout << key << " unpressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), (const char*)data, 9 + sizeof(uint32_t) + 1));
+	a = ((this->socket).sendSingle((this->server), (const char*)data, 9 + 1 + sizeof(uint32_t) + 1));
 	(this->lock).unlock();
 	return a;
 }

@@ -20,19 +20,21 @@ const char *MessageConstants::logoutMessage() {
 }
 
 const unsigned char *MessageConstants::keyPressMessage(int key) {
-	unsigned char *m = new unsigned char[7 + sizeof(uint32_t) + 1];
+	unsigned char *m = new unsigned char[7 + 1 + sizeof(uint32_t) + 1];
 	memcpy(m, pressed, strlen(pressed));
-	int next = 7;
-	next += Serializer::packInt(&m[7], key);
+	pressed[7] = ' ';
+	int next = 8;
+	next += Serializer::packInt(&m[8], key);
 	m[next] = '\0';
 	return m;
 }
 
 const unsigned char *MessageConstants::keyUnpressMessage(int key) {
-	unsigned char *m = new unsigned char[9 + sizeof(uint32_t) + 1];
+	unsigned char *m = new unsigned char[9 + 1 + sizeof(uint32_t) + 1];
 	memcpy(m, unpressed, strlen(unpressed));
-	int next = 9;
-	next += Serializer::packInt(&m[9], key);
+	unpressed[9] = ' ';
+	int next = 10;
+	next += Serializer::packInt(&m[10], key);
 	m[next] = '\0';
 	return m;
 }
