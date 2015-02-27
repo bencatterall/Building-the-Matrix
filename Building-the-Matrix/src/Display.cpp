@@ -37,8 +37,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	//handle user input
 	//TODO: local movement needed, rather than just getting server to move us
 	if (key != GLFW_KEY_UNKNOWN && key <= GLFW_KEY_LAST) {
-		if (action == GFLW_PRESS) {
-			client.sendKeyPress(key)
+		if (action == GLFW_PRESS) {
+			client.sendKeyPress(key);
 		} else {
 			client.sendKeyUnpress(key);
 		}
