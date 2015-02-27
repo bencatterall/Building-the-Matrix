@@ -56,7 +56,7 @@ int Player::deserialize(unsigned char* buffer) {
 
 	//Update orientation of the player
 	setVehicleOrientation(physicsObject->getOrientation());
-	setHeadOrientation(glm::vec3(this->pitch + 30.0f, this->roll + 20.0f, this->yaw));
+	setHeadOrientation(glm::vec3(this->pitch, this->roll, this->yaw));
 
 
 	return next;
