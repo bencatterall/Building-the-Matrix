@@ -50,8 +50,11 @@ void Chunk::init() {
 	//The number of cubes we actually want to render
 	int numCubes = 0;
 
-	//NOTE: Cube[] is 1000 in header, need to update
-	int xLength = 256, yLength = 150, zLength = 256;
+	//Dimensions
+	int xLength = getChunkSizeX(), yLength = getChunkSizeY(), zLength = getChunkSizeZ();
+	double xScale = 80.0;
+	double zScale = 80.0;
+	double yScale = 0.3;
 	SimplexNoise noiseGenerator;
 
 	//Generate the world 
@@ -59,10 +62,10 @@ void Chunk::init() {
 		for (int z = -zLength / 2; z < zLength / 2; ++z) {
 			//Generate noise 
 			//[-1.0,1.0]
-			double noise = (noiseGenerator.noise2D(x / 80.0, z / 80.0));
+			double noise = (noiseGenerator.noise2D(x / xScale, z / zScale));
 
 			//fill in y and below this block
-			int yHeight = (int)(noise*(yLength/2) * 0.3);
+			int yHeight = (int)(noise*(yLength/2) * yScale);
 			for (int y = -yLength / 2; y < yHeight; ++y) {
 				
 				if (y < 4) {
