@@ -24,7 +24,7 @@ public:
 	~Socket();
 	bool openSocket(int address, unsigned short port);
 	void closeSocket();
-	bool sendSingle(const Address &dest, const char *data, int size);
+	bool sendSingle(const Address &dest, const unsigned char *data, int size);
 	int receive(Address &sender, char *data, int size);
 	short getHandle();
 };

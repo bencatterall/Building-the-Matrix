@@ -67,7 +67,7 @@ bool Socket::openSocket(int addr, unsigned short port) {
 	return true;
 }
 
-bool Socket::sendSingle(const Address &dest, const char *data, int size) {
+bool Socket::sendSingle(const Address &dest, const unsigned char *data, int size) {
 	sockaddr_in destAddr;
 	destAddr.sin_family = AF_INET;
 	destAddr.sin_addr.s_addr = (dest.getAddress());

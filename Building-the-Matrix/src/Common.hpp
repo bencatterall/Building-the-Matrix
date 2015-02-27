@@ -11,7 +11,7 @@
 #define PLATFORM PLATFORM_UNIX
 #endif
 #if PLATFORM == PLATFORM_WINDOWS
-#include <Windows.h>
+//#include <Windows.h>
 #endif
 #include "../Dependencies/glew/glew.h"
 #include "../Dependencies/GLFW/glfw3.h"

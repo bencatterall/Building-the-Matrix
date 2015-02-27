@@ -50,7 +50,13 @@ int Player::serialize(unsigned char* buffer) {
 	}
 	next += serializer.packBool(&buffer[next], visible);
 	next += serializer.packBool(&buffer[next], renderable);
-	next += control.serialize(serializer,&buffer[next]);
+	//TEMPORARY FIX
+	//next += control.serialize(serializer,&buffer[next]);
+	next += serializer.packBool(&buffer[next], false);
+	next += serializer.packBool(&buffer[next], false);
+	next += serializer.packBool(&buffer[next], false);
+	next += serializer.packBool(&buffer[next], false);
+
 	next += serializer.packFloat(&buffer[next], pitch);
 	next += serializer.packFloat(&buffer[next], roll);
 	next += serializer.packFloat(&buffer[next], yaw);

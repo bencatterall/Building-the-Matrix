@@ -393,7 +393,7 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 	float dt = 0.0f;
 	double lastTime = glfwGetTime();
 	int numFrames = 0;
-	float count = 0.0;
+	int count = 0;
 	//game loop
 	while (!glfwWindowShouldClose(window)) {
 
@@ -495,7 +495,11 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 		//client.send(); // maybe called by updatemanager
 
 		//send PRY
-		//client.sendPitchRollYaw(getHeadOrientation());
+		count++;
+		if (count % 10 == 0) {
+			client.sendPitchRollYaw(getHeadOrientation());
+			count = 0;
+		}
 		//render game
 		//TODO: REMOVE THIS HACK TOO
 		Display* disp = (Display*)this;
@@ -517,8 +521,8 @@ void Display::findHeadOrientation() {
 		Posef pose = ts.HeadPose.ThePose;
 		float yaw, pitch, roll;
 		pose.Rotation.GetEulerAngles<Axis_Y, Axis_X, Axis_Z>(&yaw, &pitch, &roll);
-		headOrientation = glm::vec3(yaw, pitch, roll);
-		std::cout << "YAW: " << yaw << " PITCH " << pitch << " ROLL " << roll << std::endl;
+		headOrientation = glm::vec3(pitch, roll, yaw);
+		//std::cout << "YAW: " << yaw << " PITCH " << pitch << " ROLL " << roll << std::endl;
 	}
 }
 void Display::render() {

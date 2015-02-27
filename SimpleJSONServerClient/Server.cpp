@@ -288,16 +288,18 @@ int main(int argc, char **argv) {
 			//HANDLE HEAD ORIENTATION
 			else if (prefixMatch(message, "PRY")) {
 				//std::cout << "recieved pitch, roll and yaw from " << recFrom.getHBOAddress() << " " << recFrom.getHBOPort() << "\n";
-				float *pry = new float[3];
-				pry[0] = (float)((buffer[3] << 24) | (buffer[4] << 16) | (buffer[5] << 8) | buffer[6]);
-				pry[1] = (float)((buffer[7] << 24) | (buffer[8] << 16) | (buffer[9] << 8) | buffer[10]);
-				pry[2] = (float)((buffer[11] << 24) | (buffer[12] << 16) | (buffer[13] << 8) | buffer[14]);
-				//std::cout << "p=" << pry[0] << " r=" << pry[1] << " y=" << pry[2] << "\n";
+				float pitch, roll, yaw;
+				Serializer serializer = Serializer();
+				int next = 3;
+				pitch = serializer.unpackFloat(&buffer[next],next);
+				roll = serializer.unpackFloat(&buffer[next], next);
+				yaw = serializer.unpackFloat(&buffer[next], next); 
+				//std::cout << "p=" << pitch << " r=" << roll << " y=" << yaw << "\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
 						std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(p);
-						player->setPRY(pry[0], pry[1], pry[2]);
+						player->setPRY(pitch, roll, yaw);
 						//updateManager.queueUpdate(player);
 						break;
 					}
