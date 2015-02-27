@@ -44,9 +44,9 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 
 		std::shared_ptr<LocationComponent> locationComponent = objectPtr->getLocationComponent();
 		glm::vec3 objPos = locationComponent->getPosition();
-	
+		glm::mat4 objRotMat = locationComponent->getRotationMatrix();
 		//Move object to world space 
-		glm::mat4 objWorldMatrix = glm::translate(glm::mat4(1.0), glm::vec3(objPos.x, objPos.y,objPos.z));
+		glm::mat4 objWorldMatrix = glm::translate(objRotMat, glm::vec3(objPos.x, objPos.y, objPos.z));
 
 		//Move camera to the position of the player
 		glm::vec3 playerPos = player->getLocationComponent()->getPosition();

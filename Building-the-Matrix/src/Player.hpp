@@ -18,6 +18,10 @@ public:
 	int score;
 
 	Player(float xPos, float yPos, float zPos);
+
+	//Pitch, roll yaw
+	void Player::setHeadOrientation(glm::vec3 PRY);
+	void Player::setVehicleOrientation(glm::vec3 forwardVec);
 	int deserialize(unsigned char* buffer);
 };
 
