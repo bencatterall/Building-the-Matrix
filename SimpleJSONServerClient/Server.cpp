@@ -12,7 +12,8 @@
 #include <vector>
 #include <map>
 #include <chrono>
-#include "Physics/Simulator.hpp"
+#include "Physics\Simulator.hpp"
+#include "World\Chunk.hpp"
 
 /**
 ServerMain.cpp
@@ -23,7 +24,7 @@ Purpose: Controls a server instance bounded to arg[1] address and arg[2] port nu
 UpdateManager& updateManager = UpdateManager::getInstance();
 Socket mySocket;
 std::vector <Address> clients;
-std::vector <std::pair<Address, GameObjectGlobalID>> playerIDs;
+std::vector <std::pair<Address, GameObjectGlobalID> > playerIDs;
 std::map <Address, ClientState> clientStates;
 Sender sender;
 bool contMain;
@@ -52,11 +53,15 @@ void quit() {
 
 void physics() {
 	auto timer = std::chrono::system_clock::now();
+	Simulator & physicsSimulator = Simulator::getInstance();
+	auto nextTime = std::chrono::system_clock::now();
+	std::chrono::duration<float> timestepDur;
+	auto newChunk = std::make_shared<Chunk>(0.0f, 0.0f, 0.0f);
+	physicsSimulator.setChunk(newChunk);
 	while (contMain) {
-		//TODO: RUN PHYSICS HERE
-		Simulator & physicsSimulator = Simulator::getInstance();
-		auto nextTime = std::chrono::system_clock::now();
-		std::chrono::duration<float> timestepDur = nextTime - timer;
+		// Physics Tick
+		nextTime = std::chrono::system_clock::now();
+		timestepDur = nextTime - timer;
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
 		while (physicsSimulator.tickCount > 100){
