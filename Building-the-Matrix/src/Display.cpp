@@ -518,6 +518,7 @@ void Display::findHeadOrientation() {
 		float yaw, pitch, roll;
 		pose.Rotation.GetEulerAngles<Axis_Y, Axis_X, Axis_Z>(&yaw, &pitch, &roll);
 		headOrientation = glm::vec3(yaw, pitch, roll);
+		std::cout << "YAW: " << yaw << " PITCH " << pitch << " ROLL " << roll << std::endl;
 	}
 }
 void Display::render() {

@@ -14,7 +14,7 @@
 * attribution is appreciated.
 *http://webstaff.itn.liu.se/~stegu/simplexnoise/
 */
-#include <glm/mat4x4.hpp>
+#include "../../Building-the-Matrix/Dependencies/glm/mat4x4.hpp"
 #include <cmath>
 #include "Common.hpp"
 #include "SimplexNoise.hpp"

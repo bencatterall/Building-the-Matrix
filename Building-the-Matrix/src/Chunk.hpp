@@ -4,12 +4,14 @@
 #include "GameObject.hpp"
 #include "TextureAtlas.hpp"
 
+
 #include <memory>
 #include <glm/glm.hpp>
 #include <vector>
 #define CHUNK_SIZE_X 256
 #define CHUNK_SIZE_Y 150
 #define CHUNK_SIZE_Z 256
+#define CUBE_SIZE 10.0
 ///
 /// Holds a set of cubes
 ///
@@ -43,7 +45,6 @@ class Chunk : public GameObject{
 	static const GLfloat cubeTopTextureCoords[6 * 2];
 	static const GLfloat cubeBottomTextureCoords[6 * 2];
 
-
 	static const GLfloat cubeColours[4 * 36];
 
 	///
@@ -66,5 +67,10 @@ class Chunk : public GameObject{
 public:
 	Chunk();
 	Chunk(double xPos, double yPos, double zPos);
+
+	int getChunkSizeX() { return CHUNK_SIZE_X; }
+	int getChunkSizeY() { return CHUNK_SIZE_Y; }
+	int getChunkSizeZ() { return CHUNK_SIZE_Z; }
+	double getCubeSize() { return CUBE_SIZE; }
 };
 #endif

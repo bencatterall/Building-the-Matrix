@@ -67,6 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Building-the-Matrix\src\SimplexNoise.hpp" />
     <ClInclude Include="Address.hpp" />
     <ClInclude Include="ClientState.hpp" />
     <ClInclude Include="Common.hpp" />
@@ -88,8 +89,11 @@
     <ClInclude Include="Socket.hpp" />
     <ClInclude Include="Update.hpp" />
     <ClInclude Include="UpdateManager.hpp" />
+    <ClInclude Include="World\Chunk.hpp" />
+    <ClInclude Include="World\World.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Building-the-Matrix\src\SimplexNoise.cpp" />
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="ClientState.cpp" />
     <ClCompile Include="Controls.cpp" />
@@ -111,6 +115,8 @@
     <ClCompile Include="Catch.cpp" />
     <ClCompile Include="Update.cpp" />
     <ClCompile Include="UpdateManager.cpp" />
+    <ClCompile Include="World\Chunk.cpp" />
+    <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -30,7 +30,8 @@ protected:
 public:
 	///Objects are renderable by default
 	GameObject();
-	GameObject(bool renderable, bool visible);
+	GameObject(glm::vec3 worldlLoc);
+	GameObject(bool renderable, bool visible, glm::vec3 worldLoc = glm::vec3(0.0f, 0.0f, 0.0f));
 	virtual ~GameObject();
 	int deserialize(unsigned char* buffer);
 

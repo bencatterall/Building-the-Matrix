@@ -24,8 +24,8 @@ class Cube : public GameObject {
 	*
 	*
 	* 2---3
-	* | |
-	* | |
+	* |   |
+	* |   |
 	* 0---1
 	* is then
 	*

@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 Player::Player(float xPos, float yPos, float zPos) : 
-	Cube(glm::vec3(xPos, yPos, zPos)) { 
+	GameObject(glm::vec3(xPos, yPos, zPos)) { 
 
 }
 
