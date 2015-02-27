@@ -1,90 +1,79 @@
 #include "Controls.hpp"
+// for keyboard constants
+#include "GLFW/glfw3.h"
+#include <bitset>
 
-KeyboardControl::KeyboardControl() {
-	(this->U_HELD) = false;
-	(this->D_HELD) = false;
-	(this->L_HELD) = false;
-	(this->R_HELD) = false;
-}
+KeyboardControl::KeyboardControl(): keys_held(512, false) {}
 
 KeyboardControl::~KeyboardControl() {}
 
 KeyboardControl::KeyboardControl(const KeyboardControl& other) {
-	(this->U_HELD) = other.U_HELD;
-	(this->D_HELD) = other.D_HELD;
-	(this->L_HELD) = other.L_HELD;
-	(this->R_HELD) = other.R_HELD;
+	(this->keys_held) = other.keys_held;
 }
 
 KeyboardControl::KeyboardControl(Serializer serializer, unsigned char *buffer, int &next) {
 	next += (this->deserialize(serializer, buffer));
 }
 
-void KeyboardControl::regKeyPress(char key) {
-	if (key == 'u') {
-		(this->U_HELD) = true;
-	}
-	if (key == 'd') {
-		(this->D_HELD) = true;
-	}
-	if (key == 'r') {
-		(this->R_HELD) = true;
-	}
-	if (key == 'l') {
-		(this->L_HELD) = true;
-	}
+void KeyboardControl::regKeyPress(int key) {
+	if (key < 0 || key >= GLFW_KEY_LAST) return;
+	keys_held.at(key) = true;
 }
 
-void KeyboardControl::regKeyUnpress(char key) {
-	if (key == 'u') {
-		(this->U_HELD) = false;
-	}
-	if (key == 'd') {
-		(this->D_HELD) = false;
-	}
-	if (key == 'r') {
-		(this->R_HELD) = false;
-	}
-	if (key == 'l') {
-		(this->L_HELD) = false;
-	}
+void KeyboardControl::regKeyUnpress(int key) {
+	if (key < 0 || key >= GLFW_KEY_LAST) return;
+	keys_held.at(key) = false;
 }
 
-bool *KeyboardControl::getCurrentControls() {
-	bool *arr = new bool[ U_HELD, D_HELD, R_HELD, L_HELD ];
-	return arr;
+std::vector<bool> KeyboardControl::getCurrentControls() {
+	return keys_held;
 }
 
 int KeyboardControl::serialize(Serializer serializer, unsigned char *buffer) {
 	int next = 0;
-	next += serializer.packBool(&buffer[next], U_HELD);
-	next += serializer.packBool(&buffer[next], D_HELD);
-	next += serializer.packBool(&buffer[next], R_HELD);
-	next += serializer.packBool(&buffer[next], L_HELD);
+	for (size_t i = 0; i < keys_held.size(); i += sizeof(uint32_t)) {
+		std::bitset<sizeof(uint32_t)> bset;
+		for (size_t j = 0; j < sizeof(uint32_t); j++) {
+			if (keys_held[i + j]) {
+				bset.set(j);
+			}
+		}
+		next += serializer.packInt(&buffer[next], bset.to_ulong());
+	}
 	return next;
 }
 
 int KeyboardControl::deserialize(Serializer serializer, unsigned char *buffer) {
 	int next = 0;
-	(this->U_HELD) = serializer.unpackBool(&buffer[next], next);
-	(this->D_HELD) = serializer.unpackBool(&buffer[next], next);
-	(this->R_HELD) = serializer.unpackBool(&buffer[next], next);
-	(this->L_HELD) = serializer.unpackBool(&buffer[next], next);
+	for (size_t i = 0; i < keys_held.size(); i += sizeof(uint32_t)) {
+		int curr_key = serializer.unpackBool(&buffer[next], next);
+		std::bitset<sizeof(uint32_t)> bset(curr_key);
+		for (size_t j = 0; j < sizeof(uint32_t); j++) {
+			keys_held.at(i + j) = bset.test(j);
+		}
+	}
 	return next;
 }
 
-bool KeyboardControl::getUp() {
-	return (this->U_HELD);
+bool KeyboardControl::getUp() const{
+	return keys_held[GLFW_KEY_UP];
 }
 
-bool KeyboardControl::getDown() {
-	return (this->D_HELD);
+bool KeyboardControl::getDown() const{
+	return keys_held[GLFW_KEY_DOWN];
 }
 
-bool KeyboardControl::getLeft() {
-	return (this->L_HELD);
+bool KeyboardControl::getLeft() const{
+	return keys_held[GLFW_KEY_LEFT];
 }
 
-bool KeyboardControl::getRight() {
-	return (this->R_HELD);
+bool KeyboardControl::getRight() const{
+	return keys_held[GLFW_KEY_RIGHT];
+}
+
+bool KeyboardControl::getKey(unsigned int keycode) const{
+	if (keycode >= 512){
+		return false;
+	}
+	return keys_held[keycode];
 }

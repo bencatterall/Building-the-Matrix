@@ -60,7 +60,7 @@ void physics() {
 		timer = nextTime;
 		physicsSimulator.tick(timestepDur.count());
 		while (physicsSimulator.tickCount > 100){
-			std::cout << "2 Physics seconds has passed\n";
+			// std::cout << "2 Physics seconds has passed\n";
 			physicsSimulator.tickCount -= 100;
 		}
 		// Try to avoid being too fast
@@ -173,7 +173,6 @@ int main(int argc, char **argv) {
 	// thread to monitor clients and terminate if timed out
 	std::thread t_timeout(check_client_timeouts);
 	
-	auto timer = std::chrono::system_clock::now();
 	//input loops in this thread
 	while (contMain) {
 		//try to receive updates
@@ -251,10 +250,13 @@ int main(int argc, char **argv) {
 				}
 				//clientStates.erase(recFrom);
 			}
-			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <LETTER REPRESENTING KEY>)
+			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <INT REPRESENTING KEY>)
 			else if (prefixMatch(message, "PRESSED")) {
-				char key = buffer[8];
-				//std::cout << "User pressed " << key << "\n";
+				// char key = buffer[8];
+				int key = buffer[8];
+				// int p = 0;
+				// int key = Serializer::unpackInt(&buffer[8], p);
+				std::cout << "User pressed " << (char)key << " (" << key << ")\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
@@ -267,8 +269,11 @@ int main(int argc, char **argv) {
 				clientStates[recFrom].bump();
 			}
 			else if (prefixMatch(message, "UNPRESSED")) {
-				char key = buffer[10];
-				//std::cout << "User unpressed " << key << "\n";
+				// char key = buffer[10];
+				int key = buffer[10];
+				// int p = 0;
+				// int key = Serializer::unpackInt(&buffer[10], p);
+				std::cout << "User unpressed " << (char)key << " (" << key << ")\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);

@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "GLFW/glfw3.h"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
@@ -7,6 +8,8 @@
 #include "../GameObject.hpp"
 #include "../Player.hpp"
 #include "../UpdateManager.hpp"
+#include "../CubeSize.hpp"
+
 
 #define THRESHOLD 0.02f
 
@@ -45,13 +48,22 @@ void Simulator::tick(float timestep){
 				PhysicsMaths::stepObject(gameObj->physComp, THRESHOLD);
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
-					bool up = player->getUp();
-					bool down = player->getDown();
-					bool left = player->getLeft();
-					bool right = player->getRight();
-
+					bool up = player->getKey(GLFW_KEY_W);
+					bool down = player->getKey(GLFW_KEY_S);
+					bool left = player->getKey(GLFW_KEY_A);
+					bool right = player->getKey(GLFW_KEY_D);
+					bool ascend = player->getKey(GLFW_KEY_E);
+					bool descend = player->getKey(GLFW_KEY_Q);
+					
+					bool boostKey = player->getKey(GLFW_KEY_SPACE);
+					// Pressing anything
 					if (up || down || left || right) {
 						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
+					}
+					// Pressing nothing
+					else{
+						gameObj->physComp->setA(vec3());
+						gameObj->physComp->setV(gameObj->physComp->getV()*(1.0f - gameObj->physComp->getLinDrag()));
 					}
 					if (up && !down){
 						PhysicsMaths::acceleratePlayer(gameObj->physComp);
@@ -65,14 +77,15 @@ void Simulator::tick(float timestep){
 					if (left && !right){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
-					if (left && right && up && down){
-						vec3 X = gameObj->physComp->getX();
-						vec3 V = gameObj->physComp->getV();
-						vec3 A = gameObj->physComp->getA();
-						std::cout << "Object position:" << X.x << " " << X.y << " " << X.z << "\n";
-						std::cout << "Object velocity:" << V.x << " " << V.y << " " << V.z << "\n";
-						std::cout << "Object acceleration:" << A.x << " " << A.y << " " << A.z << "\n";
-					}	
+					if (boostKey){
+						gameObj->physComp->setV(gameObj->physComp->getV() * 1.1f);
+					}
+					if (ascend && ! descend){
+						gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, 0.1f, 0.0f));
+					}
+					if (descend && !ascend){
+						gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, -0.1f, 0.0f));
+					}
 				}
 			}
 		processCollisions(gameObjects);
@@ -89,7 +102,6 @@ void Simulator::tick(float timestep){
 }
 
 void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects){
-	UpdateManager & objMan = UpdateManager::getInstance();
 	// O(n^2) collision check
 	if (gameObjects.size() > 0) {
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
@@ -97,16 +109,27 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
 			std::shared_ptr<GameObject> gameObj = (it->second);
-			PhysicsObject currentObj = *(gameObj->physComp);
+			std::shared_ptr<PhysicsObject> currentObj = gameObj->physComp;
 			it2 = it;
 			for (it2++; it2 != gameObjects.end(); it2++)
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
-				if (PhysicsMaths::simpleCollision(currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
-					std::cout << "Collision!";
+				if (PhysicsMaths::simpleCollision(*currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
+					std::cout << "Collision between " << it->second->ID << " and " << it2->second->ID << "\n";
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
+			}
+			if (true){ // cubeAt()
+				vertexVector vectorAABB = std::vector<glm::vec3>(2);
+				vectorAABB.at(0) = vec3(CUBE_SIZE);
+				vectorAABB.at(1) = vec3(-CUBE_SIZE);
+				vec3 pos = vec3(); // cubeCenter
+				GameObject tmpObj = GameObject();
+				PhysicsObject tmpTerrain = PhysicsObject(tmpObj.locComp, vectorAABB);
+				tmpTerrain.setX(pos);
+				std::cout << "Collision between " << it->second->ID << " and " << it2->second->ID << "\n";
+				PhysicsMaths::handleCollision(*gameObj, tmpObj);
 			}
 		}
 	}

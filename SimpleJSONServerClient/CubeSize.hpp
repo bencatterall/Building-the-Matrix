@@ -1,0 +1,1 @@
+#define CUBE_SIZE 10.0f

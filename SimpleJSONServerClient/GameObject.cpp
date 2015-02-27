@@ -1,5 +1,6 @@
 #include "GameObject.hpp"
 #include "Serializer.hpp"
+#include "CubeSize.hpp"
 
 GameObject::GameObject(GameObjectGlobalID id) {
 	(this->ID) = id;
@@ -10,8 +11,8 @@ GameObject::GameObject(GameObjectGlobalID id) {
 	this->locComp = std::make_shared<LocationComponent>();
 	std::vector<vec3> tmpVec = std::vector<vec3>();
 	tmpVec.resize(2);
-	tmpVec.at(0) = vec3(-10.0f, -10.0f, -10.0f);
-	tmpVec.at(1) = vec3(10.0f, 10.0f, 10.0f);
+	tmpVec.at(0) = vec3(-CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE);
+	tmpVec.at(1) = vec3(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
 	this->physComp = std::make_shared<PhysicsObject>(locComp, tmpVec);
 }
 

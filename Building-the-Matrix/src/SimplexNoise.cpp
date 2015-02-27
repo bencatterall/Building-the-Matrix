@@ -15,6 +15,7 @@
 *http://webstaff.itn.liu.se/~stegu/simplexnoise/
 */
 #include <glm/mat4x4.hpp>
+#include <cmath>
 #include "Common.hpp"
 #include "SimplexNoise.hpp"
 SimplexNoise::SimplexNoise() {

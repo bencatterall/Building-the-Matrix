@@ -1,7 +1,6 @@
 #ifndef PHYSICS_OBJECT_H
 #define PHYSICS_OBJECT_H
 
-#include "../CommonMinimal.hpp"
 #include "../../Building-the-Matrix/Dependencies/glm/glm.hpp"
 #include "../../Building-the-Matrix/Dependencies/glm/gtc/quaternion.hpp"
 #include "../Serializer.hpp"

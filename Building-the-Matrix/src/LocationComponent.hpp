@@ -29,7 +29,7 @@ public:
 		LocationComponent(glm::vec3(0.0, 0.0, 0.0), glm::mat4(1.0)) {
 	}
 
-	LocationComponent::LocationComponent(unsigned char *buffer, int &next){
+	LocationComponent(unsigned char *buffer, int &next){
 		next += (this->deserialize(buffer));
 	}
 

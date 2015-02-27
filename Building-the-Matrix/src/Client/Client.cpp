@@ -55,22 +55,30 @@ Client::~Client() {
 	}
 }
 
-bool Client::sendKeyPress(char key) {
-	const char *data = constants.keyPressMessage(key);
-	std::cout << key << " pressed\n";
+bool Client::sendKeyPress(int key) {
+	if (!(0 <= key && key < 256)) {
+		std::cout << "Key " << (char)key << " (" << key << ") out of range for press\n";
+		return false;
+	}
+	const unsigned char *data = constants.keyPressMessage(key);
+	std::cout << "Key " << (char)key << " (" << key << ") pressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), data, 10));
+	a = ((this->socket).sendSingle((this->server), (const char*)data, 7 + 1 + sizeof(uint32_t) + 1));
 	(this->lock).unlock();
 	return a;
 }
 
-bool Client::sendKeyUnpress(char key) {
-	const char *data = constants.keyUnpressMessage(key);
-	std::cout << key << " unpressed\n";
+bool Client::sendKeyUnpress(int key) {
+	if (!(0 <= key && key < 256)) {
+		std::cout << "Key " << (char)key << " (" << key << ") out of range for unpress\n";
+		return false;
+	}
+	const unsigned char	 *data = constants.keyUnpressMessage(key);
+	std::cout << "Key " << (char)key << " (" << key << ") unpressed\n";
 	bool a;
 	(this->lock).lock();
-	a = ((this->socket).sendSingle((this->server), data, 12));
+	a = ((this->socket).sendSingle((this->server), (const char*)data, 9 + 1 + sizeof(uint32_t) + 1));
 	(this->lock).unlock();
 	return a;
 }

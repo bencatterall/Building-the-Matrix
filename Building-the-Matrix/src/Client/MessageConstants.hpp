@@ -11,6 +11,6 @@ class MessageConstants {
 		~MessageConstants();
 		static const char *loginMessage();
 		static const char *logoutMessage();
-		static const char *keyPressMessage(char key);
-		static const char *keyUnpressMessage(char key);
+		static const unsigned char *keyPressMessage(int);
+		static const unsigned char *keyUnpressMessage(int);
 };
