@@ -39,7 +39,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	if (key != GLFW_KEY_UNKNOWN && key <= GLFW_KEY_LAST) {
 		if (action == GLFW_PRESS) {
 			client.sendKeyPress(key);
-		} else {
+		} else if (action == GLFW_RELEASE) {
 			client.sendKeyUnpress(key);
 		}
 	}
