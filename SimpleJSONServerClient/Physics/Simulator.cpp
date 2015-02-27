@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "GLFW/glfw3.h"
 #include "AABB.hpp"
 #include "PhysicsMaths.hpp"
 #include "PhysicsObject.hpp"
@@ -7,6 +8,7 @@
 #include "../GameObject.hpp"
 #include "../Player.hpp"
 #include "../UpdateManager.hpp"
+
 
 #define THRESHOLD 0.02f
 
@@ -45,11 +47,12 @@ void Simulator::tick(float timestep){
 				PhysicsMaths::stepObject(gameObj->physComp, THRESHOLD);
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
-					bool up = player->getUp();
-					bool down = player->getDown();
-					bool left = player->getLeft();
-					bool right = player->getRight();
-
+					bool up = player->getKey(GLFW_KEY_W);
+					bool down = player->getKey(GLFW_KEY_S);
+					bool left = player->getKey(GLFW_KEY_A);
+					bool right = player->getKey(GLFW_KEY_D);
+					
+					bool boostKey = player->getKey(GLFW_KEY_SPACE);
 					// Pressing anything
 					if (up || down || left || right) {
 						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
@@ -71,14 +74,9 @@ void Simulator::tick(float timestep){
 					if (left && !right){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
-					if (left && right && up && down){
-						vec3 X = gameObj->physComp->getX();
-						vec3 V = gameObj->physComp->getV();
-						vec3 A = gameObj->physComp->getA();
-						std::cout << "Object position:" << X.x << " " << X.y << " " << X.z << "\n";
-						std::cout << "Object velocity:" << V.x << " " << V.y << " " << V.z << "\n";
-						std::cout << "Object acceleration:" << A.x << " " << A.y << " " << A.z << "\n";
-					}	
+					if (boostKey){
+						gameObj->physComp->setV(gameObj->physComp->getV() * 1.1f);
+					}
 				}
 			}
 		processCollisions(gameObjects);
