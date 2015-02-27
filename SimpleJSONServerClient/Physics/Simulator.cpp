@@ -9,6 +9,7 @@
 #include "../Player.hpp"
 #include "../UpdateManager.hpp"
 #include "../CubeSize.hpp"
+#include "../World/Chunk.hpp"
 
 
 #define THRESHOLD 0.02f
@@ -55,7 +56,8 @@ void Simulator::tick(float timestep){
 					bool ascend = player->getKey(GLFW_KEY_E);
 					bool descend = player->getKey(GLFW_KEY_Q);
 					
-					bool boostKey = player->getKey(GLFW_KEY_SPACE);
+					bool boostKey = player->getKey(GLFW_KEY_C);
+					bool emergencyStop = player->getKey(GLFW_KEY_X);
 					// Pressing anything
 					if (up || down || left || right) {
 						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
@@ -78,13 +80,16 @@ void Simulator::tick(float timestep){
 						PhysicsMaths::turnLeft(gameObj->physComp);
 					}
 					if (boostKey){
-						gameObj->physComp->setV(gameObj->physComp->getV() * 1.1f);
+						gameObj->physComp->setV(gameObj->physComp->getV() * 1.01f);
 					}
 					if (ascend && ! descend){
 						gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, 0.1f, 0.0f));
 					}
 					if (descend && !ascend){
 						gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, -0.1f, 0.0f));
+					}
+					if (emergencyStop){
+						gameObj->physComp->setV(vec3());
 					}
 				}
 			}
@@ -120,14 +125,15 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
 			}
-			if (false){ // cubeAt()
+			if (false) { //chunk.cubeAt(currentObj->getX())){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
 				vectorAABB.at(0) = vec3(CUBE_SIZE);
 				vectorAABB.at(1) = vec3(-CUBE_SIZE);
-				vec3 pos = vec3(); // cubeCenter
+				vec3 pos = vec3();//chunk.cubeCenter(currentObj->getX());
 				GameObject tmpObj = GameObject();
 				auto tmpTerrain = std::make_shared<PhysicsObject>(tmpObj.locComp, vectorAABB);
 				tmpTerrain->setX(pos);
+				tmpTerrain->setMass(0.0f);
 				tmpObj.physComp = tmpTerrain;
 				std::cout << "Collision between " << it->second->ID << " and terrain\n";
 				PhysicsMaths::handleCollision(*gameObj, tmpObj);
