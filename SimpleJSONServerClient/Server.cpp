@@ -253,9 +253,10 @@ int main(int argc, char **argv) {
 			//HANDLE USER INPUT (SENT IN FORMAT <ACTION> <INT REPRESENTING KEY>)
 			else if (prefixMatch(message, "PRESSED")) {
 				// char key = buffer[8];
-				int p = 0;
-				int key = Serializer::unpackInt(&buffer[8], p);
-				//std::cout << "User pressed " << key << "\n";
+				int key = buffer[8];
+				// int p = 0;
+				// int key = Serializer::unpackInt(&buffer[8], p);
+				std::cout << "User pressed " << (char)key << " (" << key << ")\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
@@ -268,11 +269,11 @@ int main(int argc, char **argv) {
 				clientStates[recFrom].bump();
 			}
 			else if (prefixMatch(message, "UNPRESSED")) {
-				// char key = buffer[8];
-				int p = 0;
-				int key = Serializer::unpackInt(&buffer[10], p);
 				// char key = buffer[10];
-				//std::cout << "User unpressed " << key << "\n";
+				int key = buffer[10];
+				// int p = 0;
+				// int key = Serializer::unpackInt(&buffer[10], p);
+				std::cout << "User unpressed " << (char)key << " (" << key << ")\n";
 				for (std::pair<Address, GameObjectGlobalID> e : playerIDs) {
 					if (e.first.getAddress() == recFrom.getAddress() && e.first.getPort() == recFrom.getPort()) {
 						std::shared_ptr<GameObject> p = updateManager.getGameObject(e.second);
