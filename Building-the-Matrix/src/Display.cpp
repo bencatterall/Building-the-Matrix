@@ -344,11 +344,11 @@ Display::~Display() {
 }
 
 
-void Display::run() {
+void Display::run(std::string remote_IP, int remote_port, std::string local_IP, int local_port) {
 	//Create objects
 	
 	try {
-		client.setAddresses(Address(std::string("192.168.1.1"), 9898), Address(std::string("192.168.1.3"), 9899));
+		client.setAddresses(Address(local_IP, local_port), Address(remote_IP, remote_port));
 	}
 	
 	catch (...){

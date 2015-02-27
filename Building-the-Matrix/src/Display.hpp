@@ -53,7 +53,7 @@ public:
 	void updateRenderTarget(int width, int height);
 	void Output();
 	void convertQuaternionToMatrix(const float* quat, float* mat);
-	void run(void);
+	void run(std::string remote_IP, int remote_port, std::string local_IP, int local_port);
 
 	///
 	/// Call code to begin the render sequence
