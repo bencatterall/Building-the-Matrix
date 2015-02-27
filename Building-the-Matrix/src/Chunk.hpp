@@ -68,9 +68,9 @@ public:
 	Chunk();
 	Chunk(double xPos, double yPos, double zPos);
 
-	int getChunkSizeX() { return CHUNK_SIZE_X; }
-	int getChunkSizeY() { return CHUNK_SIZE_Y; }
-	int getChunkSizeZ() { return CHUNK_SIZE_Z; }
-	double getCubeSize() { return CUBE_SIZE; }
+	static int getChunkSizeX() { return CHUNK_SIZE_X; }
+	static int getChunkSizeY() { return CHUNK_SIZE_Y; }
+	static int getChunkSizeZ() { return CHUNK_SIZE_Z; }
+	static double getCubeSize() { return CUBE_SIZE; }
 };
 #endif
