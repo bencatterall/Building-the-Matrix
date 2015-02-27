@@ -5,11 +5,11 @@
 #include "Physics/PhysicsMaths.hpp"
 #include "shader.hpp"	
 
-Cube::Cube(glm::vec3 pos) {
+Cube::Cube(glm::vec3 pos, float sf) {
 
 	//TODO improve efficiency of this entire class
 	for (size_t i = 0; i < sizeof(cubeData) / sizeof(GLfloat); ++i) {
-		cubeVertexData.push_back(10.0f*cubeData[i]);
+		cubeVertexData.push_back(sf*cubeData[i]);
 	}
 
 	for (size_t i = 0; i < sizeof(cubeColours) / sizeof(GLfloat); ++i) {
