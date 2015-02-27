@@ -93,6 +93,7 @@
     <ClInclude Include="World\World.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Building-the-Matrix\src\SimplexNoise.cpp" />
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="ClientState.cpp" />
     <ClCompile Include="Controls.cpp" />

@@ -1,6 +1,7 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
+#include "../../Building-the-Matrix/Dependencies/glm/glm.hpp"
 #include <memory>
 #include <vector>
 
@@ -36,7 +37,8 @@ public:
 	int getChunkSizeZ() { return CHUNK_SIZE_Z; }
 	//Cubes range between 1 and -1 and CUBE_HALF_SIZE is the size of 1 to 0 scaled up by cubesize
 	float getCubeSize() { return CUBE_HALF_SIZE * 2; }
-	bool cubeAt(float xPos, float yPos, float zPos);
+	bool cubeAt(glm::vec3 worldLocation);
+	glm::vec3 getCubeCenter(glm::vec3 worldLocation);
 	Chunk();
 	Chunk(double xPos, double yPos, double zPos);
 };

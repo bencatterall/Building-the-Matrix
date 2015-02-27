@@ -20,12 +20,22 @@ Chunk::Chunk(double xPos, double yPos, double zPos) :
 	init();
 }
 
-bool Chunk::cubeAt(float xPos, float yPos, float zPos) {
+glm::vec3 Chunk::getCubeCenter(glm::vec3 worldLocation) {
+	float cubeSize = (float)getCubeSize();
+	//Center of the cube
+	float xLoc = (int)(((worldLocation.x - this->xPos) / cubeSize)) * cubeSize;
+	float yLoc = (int)(((worldLocation.y - this->yPos) / cubeSize)) * cubeSize;
+	float zLoc = (int)(((worldLocation.z- this->zPos) / cubeSize)) * cubeSize;;
+
+	return glm::vec3(xLoc, yLoc, zLoc);
+}
+
+bool Chunk::cubeAt(glm::vec3 worldLocation) {
 	double cubeSize = getCubeSize();
 	int xLength = getChunkSizeX(), yLength = getChunkSizeY(), zLength = getChunkSizeZ();
-	int xLoc = (int)((xPos - this->xPos) / cubeSize) + xLength / 2;
-	int yLoc = (int)((yPos - this->yPos) / cubeSize) + yLength / 2;
-	int zLoc = (int)((zPos - this->zPos) / cubeSize) + zLength / 2;
+	int xLoc = (int)(((worldLocation.x - this->xPos) / cubeSize)) + xLength / 2;
+	int yLoc = (int)(((worldLocation.y - this->yPos) / cubeSize)) + yLength / 2;
+	int zLoc = (int)(((worldLocation.z - this->zPos) / cubeSize)) + zLength / 2;
 
 	assert(xLoc >= 0 && yLoc >= 0 && zLoc >= 0);
 	assert(xLoc < xLength && yLoc < yLength && zLoc < zLength);
