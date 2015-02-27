@@ -34,8 +34,11 @@ public:
 	const vec3 getA() const;
 	const vec3 getOrientation() const;
 	void setX(vec3 &);
+	void setX(vec3 &&);
 	void setV(vec3 &);
+	void setV(vec3 &&);
 	void setA(vec3 &);
+	void setA(vec3 &&);
 	void setOrientation(vec3 &);
 	
 	float getMass() const;

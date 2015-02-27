@@ -1,11 +1,17 @@
 CXX = clang++
 CXXFLAGS = -std=c++11 -Wall --pedantic -I ../Building-the-Matrix/Dependencies
-# DEPS = GameObject.hpp UpdateManager.hpp Sender.hpp SafeQueue.hpp SafeMap.hpp Update.hpp Controls.hpp Message.hpp Serializer.hpp Sender.hpp Player.hpp LocationComponent.hpp ClientState.hpp
-# DEPS += Controls.hpp Game.hpp GameObject.hpp ObjectManager.hpp Player.hpp Serializer.hpp SimplexNoise.hpp
+CXXFLAGS +=  -I ../Building-the-Matrix/LibOVR/Src -I ../Building-the-Matrix/LibOVR/Include
+# LIBS_SRC = 
+# LIBS = $(LIBS_SRC:%=../Building-the-Matrix/Dependencies/%)
+# CXXFLAGS += -L $(LIBS)
 DEPS =  
-DEPS += Display.hpp
-# DEPS += Chunk.hpp Cube.hpp ImageLoader.hpp LocationComponent.hpp RenderableComponent.hpp
-DEPS += Client/Address.hpp Client/Socket.hpp
+# DEPS += Display.hpp
+DEPS += Controls.hpp Game.hpp GameObject.hpp ObjectManager.hpp Player.hpp
+DEPS += Client/Address.hpp Client/Socket.hpp Client/Client.hpp Client/MessageConstants.hpp
+DEPS += Serializer.hpp
+# Graphics
+DEPS += Chunk.hpp Cube.hpp ImageLoader.hpp LocationComponent.hpp RenderableComponent.hpp
+DEPS += SimplexNoise.hpp TextRenderer.hpp shader.hpp TextureAtlas.hpp Texture.hpp
 DEPS += Physics/PhysicsObject.hpp Physics/Simulator.hpp Physics/AABB.hpp Physics/PhysicsMaths.hpp
 OBJ := $(DEPS:%.hpp=bin/%.o)
 DEPS += Common.hpp

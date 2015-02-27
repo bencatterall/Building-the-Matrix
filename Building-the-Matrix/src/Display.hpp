@@ -7,11 +7,13 @@
 
 
 //We need access to the native window handle so we need some native functions
+#if PLATFORM == PLATFORM_WINDOWS
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
 #include "../Dependencies/GLFW/glfw3native.h"
 
 #define OVR_OS_WIN32
+#endif
 #include "OVR_CAPI.h"
 #include "OVR_CAPI_GL.h"
 #include "Kernel/OVR_Math.h"
