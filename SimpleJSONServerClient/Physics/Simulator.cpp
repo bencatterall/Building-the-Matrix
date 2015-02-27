@@ -8,7 +8,6 @@
 #include "../GameObject.hpp"
 #include "../Player.hpp"
 #include "../UpdateManager.hpp"
-#include "../CubeSize.hpp"
 #include "../World/Chunk.hpp"
 
 
@@ -27,6 +26,10 @@ Simulator::~Simulator()
 Simulator& Simulator::getInstance() {
 	static Simulator instance;
 	return instance;
+}
+
+void Simulator::setChunk(std::shared_ptr<Chunk> newChunk){
+	chunk = newChunk;
 }
 
 void Simulator::tick(float timestep){
@@ -125,11 +128,11 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
 			}
-			if (false) { //chunk.cubeAt(currentObj->getX())){
+			if (chunk->cubeAt(currentObj->getX())){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
-				vectorAABB.at(0) = vec3(CUBE_SIZE);
-				vectorAABB.at(1) = vec3(-CUBE_SIZE);
-				vec3 pos = vec3();//chunk.cubeCenter(currentObj->getX());
+				vectorAABB.at(0) = vec3(chunk->getCubeSize());
+				vectorAABB.at(1) = vec3(chunk->getCubeSize());
+				vec3 pos = chunk->getCubeCenter(currentObj->getX());
 				GameObject tmpObj = GameObject();
 				auto tmpTerrain = std::make_shared<PhysicsObject>(tmpObj.locComp, vectorAABB);
 				tmpTerrain->setX(pos);
