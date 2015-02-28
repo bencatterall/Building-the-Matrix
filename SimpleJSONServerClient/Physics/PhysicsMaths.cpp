@@ -12,16 +12,6 @@
 
 namespace PhysicsMaths{
 	// Simple first order approximation to motion given U, A, T.
-	float UATtoS(float U, float A, float T){
-		return (U + (A * T) * 0.5f) * T;
-	}
-
-	// Simple first order approximation to motion given U, A, T.
-	float UATtoV(float U, float A, float T){
-		return U + (A * T);
-	}
-
-	// Simple first order approximation to motion given U, A, T.
 	vec3 UATtoS(const vec3 U, const vec3 A, float T){
 		vec3 vec = vec3();
 		vec = (U + (A * T) * 0.5f) * T;
@@ -75,14 +65,6 @@ namespace PhysicsMaths{
 		return true;
 	}
 
-	/*void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID){
-		UpdateManager& objMan = UpdateManager::getInstance();
-		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map = objMan.getState();
-		GameObject objA = *objMan.getGameObject(aID);
-		GameObject objB = *objMan.getGameObject(bID);
-		handleCollision(objA, objB);
-	}*/
-
 	void handleCollision(GameObjectGlobalID aID, GameObjectGlobalID bID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> map){
 		GameObject objA = *((map.find(aID))->second);
 		GameObject objB = *((map.find(bID))->second);
@@ -109,10 +91,11 @@ namespace PhysicsMaths{
 		vec3 vDiff = physA->getV() - physB->getV();
 
 		// Calculate relative velocity along normal direction
-		float velDelAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
+		float speedAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
+		bool collisionMetric = glm::length(sDiff) > glm::length(vDiff - sDiff);
 
 		// Do not resolve if they are separating already
-		if (velDelAlongCollisionNormal > 0.0f){
+		if (collisionMetric > 0.0f){
 			return;
 		}
 		// Choose minimal restitution
@@ -152,8 +135,8 @@ namespace PhysicsMaths{
 			return;
 		}
 
-		vec3 v1 = (m1 * u1 + m2 * (u2 - e * velDelAlongCollisionNormal * sDiffNormal)) / (m1 + m2);
-		vec3 v2 = v1 + e * velDelAlongCollisionNormal * sDiffNormal;
+		vec3 v1 = (m1 * u1 + m2 * (u2 - e * speedAlongCollisionNormal * sDiffNormal)) / (m1 + m2);
+		vec3 v2 = v1 + e * speedAlongCollisionNormal * sDiffNormal;
 
 		physA->setV(u1rejection + v1);
 		physB->setV(u2rejection + v2);

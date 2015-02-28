@@ -61,6 +61,7 @@ void Simulator::tick(float timestep){
 					
 					bool boostKey = player->getKey(GLFW_KEY_C);
 					bool emergencyStop = player->getKey(GLFW_KEY_X);
+					bool resetX = player->getKey(GLFW_KEY_Z);
 					// Pressing anything
 					if (up || down || left || right) {
 						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
@@ -93,6 +94,9 @@ void Simulator::tick(float timestep){
 					}
 					if (emergencyStop){
 						gameObj->physComp->setV(vec3());
+					}
+					if (resetX){
+						gameObj->physComp->setX(vec3(0.0f, 50.0f, 0.0f));
 					}
 				}
 			}
@@ -128,10 +132,20 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
 			}
-			if (chunk->cubeAt(currentObj->getX())){
+			bool terrainCollision = false;
+			auto worldAABB = currentObj->getWorldAABB()->getFullBox();
+			for (size_t i = 0; i < 8; i++){
+				vec3 currentVertex = worldAABB->at(i);
+				if (chunk->cubeAt(currentVertex)){
+					terrainCollision = true;
+					break;
+				}
+			}
+			terrainCollision = chunk->cubeAt(currentObj->getX());
+			if (terrainCollision){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
-				vectorAABB.at(0) = vec3(chunk->getCubeSize());
-				vectorAABB.at(1) = vec3(chunk->getCubeSize());
+				vectorAABB.at(0) = vec3(-chunk->getCubeSize() / 2.0f);
+				vectorAABB.at(1) = vec3(chunk->getCubeSize() / 2.0f);
 				vec3 pos = chunk->getCubeCenter(currentObj->getX());
 				GameObject tmpObj = GameObject();
 				tmpObj.locComp = std::make_shared<LocationComponent>(pos);
