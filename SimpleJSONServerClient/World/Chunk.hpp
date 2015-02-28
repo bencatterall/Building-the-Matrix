@@ -8,7 +8,7 @@
 #define CHUNK_SIZE_X 256
 #define CHUNK_SIZE_Y 150
 #define CHUNK_SIZE_Z 256
-#define CUBE_HALF_SIZE 10.0f
+#define CUBE_HALF_SIZE 1.0f
 ///
 /// Holds a set of cubes
 ///

@@ -37,8 +37,13 @@ bool Chunk::cubeAt(glm::vec3 worldLocation) {
 	int yLoc = (int)(((worldLocation.y - this->yPos) / cubeSize)) + yLength / 2;
 	int zLoc = (int)(((worldLocation.z - this->zPos) / cubeSize)) + zLength / 2;
 
-	assert(xLoc >= 0 && yLoc >= 0 && zLoc >= 0);
-	assert(xLoc < xLength && yLoc < yLength && zLoc < zLength);
+	//Prevent array out-of-bounds
+	//Assume you can't leave the chunk
+	//TODO: Fix for multiple chunks.
+	if ((xLoc < 0 || yLoc < 0 || zLoc < 0))
+		return true;
+	if (xLoc >= xLength || yLoc >= yLength || zLoc >= zLength)
+		return true;
 
 	return (chunkData[xLoc][yLoc][zLoc] > 0);
 }

@@ -130,8 +130,8 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 			}
 			if (chunk->cubeAt(currentObj->getX())){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
-				vectorAABB.at(0) = vec3(chunk->getCubeSize());
-				vectorAABB.at(1) = vec3(chunk->getCubeSize());
+				vectorAABB.at(0) = vec3(-chunk->getCubeSize()/2.0f);
+				vectorAABB.at(1) = vec3(chunk->getCubeSize()/2.0f);
 				vec3 pos = chunk->getCubeCenter(currentObj->getX());
 				GameObject tmpObj = GameObject();
 				tmpObj.locComp = std::make_shared<LocationComponent>(pos);
