@@ -92,10 +92,10 @@ namespace PhysicsMaths{
 
 		// Calculate relative velocity along normal direction
 		float speedAlongCollisionNormal = glm::dot(vDiff, sDiffNormal);
-		bool collisionMetric = glm::length(sDiff) > glm::length(vDiff - sDiff);
+		bool seperatingMetric = glm::length(sDiff) > glm::length(vDiff - sDiff);
 
 		// Do not resolve if they are separating already
-		if (collisionMetric > 0.0f){
+		if (seperatingMetric){
 			return;
 		}
 		// Choose minimal restitution
