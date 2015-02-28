@@ -9,8 +9,8 @@
 
 Player::Player(float xPos, float yPos, float zPos) :
 GameObject(glm::vec3(xPos, yPos, zPos)) {
-	headCube = std::make_shared<Cube>(glm::vec3(xPos, yPos + Chunk::getCubeSize(), zPos - 20.0f), (float)Chunk::getCubeSize() / 5.0f);
-	vehicleCube = std::make_shared<Cube>(glm::vec3(xPos, yPos, zPos), (float)Chunk::getCubeSize());
+	headCube = std::make_shared<Cube>(glm::vec3(xPos, yPos + Chunk::getCubeSize(), zPos), (float)Chunk::getCubeSize() / 5.0f);
+	vehicleCube = std::make_shared<Cube>(glm::vec3(xPos, yPos, zPos - 20.0f), (float)Chunk::getCubeSize());
 
 	//Add to object mangager
 	ObjectManager& objManager = ObjectManager::getInstance();
@@ -56,7 +56,7 @@ int Player::deserialize(unsigned char* buffer) {
 
 	//Update orientation of the player
 	setVehicleOrientation(physicsObject->getOrientation());
-	setHeadOrientation(glm::vec3(this->pitch, this->roll, this->yaw));
+	setHeadOrientation(glm::vec3(this->roll, this->pitch, this->yaw));
 
 
 	return next;
