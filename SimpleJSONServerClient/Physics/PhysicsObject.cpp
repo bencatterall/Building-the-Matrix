@@ -3,6 +3,11 @@
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
 
+#define SMALL_COS 0.999876632481660598638907127731252174499277787538006150898362f
+#define SMALL_SIN 0.015707317311820675753295353309906770086948450733778946832100f
+#define MAX_SPEED 10.0f
+
+
 PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& pointer) {
 	pointer += (this->deserialize(serializer,serial));
 }
@@ -10,7 +15,7 @@ PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
 	restitution(1.0f), velocity(vec3()), 
-	orientation(vec3(0,0,-1)), friction(0.001f), airRes(0.0f)
+	orientation(vec3(0,0,-1)), friction(0.003f), airRes(0.0f)
 {
 	if (locationComp == nullptr){
 		locationComp = std::make_shared<LocationComponent>();
@@ -151,32 +156,75 @@ void PhysicsObject::turnObject(const Quaternion rotator, const vec3(PhysicsObjec
 	(*this.*setter)(updated);
 }
 
+void PhysicsObject::stepObject(float timestep){
+	vec3 newV = velocity + acc * timestep;
+	vec3 delS = (velocity + newV) * 0.5f * timestep;
+	setX(getX() + delS);
+	setV(newV);
+}
+
 void PhysicsObject::acceleratePlayer(){
-	vec3 dir = this->getOrientation();
-	float speed = glm::length(dir);
-	vec3 A = this->getA();
-	// TODO: Consider further mechanisms for determining power
-	// TODO: Adjust arbitrary constant according to playtesting
-	this->setA(A + glm::normalize(dir)*(5.0f - speed));
+	vec3 dir = getOrientation();
+	vec3 A = getA(), V = getV();
+	// If we are moving forwards
+	if (glm::dot(dir, V) > 0) {
+		// If we are max speed
+		if (glm::length(V) > MAX_SPEED){
+			// Stop accelerating.
+			setA(vec3());
+		}
+		else{
+			//We aren't at max speed yet, accelerate
+			vec3 newA = A + dir;
+			if (newA != vec3()){
+				newA = glm::normalize(newA) * 5.0f;
+			}
+			setA(newA);
+		}
+	}
+	else{
+		// We are moving backwards - accelerate forwards
+		vec3 newA = A + dir;
+		if (newA != vec3()){
+			newA = glm::normalize(newA);
+		}
+		setA(newA);
+	}
 }
 
 
 void PhysicsObject::reversePlayer(){
-	vec3 dir = this->getOrientation();
-	float speed = glm::length(dir);
-	vec3 A = this->getA();
-	// TODO: Adjust arbitrary constant according to playtesting
-	this->setA(A + glm::normalize(dir)*(-2.0f - speed));
+	vec3 dir = getOrientation();
+	vec3 A = getA(), V = getV();
+	if (glm::dot(dir, V) < 0) { // go faster
+		if (glm::length(V) > MAX_SPEED){ //max speed
+			setA(vec3());
+		}
+		else{ //speed up
+			vec3 newA = A - dir;
+			if (newA != vec3()){
+				newA = glm::normalize(A - dir);
+			}
+			setA(newA);
+		}
+	}
+	else{
+		vec3 newA = A - dir;
+		if (newA != vec3()){
+			newA = glm::normalize(A - dir);
+		}
+		setA(newA);
+	}
 }
 
-void PhysicsObject::turnLeft(float turnSpeed = TURN_SPEED){
+void PhysicsObject::turnLeft(float turnSpeed){
 	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
 	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
 	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getA, &PhysicsObject::setA);
 
 }
 
-void PhysicsObject::turnRight(float turnSpeed = TURN_SPEED){
+void PhysicsObject::turnRight(float turnSpeed){
 	turnLeft(-turnSpeed);
 
 }

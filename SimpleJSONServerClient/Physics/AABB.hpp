@@ -1,12 +1,13 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "../Common.hpp"
+#include <memory>
+#include <vector>
+#include "../CommonMinimal.hpp"
 #include "../../Building-the-Matrix/Dependencies/glm/glm.hpp"
 #include "../../Building-the-Matrix/Dependencies/glm/vector_relational.hpp"
 #include "../Serializer.hpp"
-#include <memory>
-#include <vector>
+
 
 class Serializer;
 
@@ -38,8 +39,6 @@ public:
 
 	int serialize(Serializer serializer, unsigned char *buffer);
 	int deserialize(Serializer serializer, unsigned char *buffer);
-
-protected:
 
 private:
 	vec3 min, max;

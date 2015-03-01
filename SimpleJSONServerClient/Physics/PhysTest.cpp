@@ -1,5 +1,7 @@
-//#define TEST
+#include "..\Common.hpp"
+
 #ifdef TEST
+#ifdef TEST_PHYSICS
 #include "../../Building-The-Matrix/Dependencies/Catch/catch.hpp"
 #include "../Player.hpp"
 #include "PhysicsMaths.hpp"
@@ -16,4 +18,5 @@ TEST_CASE("", "[a]"){
 
 	REQUIRE(true);
 }
+#endif
 #endif

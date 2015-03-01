@@ -10,11 +10,9 @@
 #include "../UpdateManager.hpp"
 #include "../World/Chunk.hpp"
 
-
 #define THRESHOLD 0.02f
 
-Simulator::Simulator() :
-accumulator(0), tickCount(0)
+Simulator::Simulator() : accumulator(0)
 {
 }
 
@@ -36,7 +34,6 @@ void Simulator::tick(float timestep){
 	UpdateManager& objMan = UpdateManager::getInstance();
 	accumulator += timestep;
 	while (accumulator > THRESHOLD){
-		tickCount++;
 		accumulator -= THRESHOLD;
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects = objMan.getState();
 
@@ -49,7 +46,7 @@ void Simulator::tick(float timestep){
 				continue;
 			}
 				std::shared_ptr<GameObject> gameObj = (it->second);
-				PhysicsMaths::stepObject(gameObj->physComp, THRESHOLD);
+				gameObj->physComp->stepObject(THRESHOLD);
 				if (gameObj->userControllable){
 					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
 					bool up = player->getKey(GLFW_KEY_W);
@@ -72,16 +69,16 @@ void Simulator::tick(float timestep){
 						gameObj->physComp->setV(gameObj->physComp->getV()*(1.0f - gameObj->physComp->getLinDrag()));
 					}
 					if (up && !down){
-						PhysicsMaths::acceleratePlayer(gameObj->physComp);
+						gameObj->physComp->acceleratePlayer();
 					}
 					if (down && !up){
-						PhysicsMaths::reversePlayer(gameObj->physComp);
+						gameObj->physComp->reversePlayer();
 					}
 					if (right && !left){
-						PhysicsMaths::turnRight(gameObj->physComp);
+						gameObj->physComp->turnRight();
 					}
 					if (left && !right){
-						PhysicsMaths::turnLeft(gameObj->physComp);
+						gameObj->physComp->turnLeft();
 					}
 					if (boostKey){
 						gameObj->physComp->setV(gameObj->physComp->getV() * 1.01f);
@@ -113,7 +110,7 @@ void Simulator::tick(float timestep){
 	}
 }
 
-void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> gameObjects){
+void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> & gameObjects){
 	// O(n^2) collision check
 	if (gameObjects.size() > 0) {
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
@@ -127,7 +124,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
-				if (PhysicsMaths::simpleCollision(*currentObj, checkObj)){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
+				if (PhysicsMaths::simpleCollision(*currentObj->getWorldAABB(), *checkObj.getWorldAABB())){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
 					std::cout << "Collision between " << it->second->ID << " and " << it2->second->ID << "\n";
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
@@ -152,7 +149,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				auto tmpTerrain = std::make_shared<PhysicsObject>(tmpObj.locComp, vectorAABB);
 				tmpTerrain->setMass(0.0f);
 				tmpObj.physComp = tmpTerrain;
-				std::cout << "Collision between " << it->second->ID << " and terrain\n";
+				//std::cout << "Collision between " << it->second->ID << " and terrain\n";
 				PhysicsMaths::handleCollision(*gameObj, tmpObj);
 			}
 		}

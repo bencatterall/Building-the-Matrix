@@ -20,7 +20,6 @@
 /*
 // Enable tests
 //#define TEST
-//#define TEST_GRAPHICS
 //#define TEST_PHYSICS
 //#define TEST_UPDATES
 */
@@ -32,9 +31,8 @@
 
 #include "CommonMinimal.hpp"
 
-//typedef GameObjectGlobalID GameObjectID;
-
 #endif
+
 
 
 
