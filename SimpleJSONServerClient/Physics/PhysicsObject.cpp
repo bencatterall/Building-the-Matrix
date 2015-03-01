@@ -148,7 +148,7 @@ void PhysicsObject::setLinDrag(const float linDrag){
 	friction = linDrag;
 }
 
-void PhysicsObject::turnObject(const Quaternion rotator, const vec3(PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
+void PhysicsObject::turnObject(const Quaternion & rotator, const vec3(PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &)){
 	vec3 dir = (*this.*getter)();
 	Quaternion oldVector = Quaternion(0.0f, dir.x, dir.y, dir.z);
 	Quaternion out = rotator*oldVector;
@@ -218,15 +218,15 @@ void PhysicsObject::reversePlayer(){
 }
 
 void PhysicsObject::turnLeft(float turnSpeed){
-	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
-	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getV, &PhysicsObject::setV);
-	turnObject(Quaternion(turnSpeed, 0.0f, 1.0f, 0.0f), &PhysicsObject::getA, &PhysicsObject::setA);
-
+	Quaternion rot = Quaternion(SMALL_COS, 0.0f, SMALL_SIN, 0.0f);
+	turnObject(rot, &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+	turnObject(rot, &PhysicsObject::getV, &PhysicsObject::setV);
 }
 
 void PhysicsObject::turnRight(float turnSpeed){
-	turnLeft(-turnSpeed);
-
+	Quaternion rot = Quaternion(SMALL_COS, 0.0f, -SMALL_SIN, 0.0f);
+	turnObject(rot, &PhysicsObject::getOrientation, &PhysicsObject::setOrientation);
+	turnObject(rot, &PhysicsObject::getV, &PhysicsObject::setV);
 }
 
 int PhysicsObject::serialize(Serializer serializer, unsigned char *buffer) {

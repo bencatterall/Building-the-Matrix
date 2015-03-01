@@ -61,7 +61,7 @@ public:
 	int deserialize(Serializer serializer, unsigned char *buffer);
 
 private:
-	void turnObject(const Quaternion rotator, const vec3(PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
+	void turnObject(const Quaternion & rotator, const vec3(PhysicsObject::*getter) () const, void (PhysicsObject::*setter) (vec3 &));
 
 	// Will need some more information later
 	std::shared_ptr<AABB> boundingBox;
