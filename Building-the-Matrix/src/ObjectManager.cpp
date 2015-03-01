@@ -1,7 +1,6 @@
 #include "ObjectManager.hpp"
 
 #include <algorithm>
-#include <glm/mat4x4.hpp>
 
 int ObjectManager::nextID = 1;
 

@@ -2,7 +2,6 @@
 #include "LocationComponent.hpp"
 #include "RenderableComponent.hpp"
 #include "Physics/PhysicsObject.hpp"
-#include "Physics/PhysicsMaths.hpp"
 #include "shader.hpp"	
 
 Cube::Cube(glm::vec3 pos, float sf) {
@@ -34,7 +33,8 @@ Cube::Cube(glm::vec3 pos, float sf) {
 	renderableComponent->setVertexData(cubeVertexData, false);
 	renderableComponent->setNumVerticesRender(36);
 	renderableComponent->setColourData(cubeColourData, false);
-	physicsObject = std::make_shared<PhysicsObject>(locationComponent, PhysicsMaths::convertGLfloatToVec3(renderableComponent->getVertexData()));
+	std::vector<vec3> tmpVertexVector = std::vector<vec3>(1);
+	physicsObject = std::make_shared<PhysicsObject>(locationComponent);
 }
 
 const GLfloat Cube::cubeData[3*36] = {

@@ -89,9 +89,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
     <ClCompile Include="src\Physics\AABB.cpp" />
-    <ClCompile Include="src\Physics\PhysicsMaths.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
-    <ClCompile Include="src\Physics\Simulator.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\RenderableComponent.cpp" />
     <ClCompile Include="src\shader.cpp" />
@@ -102,7 +100,6 @@
     <ClCompile Include="src\UpdateManager.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="tests\Catch.cpp" />
-    <ClCompile Include="tests\PhysicsTest.cpp" />
     <ClCompile Include="tests\TestObjManager.cpp" />
     <ClCompile Include="tests\TextureAtlasTest.cpp" />
     <ClCompile Include="tests\UpdateManagerTest.cpp" />
@@ -125,9 +122,7 @@
     <ClInclude Include="src\LocationComponent.hpp" />
     <ClInclude Include="src\ObjectManager.hpp" />
     <ClInclude Include="src\Physics\AABB.hpp" />
-    <ClInclude Include="src\Physics\PhysicsMaths.hpp" />
     <ClInclude Include="src\Physics\PhysicsObject.hpp" />
-    <ClInclude Include="src\Physics\Simulator.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\RenderableComponent.hpp" />
     <ClInclude Include="src\shader.hpp" />

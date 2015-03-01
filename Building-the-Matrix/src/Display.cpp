@@ -2,7 +2,6 @@
 #include "Display.hpp"
 #include "ObjectManager.hpp"
 #include "JSON/UpdateManager.hpp"
-#include "Physics/Simulator.hpp"
 #include "../src/Common.hpp"
 #include "Serializer.hpp"
 #include "Player.hpp"
@@ -387,8 +386,6 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 	
 	UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
-	Simulator& simulator = Simulator::getInstance();
-
 
 	float dt = 0.0f;
 	double lastTime = glfwGetTime();
