@@ -14,6 +14,7 @@ class Message {
 		Message(Address client, std::map<GameObjectGlobalID, GameObject> message);
 		Message(Address client, std::string event);
 		Message(Address client, unsigned char *message, int length);
+		~Message();
 		Address getClient();
 		unsigned char* getMessage();
 		std::map<GameObjectGlobalID, GameObject> parseMessage();

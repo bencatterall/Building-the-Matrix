@@ -1,6 +1,10 @@
 #include "Message.hpp" 
 #include <iostream>
 
+Message::~Message() {
+	delete[] message;
+}
+
 int Message::getMessageSize() {
 	return (this->messageSize);
 }
