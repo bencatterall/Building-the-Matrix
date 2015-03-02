@@ -11,8 +11,8 @@
 #include "UpdateManager.hpp"
 #include "Sender.hpp"
 #include "Player.hpp"
-#include "Physics\Simulator.hpp"
-#include "World\Chunk.hpp"
+#include "Physics/Simulator.hpp"
+#include "World/Chunk.hpp"
 #include "Common.hpp"
 #include "CubeSize.hpp"
 
