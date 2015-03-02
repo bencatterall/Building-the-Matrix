@@ -214,7 +214,7 @@ int main(int argc, char **argv) {
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
 					Player player = Player(id);
 					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
-					p->locComp->setPosition(glm::vec3(0.0f,PLAYER_CUBE_SIZE+0.1f,playerZpos));
+					p->locComp->setPosition(glm::vec3(0.0f,3*PLAYER_CUBE_SIZE+0.1f,playerZpos));
 					playerZpos += 25.0f;
 					updateManager.queueUpdate(p);
 				}

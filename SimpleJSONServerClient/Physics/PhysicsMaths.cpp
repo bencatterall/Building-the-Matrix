@@ -19,7 +19,7 @@ namespace PhysicsMaths{
 		auto state = update.getState();
 		GameObject aObj = *state.at(a);
 		GameObject bObj = *state.at(b);
-		return simpleCollision(*aObj.physComp->getWorldAABB(), *bObj.physComp->getWorldAABB());
+		return simpleCollision(aObj.physComp->getLocalAABB(), bObj.physComp->getLocalAABB());
 	}
 
 	// Tests for global-axis aligned bounding box collision.
