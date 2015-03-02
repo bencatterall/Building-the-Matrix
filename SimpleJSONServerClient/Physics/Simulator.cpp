@@ -92,7 +92,7 @@ void Simulator::tick(float timestep){
 					gameObj->physComp->setV(vec3());
 				}
 				if (resetX){
-					gameObj->physComp->setX(vec3(0.0f, 10.1f, 0.0f));
+					gameObj->physComp->setX(vec3(0.0f, 30.1f, 0.0f));
 				}
 			}
 		}
