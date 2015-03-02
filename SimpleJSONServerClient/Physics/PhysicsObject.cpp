@@ -3,6 +3,7 @@
 #include "PhysicsObject.hpp"
 #include "PhysicsMaths.hpp"
 
+// SMALL is a small rad/s value, which we take the cos and sin of for use in turning.
 #define SMALL_COS 0.999876632481660598638907127731252174499277787538006150898362f
 #define SMALL_SIN 0.015707317311820675753295353309906770086948450733778946832100f
 #define MAX_SPEED 10.0f
@@ -14,7 +15,7 @@ PhysicsObject::PhysicsObject(Serializer serializer, unsigned char *serial, int& 
 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp, const vertexVector vertices)
 	: mass(1.0f), inverseMass(1.0f),
-	restitution(1.0f), velocity(vec3()), 
+	restitution(0.8f), velocity(vec3()), 
 	orientation(vec3(0,0,-1)), friction(0.003f), airRes(0.0f)
 {
 	if (locationComp == nullptr){
