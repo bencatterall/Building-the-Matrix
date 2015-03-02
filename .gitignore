@@ -12,6 +12,7 @@
 *.so
 *.dylib
 *.dll
+*.db
 
 # Fortran module files
 *.mod
@@ -20,9 +21,18 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
 *.out
 *.app
+**/bin/
+
+#Visual studio
+*.suo
+*.sdf0
+*.tlog
+*.log
+Building-the-Matrix.opensdf
+Building-the-Matrix.sdf
+*.sdf
