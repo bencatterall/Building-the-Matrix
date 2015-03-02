@@ -123,7 +123,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 			{
 				std::shared_ptr<GameObject> gameObj2 = (it2->second);
 				PhysicsObject checkObj = *(gameObj2->physComp);
-				if (PhysicsMaths::simpleCollision((gameObj->getID()), (gameObj2->getID()))){ // && PhysicsMaths::complexCollision(gameObj->getID(), gameObj2->getID())){
+				if (PhysicsMaths::simpleCollision((gameObj->getID()), (gameObj2->getID()))){
 					std::cout << "Collision between " << it->second->ID << " and " << it2->second->ID << "\n";
 					PhysicsMaths::handleCollision(*gameObj, *gameObj2);
 				}
