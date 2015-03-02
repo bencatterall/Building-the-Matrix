@@ -39,64 +39,63 @@ void Simulator::tick(float timestep){
 
 		// Step by THRESHOLD
 		std::map<GameObjectGlobalID, std::shared_ptr<GameObject>>::iterator it;
-		for (it = gameObjects.begin(); it != gameObjects.end();it++)
-			{
+		for (it = gameObjects.begin(); it != gameObjects.end();it++){
 			if (it->second->deleted){
 				//std::cout << "Ignored deleted item"
 				continue;
 			}
-				std::shared_ptr<GameObject> gameObj = (it->second);
-				gameObj->physComp->stepObject(THRESHOLD);
-				if (gameObj->userControllable){
-					std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
-					bool up = player->getKey(GLFW_KEY_W);
-					bool down = player->getKey(GLFW_KEY_S);
-					bool left = player->getKey(GLFW_KEY_A);
-					bool right = player->getKey(GLFW_KEY_D);
-					bool ascend = player->getKey(GLFW_KEY_E);
-					bool descend = player->getKey(GLFW_KEY_Q);
-					
-					bool boostKey = player->getKey(GLFW_KEY_C);
-					bool emergencyStop = player->getKey(GLFW_KEY_X);
-					bool resetX = player->getKey(GLFW_KEY_Z);
-					// Pressing anything
-					if (up || down || left || right) {
-						//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
-					}
-					// Pressing nothing
-					else{
-						gameObj->physComp->setA(vec3());
-						gameObj->physComp->setV(gameObj->physComp->getV()*(1.0f - gameObj->physComp->getLinDrag()));
-					}
-					if (up && !down){
-						gameObj->physComp->acceleratePlayer();
-					}
-					if (down && !up){
-						gameObj->physComp->reversePlayer();
-					}
-					if (right && !left){
-						gameObj->physComp->turnRight();
-					}
-					if (left && !right){
-						gameObj->physComp->turnLeft();
-					}
-					if (boostKey){
-						gameObj->physComp->setV(gameObj->physComp->getV() * 1.01f);
-					}
-					if (ascend && ! descend){
-						gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, 0.1f, 0.0f));
-					}
-					if (descend && !ascend){
-						gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, -0.1f, 0.0f));
-					}
-					if (emergencyStop){
-						gameObj->physComp->setV(vec3());
-					}
-					if (resetX){
-						gameObj->physComp->setX(vec3(0.0f, 10.1f, 0.0f));
-					}
+			std::shared_ptr<GameObject> gameObj = (it->second);
+			gameObj->physComp->stepObject(THRESHOLD);
+			if (gameObj->userControllable){
+				std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(gameObj);
+				bool up = player->getKey(GLFW_KEY_W);
+				bool down = player->getKey(GLFW_KEY_S);
+				bool left = player->getKey(GLFW_KEY_A);
+				bool right = player->getKey(GLFW_KEY_D);
+				bool ascend = player->getKey(GLFW_KEY_E);
+				bool descend = player->getKey(GLFW_KEY_Q);
+				
+				bool boostKey = player->getKey(GLFW_KEY_C);
+				bool emergencyStop = player->getKey(GLFW_KEY_X);
+				bool resetX = player->getKey(GLFW_KEY_Z);
+				// Pressing anything
+				if (up || down || left || right) {
+					//std::cout << "keys presses:" << up << " " << down << " " << left << " " << right << "\n";
+				}
+				// Pressing nothing
+				else{
+					gameObj->physComp->setA(vec3());
+					gameObj->physComp->setV(gameObj->physComp->getV()*(1.0f - gameObj->physComp->getLinDrag()));
+				}
+				if (up && !down){
+					gameObj->physComp->acceleratePlayer();
+				}
+				if (down && !up){
+					gameObj->physComp->reversePlayer();
+				}
+				if (right && !left){
+					gameObj->physComp->turnRight();
+				}
+				if (left && !right){
+					gameObj->physComp->turnLeft();
+				}
+				if (boostKey){
+					gameObj->physComp->setV(gameObj->physComp->getV() * 1.01f);
+				}
+				if (ascend && ! descend){
+					gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, 0.1f, 0.0f));
+				}
+				if (descend && !ascend){
+					gameObj->physComp->setX(gameObj->physComp->getX() + vec3(0.0f, -0.1f, 0.0f));
+				}
+				if (emergencyStop){
+					gameObj->physComp->setV(vec3());
+				}
+				if (resetX){
+					gameObj->physComp->setX(vec3(0.0f, 10.1f, 0.0f));
 				}
 			}
+		}
 		processCollisions(gameObjects);
 		for (it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
