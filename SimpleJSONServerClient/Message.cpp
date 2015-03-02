@@ -2,7 +2,7 @@
 #include <iostream>
 
 Message::~Message() {
-	delete[] message;
+	// delete[] message;
 }
 
 int Message::getMessageSize() {
