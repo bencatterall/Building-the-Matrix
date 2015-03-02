@@ -15,7 +15,7 @@ GameObject(glm::vec3(xPos, yPos, zPos)) {
 	//Add to object mangager
 	ObjectManager& objManager = ObjectManager::getInstance();
 	objManager.addObject(headCube);
-	objManager.addObject(vehicleCube);
+	//objManager.addObject(vehicleCube);
 }
 
 //Up is aways  (0.0, 1.0, 0.0)

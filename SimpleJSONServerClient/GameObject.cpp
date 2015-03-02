@@ -11,8 +11,8 @@ GameObject::GameObject(GameObjectGlobalID id) {
 	this->locComp = std::make_shared<LocationComponent>();
 	std::vector<vec3> tmpVec = std::vector<vec3>();
 	tmpVec.resize(2);
-	tmpVec.at(0) = vec3(-CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE);
-	tmpVec.at(1) = vec3(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
+	tmpVec.at(0) = vec3(-PLAYER_CUBE_SIZE);
+	tmpVec.at(1) = vec3(PLAYER_CUBE_SIZE);
 	this->physComp = std::make_shared<PhysicsObject>(locComp, tmpVec);
 }
 

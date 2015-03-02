@@ -76,9 +76,10 @@ namespace PhysicsMaths{
 
 		// Do not resolve if they are separating already
 		if (seperatingMetric){
-			std::cout << "Discarded collision\n";
+			//std::cout << "Discarded collision\n";
 			return;
 		}
+
 		// Choose minimal restitution
 		float e = ((physA->getRest() < physB->getRest()) ? physA : physB)->getRest();
 
@@ -105,22 +106,30 @@ namespace PhysicsMaths{
 		vec3 u1rejection = physA->getV() - u1;
 		vec3 u2rejection = physB->getV() - u2;
 
+		physA->setX(physA->getX() - 0.5f * sDiffNormal);
+		physB->setX(physB->getX() + 0.5f * sDiffNormal);
+
 		if (m1 == 0 && m2 == 0) return;
 
 		if (m1 == 0){
-			physB->setV(-e * u2);
+			vec3 newV = -e * u2;
+			physB->setV(newV);
 			return;
 		}
 		if (m2 == 0){
-			physA->setV(-e * u1);
+			vec3 newV = -e * u1;
+
+			physA->setV(newV);
 			return;
 		}
 
 		vec3 v1 = (m1 * u1 + m2 * (u2 - e * speedAlongCollisionNormal * sDiffNormal)) / (m1 + m2);
 		vec3 v2 = v1 + e * speedAlongCollisionNormal * sDiffNormal;
-
-		physA->setV(u1rejection + v1);
-		physB->setV(u2rejection + v2);
+		vec3 newVA = u1rejection + v1, newVB = u2rejection + v2;
+		newVA.y = 0.0f;
+		newVB.y = 0.0f;
+		physA->setV(newVA);
+		physB->setV(newVB);
 	}
 
 	std::vector<glm::vec3> convertGLfloatToVec3(const std::vector<GLfloat> & data) {

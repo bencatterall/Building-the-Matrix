@@ -93,7 +93,7 @@ void Simulator::tick(float timestep){
 						gameObj->physComp->setV(vec3());
 					}
 					if (resetX){
-						gameObj->physComp->setX(vec3(0.0f, 50.0f, 0.0f));
+						gameObj->physComp->setX(vec3(0.0f, 10.1f, 0.0f));
 					}
 				}
 			}
@@ -143,12 +143,23 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
 				vectorAABB.at(0) = vec3(-chunk->getCubeSize() / 2.0f);
 				vectorAABB.at(1) = vec3(chunk->getCubeSize() / 2.0f);
-				vec3 pos = chunk->getCubeCenter(currentObj->getX());
+				vec3 objPos = currentObj->getX();
+				vec3 cubePos = chunk->getCubeCenter(objPos);
+				// Adjust pos to make the player bounce back.
+				vec3 cubeToObj = objPos - cubePos;
+				if (abs(cubeToObj.x) < abs(cubeToObj.z)){
+					cubePos.z = objPos.z;
+				}
+				else{
+					cubePos.x = objPos.x;
+				}
+				cubePos.y = objPos.y;
 				GameObject tmpObj = GameObject();
-				tmpObj.locComp = std::make_shared<LocationComponent>(pos);
+				tmpObj.locComp = std::make_shared<LocationComponent>(cubePos);
 				auto tmpTerrain = std::make_shared<PhysicsObject>(tmpObj.locComp, vectorAABB);
 				tmpTerrain->setMass(0.0f);
 				tmpObj.physComp = tmpTerrain;
+				tmpTerrain->setRest(0.5);
 				//std::cout << "Collision between " << it->second->ID << " and terrain\n";
 				PhysicsMaths::handleCollision(*gameObj, tmpObj);
 			}

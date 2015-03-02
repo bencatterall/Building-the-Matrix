@@ -1,4 +1,9 @@
-//#define TEST
+#include <iostream>
+#include <string>
+#include <thread>
+#include <vector>
+#include <map>
+#include <chrono>
 
 #include "Socket.hpp"
 #include "Address.hpp"
@@ -6,14 +11,10 @@
 #include "UpdateManager.hpp"
 #include "Sender.hpp"
 #include "Player.hpp"
-#include <iostream>
-#include <string>
-#include <thread>
-#include <vector>
-#include <map>
-#include <chrono>
 #include "Physics\Simulator.hpp"
 #include "World\Chunk.hpp"
+#include "Common.hpp"
+#include "CubeSize.hpp"
 
 /**
 ServerMain.cpp
@@ -163,15 +164,16 @@ int main(int argc, char **argv) {
 	//start send loop in new thread
 	std::thread sendMessages(&Sender::run, &sender);
 
-	//start send update loop in new thread
+	// Send updates. Sleeps for 1ms.
 	std::thread update(broadcast);
 
+	// Process physics. Sleeps for 10ms.
 	std::thread t_physics(physics);
 
-	//start listener fo quitting
+	// Start listener for quitting. Blocks on input.
 	std::thread l_quit(quit);
 
-	// thread to monitor clients and terminate if timed out
+	// Monitor clients for timeouts. Sleeps for 1s.
 	std::thread t_timeout(check_client_timeouts);
 	
 	//input loops in this thread
@@ -212,7 +214,7 @@ int main(int argc, char **argv) {
 					playerIDs.push_back(std::pair<Address, GameObjectGlobalID>(recFrom, id));
 					Player player = Player(id);
 					std::shared_ptr<GameObject> p = std::make_shared<Player>(player);
-					p->locComp->setPosition(glm::vec3(0.0f,50.0f,playerZpos));
+					p->locComp->setPosition(glm::vec3(0.0f,PLAYER_CUBE_SIZE+0.1f,playerZpos));
 					playerZpos += 25.0f;
 					updateManager.queueUpdate(p);
 				}

@@ -1,1 +1,1 @@
-#define CUBE_SIZE 10.0f
+#define PLAYER_CUBE_SIZE 10.0f
