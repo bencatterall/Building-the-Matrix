@@ -502,6 +502,11 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 		Display* disp = (Display*)this;
 		Game *g = (dynamic_cast<Game*>(disp));
 		if (g->getPlayer()) {
+			// update score
+			int p_score = g->getPlayer()->score;
+			std::ostringstream sout;
+			sout << "Score: " << p_score;
+			hud_text = sout.str();
 			render();
 		}
 		else {
@@ -592,8 +597,7 @@ void Display::render() {
 	}
 	glWindowPos2i(100, 120);
 	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-	std::string str = "TEsting the new text engine!!";
-	const unsigned char * strP = (const unsigned char*)str.c_str();
+	const unsigned char * strP = (const unsigned char*)hud_text.c_str();
 	glutBitmapString(GLUT_BITMAP_HELVETICA_18, strP);
 	glWindowPos2i(1400, 120);
 	glutBitmapString(GLUT_BITMAP_HELVETICA_18, strP);

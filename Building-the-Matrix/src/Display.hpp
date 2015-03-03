@@ -35,6 +35,7 @@ class Display {
 	int frameBufferHeight = 0;
 	GLFWwindow* window = nullptr;
 	glm::vec3 headOrientation;
+	std::string hud_text = "Testing the new text engine!";
 
 	static void glfwErrorCallback(int error, const char* desc) {
 		std::cerr << "ERROR: In GLFW: " << error << " " << desc << std::endl;
