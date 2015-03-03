@@ -2,6 +2,7 @@
 #include "Player.hpp"
 #include <iostream>
 #include <thread>
+#include <time.h>
 
 Sender::Sender() {
 	(this->cont) = true;
@@ -57,6 +58,8 @@ void Sender::sendUpdateMessage(std::vector <Address> addresses, std::map<GameObj
 	//std::cout << "total map size = " << size << "\n";
 	std::vector<Address>::iterator it;
 	for (it = addresses.begin(); it != addresses.end(); it++) {
+		time_t  timev;
+		std::cout << "Sending update " << time(&timev) << "\n";
 		Message mess = Message(*it, m, size);
 		(this->toSend).pushToEnd(mess);
 	}

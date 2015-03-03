@@ -153,10 +153,9 @@ void Player::setVehicleOrientation(glm::vec3 forwardVec) {
 	vehicleCube->getLocationComponent()->setRotationMatrix(rotationMat);
 }
 
-//NOTE: INVERTED WHEN GOING IN THE +Z DIRECTION - THINK IT ASSUMES FORWARD FACING DIRECTION TO BE CONSTANT
 void Player::setHeadOrientation(glm::vec3 PRY) {
 	glm::mat4 rotationMatrix = glm::mat4(1.0f);
-	glm::vec3 dir = (this->getPhysicsComponent())->getOrientation();
+	glm::vec3 dir = -(this->getPhysicsComponent())->getOrientation();
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 other = glm::cross(up,dir);
 
