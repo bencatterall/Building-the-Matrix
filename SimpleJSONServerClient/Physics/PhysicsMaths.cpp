@@ -106,8 +106,8 @@ namespace PhysicsMaths{
 		vec3 u1rejection = physA->getV() - u1;
 		vec3 u2rejection = physB->getV() - u2;
 
-		physA->setX(physA->getX() - 0.5f * sDiffNormal);
-		physB->setX(physB->getX() + 0.5f * sDiffNormal);
+		physA->setX(physA->getX() - 0.5f * (sDiffNormal - vec3(0, sDiffNormal.y, 0)));
+		physB->setX(physB->getX() + 0.5f * (sDiffNormal - vec3(0, sDiffNormal.y, 0)));
 
 		if (m1 == 0 && m2 == 0) return;
 
