@@ -35,7 +35,7 @@ public:
 
 	int deserialize(Serializer serializer, unsigned char *buffer);
 
-	LocationComponent(glm::vec3 pos = glm::vec3(0.0f,0.0f,0.0f), const glm::mat4x4 & rotationMat = glm::mat4x4(1.0f), double sf = 1.0) :
+	LocationComponent(glm::vec3 pos = glm::vec3(0.0f,0.0f,0.0f), const glm::mat4x4 rotationMat = glm::mat4x4(1.0f), double sf = 1.0) :
 		position(pos), rotationMatrix(rotationMat),
 		scaleFactor(sf)
 	{
