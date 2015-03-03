@@ -20,8 +20,8 @@ public:
 	Player(float xPos, float yPos, float zPos);
 
 	//Pitch, roll yaw
-	void Player::setHeadOrientation(glm::vec3 PRY);
-	void Player::setVehicleOrientation(glm::vec3 forwardVec);
+	void setHeadOrientation(glm::vec3 PRY);
+	void setVehicleOrientation(glm::vec3 forwardVec);
 	int deserialize(unsigned char* buffer);
 };
 

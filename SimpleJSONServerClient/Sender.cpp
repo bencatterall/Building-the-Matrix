@@ -1,6 +1,7 @@
 #include "Sender.hpp"
 #include "Player.hpp"
 #include <iostream>
+#include <thread>
 
 Sender::Sender() {
 	(this->cont) = true;
@@ -78,6 +79,9 @@ void Sender::run() {
 			Message m = (this->toSend).popFromFront();
 			if (!((this->serverSocket).sendSingle(m.getClient(), (const char *)m.getMessage(), m.getMessageSize()))) {
 				std::cout << "Failed to send message\n";
+			}
+			else{
+				std::this_thread::sleep_for(std::chrono::milliseconds(5));
 			}
 		}
 	}
