@@ -21,6 +21,7 @@ template<> Update SafeQueue<Update>::popFromFront() {
 		//std::cout << "queue was empty\n";
 		(this->lock).unlock();
 		//throw 1;
+		assert(false);
 	}
 	else {
 		Update u = (this->queue).front();
@@ -55,7 +56,7 @@ template<> Message SafeQueue<Message>::popFromFront() {
 	if ((this->queue).empty()) {
 		//std::cout << "queue was empty\n";
 		(this->lock).unlock();
-		//throw 1;
+		assert(false);
 	}
 	else {
 		Message u = (this->queue).front();

@@ -5,14 +5,14 @@ CXXFLAGS +=  -I ../Building-the-Matrix/LibOVR/Src -I ../Building-the-Matrix/LibO
 # LIBS = $(LIBS_SRC:%=../Building-the-Matrix/Dependencies/%)
 # CXXFLAGS += -L $(LIBS)
 DEPS =  
-# DEPS += Display.hpp
+DEPS += Display.hpp
 DEPS += Controls.hpp Game.hpp GameObject.hpp ObjectManager.hpp Player.hpp
 DEPS += Client/Address.hpp Client/Socket.hpp Client/Client.hpp Client/MessageConstants.hpp
 DEPS += Serializer.hpp
 # Graphics
 DEPS += Chunk.hpp Cube.hpp ImageLoader.hpp LocationComponent.hpp RenderableComponent.hpp
 DEPS += SimplexNoise.hpp TextRenderer.hpp shader.hpp TextureAtlas.hpp Texture.hpp
-DEPS += Physics/PhysicsObject.hpp Physics/Simulator.hpp Physics/AABB.hpp Physics/PhysicsMaths.hpp
+DEPS += Physics/PhysicsObject.hpp Physics/AABB.hpp
 OBJ := $(DEPS:%.hpp=bin/%.o)
 DEPS += Common.hpp
 DEPS_SRC := $(DEPS:%=src/%)

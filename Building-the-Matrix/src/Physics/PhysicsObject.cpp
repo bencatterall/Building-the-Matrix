@@ -4,8 +4,8 @@
 #include "../Serializer.hpp"
 
 PhysicsObject::PhysicsObject(std::shared_ptr<LocationComponent> locationComp)
-	: mass(1.0f), inverseMass(1.0f),
-	restitution(1.0f), velocity(vec3())
+	: restitution(1.0f), mass(1.0f), inverseMass(1.0f),
+	  velocity(vec3())
 {
 	this->location = locationComp;
 	boundingBox = std::make_shared<AABB>(vec3(),vec3());

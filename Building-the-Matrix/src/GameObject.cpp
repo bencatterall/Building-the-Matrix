@@ -11,7 +11,7 @@ GameObject::GameObject(glm::vec3 worldlLoc) :
 }
 
 GameObject::GameObject(bool renderable, bool visible, glm::vec3 worldLoc) :
-	renderable(renderable), visible(visible) {
+	visible(visible), renderable(renderable) {
 	//Get a GUID from the ObjectManager
 	this->ID = ObjectManager::getNextID();
 
