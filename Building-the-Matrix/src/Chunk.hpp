@@ -28,22 +28,9 @@ class Chunk : public GameObject{
 	///
 	double chunkNoiseData[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
 	void init();
-	///
-	/// Cubes are building blocks of chunks, we just copy these where needed
-	///
-	static const glm::vec3 cubeTopFace[6];
-	static const glm::vec3 cubeBottomFace[6];
-	static const glm::vec3 cubeLeftFace[6];
-	static const glm::vec3 cubeRightFace[6];
-	static const glm::vec3 cubeFrontFace[6];
-	static const glm::vec3 cubeBackFace[6];
 
-	static const GLfloat cubeFrontTextureCoords[6*2];
-	static const GLfloat cubeBackTextureCoords[6 * 2];
-	static const GLfloat cubeLeftTextureCoords[6 * 2];
-	static const GLfloat cubeRightTextureCoords[6 * 2];
-	static const GLfloat cubeTopTextureCoords[6 * 2];
-	static const GLfloat cubeBottomTextureCoords[6 * 2];
+
+
 
 	static const GLfloat cubeColours[4 * 36];
 
@@ -72,5 +59,22 @@ public:
 	static int getChunkSizeY() { return CHUNK_SIZE_Y; }
 	static int getChunkSizeZ() { return CHUNK_SIZE_Z; }
 	static double getCubeSize() { return CUBE_SIZE; }
+
+	static const GLfloat cubeFrontTextureCoords[6 * 2];
+	static const GLfloat cubeBackTextureCoords[6 * 2];
+	static const GLfloat cubeLeftTextureCoords[6 * 2];
+	static const GLfloat cubeRightTextureCoords[6 * 2];
+	static const GLfloat cubeTopTextureCoords[6 * 2];
+	static const GLfloat cubeBottomTextureCoords[6 * 2];
+
+	///
+	/// Cubes are building blocks of chunks, we just copy these where needed
+	///
+	static const glm::vec3 cubeTopFace[6];
+	static const glm::vec3 cubeBottomFace[6];
+	static const glm::vec3 cubeLeftFace[6];
+	static const glm::vec3 cubeRightFace[6];
+	static const glm::vec3 cubeFrontFace[6];
+	static const glm::vec3 cubeBackFace[6];
 };
 #endif

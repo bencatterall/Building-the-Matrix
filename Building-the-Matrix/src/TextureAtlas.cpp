@@ -4,9 +4,9 @@
 #include <iostream>
 #include <utility>
 
-TextureAtlas::TextureAtlas(std::string fileName) : Texture(fileName) {
+TextureAtlas::TextureAtlas(std::string fileName, std::string nameMappings) : Texture(fileName) {
 	//Get config file
-	std::ifstream infile("resources//textures//name_mappings.txt");
+	std::ifstream infile(nameMappings);
 	if (!infile.is_open()){
 		std::cerr << "ERROR: Couldn't load TextureAtlas config file" << std::endl;
 		return;

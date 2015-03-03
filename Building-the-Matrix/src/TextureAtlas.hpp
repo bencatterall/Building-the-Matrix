@@ -18,7 +18,7 @@ class TextureAtlas : public Texture {
 	std::map<std::string, int> identififerNameMap;
 
 public:
-	TextureAtlas(std::string fileName);
+	TextureAtlas(std::string fileName, std::string nameMappings);
 
 	///
 	/// Calculate texture coordinate offsets for a named tile

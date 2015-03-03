@@ -16,24 +16,16 @@
 #include "Cube.hpp"
 
 void Game::init() {
-	//Sahil: You can comment this out
 	chunks = new Chunk[numChunks];
 
 	//Add objects to the object manager
 	ObjectManager& objManager = ObjectManager::getInstance();
 	for (int i = 0; i < numChunks; ++i) {
-		objManager.addObject(std::make_shared<Chunk>(chunks[i]));
+		objManager.addObject(std::make_shared<Chunk>(chunks[i]));	
 	}
-	//objManager.addObject(std::make_shared<Cube>(glm::vec3(0.0f, 30.0f, 0.0f)));
-
 }
 
 void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
-	/*
-	if (!player)
-		return;
-		//handle no player formserver
-	*/
 	//Render all objects
 	ObjectManager& objManager = ObjectManager::getInstance();
 	std::vector<GameObjectID> objects = objManager.getObjects();
@@ -45,15 +37,16 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		std::shared_ptr<LocationComponent> locationComponent = objectPtr->getLocationComponent();
 		glm::vec3 objPos = locationComponent->getPosition();
 		glm::mat4 objRotMat = locationComponent->getRotationMatrix();
+
 		//Move object to world space 
 		glm::mat4 objWorldMatrix = glm::translate(objRotMat, glm::vec3(objPos.x, objPos.y, objPos.z));
 
 		//Move camera to the position of the player
 		glm::vec3 playerPos = player->getLocationComponent()->getPosition();
-		glm::vec3 eyePos(playerPos.x, playerPos.y, playerPos.z);
+		glm::vec3 eyePos(playerPos.x, playerPos.y + 1.5*Chunk::getCubeSize(), playerPos.z);
 		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
 		objCameraMatrix = modelViewMatrix *  glm::transpose(player->getLocationComponent()->getRotationMatrix()) * objCameraMatrix;
-		//std::cout << playerPos.x << " " << playerPos.y << " " << playerPos.z << std::endl;
+
 		//Get the renderable component and bind in the shader
 		std::shared_ptr<RenderableComponent> renderableComponent = objectPtr->getRenderableComponent();
 		std::shared_ptr<Shader> objectShader = renderableComponent->getShader();

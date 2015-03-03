@@ -30,7 +30,7 @@ Chunk::Chunk(double xPos, double yPos, double zPos) {
 
 void Chunk::init() {
 	//Init starting renderable data 
-	std::shared_ptr<TextureAtlas> texture = std::make_shared<TextureAtlas>("resources/textures/texture_atlas.png");
+	std::shared_ptr<TextureAtlas> texture = std::make_shared<TextureAtlas>("resources/textures/texture_atlas.png", "resources/textures/name_mappings.txt");
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources//shaders//default_shader");
 	if (!shader->isLoaded()) {
 		std::cerr << "ERROR: In Chunk::init, cannot load shader." << std::endl;

@@ -13,6 +13,7 @@ int main(int argc, char **argv) {
         std::cerr << "Usage: " << argv[0] << " <remote IP> <remote port> <local IP> <local port>\n";
         return 1;
     }
+
     std::string remote_IP = argv[1];
     int remote_port = std::stoi(argv[2], nullptr, 10);
     std::string local_IP = argv[3];

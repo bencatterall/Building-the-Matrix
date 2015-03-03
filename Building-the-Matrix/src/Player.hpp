@@ -6,10 +6,15 @@
 #include "Cube.hpp"
 #include "GameObject.hpp"
 #include "Controls.hpp"
+#include "TextureAtlas.hpp"
 
 class Player : public GameObject {
 	std::shared_ptr<Cube> headCube;
 	std::shared_ptr<Cube> vehicleCube;
+
+	void setTileTexture(float xPos, float yPos, float zPos, int* numVertices, std::string tileName, std::shared_ptr<TextureAtlas> texture,
+		const glm::vec3(&vertexData)[6], const GLfloat(&texData)[6 * 2], std::vector<GLfloat>& vertData, std::vector<GLfloat>& texCoords, float sf);
+
 public:
 	KeyboardControl control;
 	float pitch;

@@ -33,7 +33,6 @@ Cube::Cube(glm::vec3 pos, float sf) {
 	renderableComponent->setVertexData(cubeVertexData, false);
 	renderableComponent->setNumVerticesRender(36);
 	renderableComponent->setColourData(cubeColourData, false);
-	std::vector<vec3> tmpVertexVector = std::vector<vec3>(1);
 	physicsObject = std::make_shared<PhysicsObject>(locationComponent);
 }
 
