@@ -402,7 +402,7 @@ const glm::vec3 Chunk::cubeBackFace[6]{
 };
 
 const GLfloat Chunk::cubeFrontTextureCoords[6 * 2] {
-	0.0f, 0.0,
+	0.0f, 0.0f,
 	0.0f, 1.0f,
 	1.0f, 1.0f,
 

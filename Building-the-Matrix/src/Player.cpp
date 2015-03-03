@@ -158,7 +158,7 @@ void Player::setHeadOrientation(glm::vec3 PRY) {
 	glm::mat4 rotationMatrix = glm::mat4(1.0f);
 	
 	//roll
-	rotationMatrix = glm::rotate(rotationMatrix, PRY.x, glm::vec3(0.0f, 0.0f, 1.0f));
+	rotationMatrix = glm::rotate(rotationMatrix, PRY.x, glm::vec3(0.0f, 0.0f, -1.0f));
 
 	//yaw
 	rotationMatrix = glm::rotate(rotationMatrix, PRY.z, glm::vec3(0.0f, 1.0f, 0.0f));
