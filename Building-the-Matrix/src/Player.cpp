@@ -49,8 +49,8 @@ GameObject(glm::vec3(xPos, yPos, zPos)) {
 	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headBottom"), std::string("BoyHeadBottom")));
 	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headFront"), std::string("BoyHeadFront")));
 	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headBack"), std::string("BoyHeadBack")));
-	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headLeft"), std::string("BoyHeadSide1")));
-	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headRight"), std::string("BoyHeadSide2")));
+	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headLeft"), std::string("BoyHeadSide2")));
+	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headRight"), std::string("BoyHeadSide1")));
 
 	std::map<std::string, std::string> vehicleTypeToID;
 	vehicleTypeToID.insert(std::make_pair<std::string, std::string>(std::string("vehicleTop"), std::string("RedCarTop")));
