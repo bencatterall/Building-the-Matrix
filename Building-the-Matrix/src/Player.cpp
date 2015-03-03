@@ -171,7 +171,7 @@ void Player::setHeadOrientation(glm::vec3 PRY) {
 	//pitch
 	rotationMatrix = glm::rotate(rotationMatrix, PRY.y, other);
 
-	glm::mat4 rotateMat = rotationMatrix; //* glm::rotate(glm::mat4(1.0f), glm::pi<float>(), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 rotateMat = rotationMatrix * glm::rotate(glm::mat4(1.0f), glm::pi<float>(), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 	headCube->getLocationComponent()->setRotationMatrix(rotateMat * ((this->getLocationComponent()->getRotationMatrix())));
