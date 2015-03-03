@@ -1,0 +1,12 @@
+200
+200
+6
+1
+RGBA
+6
+0 GirlHeadBack
+1 GirlHeadBottom
+2 GirlHeadFront
+3 GirlHeadSide1
+4 GirlHeadSide2
+5 GirlHeadTop

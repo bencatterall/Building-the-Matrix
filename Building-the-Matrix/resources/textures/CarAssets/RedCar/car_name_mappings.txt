@@ -1,0 +1,12 @@
+200
+200
+6
+1
+RGBA
+6
+0 RedCarBack
+1 RedCarBottom
+2 RedCarFront
+3 RedCarSide1
+4 RedCarSide2
+5 RedCarTop
