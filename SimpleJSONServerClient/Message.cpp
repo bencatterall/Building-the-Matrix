@@ -2,7 +2,11 @@
 #include <iostream>
 
 Message::~Message() {
-	// delete[] message;
+	if (message != nullptr){
+		delete[] message;
+		message = nullptr;
+	}
+	
 }
 
 int Message::getMessageSize() {
