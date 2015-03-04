@@ -130,7 +130,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				}
 			}
 			bool terrainCollision = false;
-			/*
+			
 			auto worldAABB = currentObj->getWorldAABB()->getFullBox();
 			for (size_t i = 0; i < 8; i++){
 				vec3 currentVertex = worldAABB->at(i);
@@ -140,7 +140,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				}
 			}
 			(
-			*/
+			
 			/*
 			vec3 terrainPosToCheck;
 			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
@@ -175,8 +175,9 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				
 			}
 			*/
-			vec3 terrainPosToCheck;
 			terrainCollision = chunk->cubeAt(currentObj->getX());
+			/*
+			vec3 terrainPosToCheck;
 			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
 				for (int j = 0; j < PLAYER_CUBE_SIZE; j++){
 					if (abs(i*i + j*j - 100) < 5){
@@ -208,6 +209,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				}
 
 			}
+			*/
 			if (terrainCollision){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
 				vectorAABB.at(0) = vec3(-chunk->getCubeSize() / 2.0f);
