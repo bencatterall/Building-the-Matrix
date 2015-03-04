@@ -7,7 +7,9 @@
 #include "Player.hpp"
 #include "Game.hpp"
 
+#if PLATFORM == PLATFORM_WINDOWS
 #include <conio.h>
+#endif
 #include <iostream>
 #include <memory>
 #include <thread>
@@ -384,10 +386,9 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 		std::cout << "Login to game server failed\n";
 	}
 	
-	UpdateManager& updateManager = UpdateManager::getInstance();
+	// UpdateManager& updateManager = UpdateManager::getInstance();
 	ObjectManager& objectManager = ObjectManager::getInstance();
 
-	float dt = 0.0f;
 	double lastTime = glfwGetTime();
 	int numFrames = 0;
 	int count = 0;
@@ -484,10 +485,6 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 			//some form of prediction
 		}
 		
-		//physics tick 
-		//TODO calculate dt per frame
-		//simulator.tick(dt);
-
 		//send updates to server
 		//client.send(); // maybe called by updatemanager
 
