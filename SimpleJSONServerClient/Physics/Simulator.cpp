@@ -175,8 +175,9 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				
 			}
 			*/
-			vec3 terrainPosToCheck;
 			terrainCollision = chunk->cubeAt(currentObj->getX());
+
+			vec3 terrainPosToCheck;
 			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
 				for (int j = 0; j < PLAYER_CUBE_SIZE; j++){
 					if (abs(i*i + j*j - 100) < 5){
