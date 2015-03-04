@@ -139,7 +139,6 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					break;
 				}
 			}
-			(
 			
 			/*
 			vec3 terrainPosToCheck;
