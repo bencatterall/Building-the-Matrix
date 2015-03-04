@@ -27,7 +27,7 @@ namespace PhysicsMaths
 	bool simpleCollision(const GameObjectGlobalID, const GameObjectGlobalID);
 
 	void handleCollision(GameObjectGlobalID, GameObjectGlobalID, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> &);
-	void handleCollision(GameObject &, GameObject &);
+	void handleCollision(GameObject &, GameObject &, bool terrain = false);
 
 	std::vector<vec3> convertGLfloatToVec3(std::vector<GLfloat> &);
 

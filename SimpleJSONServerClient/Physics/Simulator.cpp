@@ -93,7 +93,7 @@ void Simulator::tick(float timestep){
 					gameObj->physComp->setV(vec3());
 				}
 				if (resetX){
-					gameObj->physComp->setX(vec3(0.0f, 1.5f * PLAYER_CUBE_SIZE + 0.1f, 0.0f));
+					gameObj->physComp->setX(vec3(0.0f, 2.0f * PLAYER_CUBE_SIZE + 0.1f, 0.0f));
 				}
 			}
 		}
@@ -238,7 +238,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				tmpObj.physComp = tmpTerrain;
 				tmpTerrain->setRest(0.5);
 				std::cout << "Collision between " << it->second->ID << " and terrain\n";
-				PhysicsMaths::handleCollision(*gameObj, tmpObj);
+				PhysicsMaths::handleCollision(*gameObj, tmpObj, true);
 			}
 		}
 	}

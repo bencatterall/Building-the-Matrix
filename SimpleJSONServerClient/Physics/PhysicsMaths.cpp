@@ -51,7 +51,7 @@ namespace PhysicsMaths{
 		handleCollision(objA, objB);
 	}
 
-	void handleCollision(GameObject & objA, GameObject & objB){
+	void handleCollision(GameObject & objA, GameObject & objB, bool terrain){
 
 		std::shared_ptr<PhysicsObject> physA = objA.physComp;
 		std::shared_ptr<PhysicsObject> physB = objB.physComp;
@@ -90,24 +90,25 @@ namespace PhysicsMaths{
 		vec3 u2 = glm::dot(physB->getV(), sDiffNormal) * sDiffNormal;
 
 		// Scoring
-		if (objA.userControllable && objB.userControllable) {
-			Player playerA = (Player&) objA;
-			Player playerB = (Player&) objB;
-			float speed_diff = glm::length(physA->getV()) - glm::length(physB->getV());
-			// increase score of fastest player
-			// TODO: score increase to depend on difference in speeds
-			if (speed_diff > 0) {
-				playerA.modifyScore(+1);
-			} else {
-				playerB.modifyScore(+1);
-			}
-		}
+		// if (objA.userControllable && objB.userControllable) {
+		// 	Player playerA = (Player&) objA;
+		// 	Player playerB = (Player&) objB;
+		// 	float speed_diff = glm::length(physA->getV()) - glm::length(physB->getV());
+		// 	// increase score of fastest player
+		// 	// TODO: score increase to depend on difference in speeds
+		// 	if (speed_diff > 0) {
+		// 		playerA.modifyScore(+1);
+		// 	} else {
+		// 		playerB.modifyScore(+1);
+		// 	}
+		// }
 
 		vec3 u1rejection = physA->getV() - u1;
 		vec3 u2rejection = physB->getV() - u2;
 
-		physA->setX(physA->getX() - 0.5f * (sDiffNormal - vec3(0, sDiffNormal.y, 0)));
-		physB->setX(physB->getX() + 0.5f * (sDiffNormal - vec3(0, sDiffNormal.y, 0)));
+		float terrain_factor = terrain ? 1.0f : -1.0f;
+		physA->setX(physA->getX() - terrain_factor * 3.0f * (sDiffNormal - vec3(0, sDiffNormal.y, 0)));
+		physB->setX(physB->getX() + terrain_factor * 3.0f * (sDiffNormal - vec3(0, sDiffNormal.y, 0)));
 
 		if (m1 == 0 && m2 == 0) return;
 
