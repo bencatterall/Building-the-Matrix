@@ -93,7 +93,7 @@ void Simulator::tick(float timestep){
 					gameObj->physComp->setV(vec3());
 				}
 				if (resetX){
-					gameObj->physComp->setX(vec3(0.0f, 30.1f, 0.0f));
+					gameObj->physComp->setX(vec3(0.0f, 1.5f * PLAYER_CUBE_SIZE + 0.1f, 0.0f));
 				}
 			}
 		}
@@ -130,6 +130,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				}
 			}
 			bool terrainCollision = false;
+			
 			auto worldAABB = currentObj->getWorldAABB()->getFullBox();
 			for (size_t i = 0; i < 8; i++){
 				vec3 currentVertex = worldAABB->at(i);
@@ -138,8 +139,16 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					break;
 				}
 			}
-			terrainCollision = chunk->cubeAt(currentObj->getX());
-			/*vec3 terrainPosToCheck;
+			terrainCollision =
+				(chunk->cubeAt((worldAABB->at(7) + worldAABB->at(6)) / 2.0f) || chunk->cubeAt((worldAABB->at(3) + worldAABB->at(7)) / 2.0f)) ||
+				(chunk->cubeAt((worldAABB->at(2) + worldAABB->at(6)) / 2.0f) || chunk->cubeAt((worldAABB->at(3) + worldAABB->at(2)) / 2.0f)) ||
+				(chunk->cubeAt((worldAABB->at(3) + worldAABB->at(2) + worldAABB->at(2) + worldAABB->at(2) + worldAABB->at(6)) / 5.0f)) ||
+				(chunk->cubeAt((worldAABB->at(2) + worldAABB->at(6) + worldAABB->at(6) + worldAABB->at(6) + worldAABB->at(7)) / 5.0f)) ||
+				(chunk->cubeAt((worldAABB->at(6) + worldAABB->at(7) + worldAABB->at(7) + worldAABB->at(7) + worldAABB->at(3)) / 5.0f)) ||
+				(chunk->cubeAt((worldAABB->at(7) + worldAABB->at(3) + worldAABB->at(3) + worldAABB->at(3) + worldAABB->at(2)) / 5.0f)) ||
+				chunk->cubeAt(currentObj->getX());
+			/*
+			vec3 terrainPosToCheck;
 			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
 				for (int j = 0; j < PLAYER_CUBE_SIZE; j++){
 					if (j + 1 >= PLAYER_CUBE_SIZE || i + 1 >= PLAYER_CUBE_SIZE){
@@ -170,7 +179,43 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					}
 				}
 				
-			}*/
+			}
+			*/
+			//terrainCollision = chunk->cubeAt(currentObj->getX());
+			/*
+			vec3 terrainPosToCheck;
+			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
+				for (int j = 0; j < PLAYER_CUBE_SIZE; j++){
+					if (abs(i*i + j*j - 100) < 5){
+						// We can use (+-i,+-j) to generate perimeter offsets.
+						terrainPosToCheck = currentObj->getX() + vec3(i, -15.0f, j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+						terrainPosToCheck = currentObj->getX() - vec3(-i, -15.0f, j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+						terrainPosToCheck = currentObj->getX() - vec3(i, -15.0f, -j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+						terrainPosToCheck = currentObj->getX() - vec3(-i, -15.0f, -j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+					}
+					if (terrainCollision){
+						break;
+					}
+				}
+
+			}
+			*/
 			if (terrainCollision){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
 				vectorAABB.at(0) = vec3(-chunk->getCubeSize() / 2.0f);
