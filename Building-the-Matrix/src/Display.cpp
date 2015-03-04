@@ -490,7 +490,7 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 
 		//send PRY
 		count++;
-		if (count % 4 == 0) {
+		if (count % 10 == 0) {
 			client.sendPitchRollYaw(getHeadOrientation());
 			count = 0;
 		}
