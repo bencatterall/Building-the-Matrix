@@ -93,7 +93,7 @@ void Simulator::tick(float timestep){
 					gameObj->physComp->setV(vec3());
 				}
 				if (resetX){
-					gameObj->physComp->setX(vec3(0.0f, 30.1f, 0.0f));
+					gameObj->physComp->setX(vec3(0.0f, 1.5f * PLAYER_CUBE_SIZE + 0.1f, 0.0f));
 				}
 			}
 		}
@@ -139,7 +139,14 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 					break;
 				}
 			}
-			
+			terrainCollision =
+				(chunk->cubeAt((worldAABB->at(7) + worldAABB->at(6)) / 2.0f) || chunk->cubeAt((worldAABB->at(3) + worldAABB->at(7)) / 2.0f)) ||
+				(chunk->cubeAt((worldAABB->at(5) + worldAABB->at(6)) / 2.0f) || chunk->cubeAt((worldAABB->at(3) + worldAABB->at(5)) / 2.0f)) ||
+				(chunk->cubeAt((worldAABB->at(3) + worldAABB->at(5) + worldAABB->at(5) + worldAABB->at(5) + worldAABB->at(6)) / 5.0f)) ||
+				(chunk->cubeAt((worldAABB->at(5) + worldAABB->at(6) + worldAABB->at(6) + worldAABB->at(6) + worldAABB->at(7)) / 5.0f)) ||
+				(chunk->cubeAt((worldAABB->at(6) + worldAABB->at(7) + worldAABB->at(7) + worldAABB->at(7) + worldAABB->at(3)) / 5.0f)) ||
+				(chunk->cubeAt((worldAABB->at(7) + worldAABB->at(3) + worldAABB->at(3) + worldAABB->at(3) + worldAABB->at(5)) / 5.0f)) ||
+				chunk->cubeAt(currentObj->getX());
 			/*
 			vec3 terrainPosToCheck;
 			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
@@ -174,7 +181,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				
 			}
 			*/
-			terrainCollision = chunk->cubeAt(currentObj->getX());
+			//terrainCollision = chunk->cubeAt(currentObj->getX());
 			/*
 			vec3 terrainPosToCheck;
 			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
