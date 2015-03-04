@@ -422,13 +422,13 @@ const GLfloat Chunk::cubeBackTextureCoords[6 * 2] {
 };
 
 const GLfloat Chunk::cubeLeftTextureCoords[6 * 2] {
-	1.0f, 0.0f,
-	0.0f, 0.0f,
 	0.0f, 1.0f,
+	1.0f, 1.0f,
+	1.0f, 0.0f,
 
-	1.0f, 0.0f,
 	0.0f, 1.0f,
-	1.0f, 1.0f
+	1.0f, 0.0f,
+	0.0f, 0.0f
 };
 
 const GLfloat Chunk::cubeRightTextureCoords[6 * 2] {
@@ -438,7 +438,7 @@ const GLfloat Chunk::cubeRightTextureCoords[6 * 2] {
 
 	1.0f, 1.0f,
 	0.0f, 0.0f,
-	0.0f, 1.0f,
+	0.0f, 1.0f
 };
 
 const GLfloat Chunk::cubeTopTextureCoords[6 * 2]{

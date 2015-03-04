@@ -39,12 +39,13 @@ void Game::renderScene(glm::mat4 modelViewMatrix, glm::mat4 projectionMatrix) {
 		glm::mat4 objRotMat = locationComponent->getRotationMatrix();
 
 		//Move object to world space 
-		glm::mat4 objWorldMatrix = glm::translate(objRotMat, glm::vec3(objPos.x, objPos.y, objPos.z));
+		glm::mat4 objWorldMatrix = glm::translate(glm::mat4(1.0), glm::vec3(objPos.x, objPos.y, objPos.z)) * objRotMat;
 
 		//Move camera to the position of the player
 		glm::vec3 playerPos = player->getLocationComponent()->getPosition();
 		glm::vec3 eyePos(playerPos.x, playerPos.y + 1.5*Chunk::getCubeSize(), playerPos.z);
-		glm::mat4 objCameraMatrix = glm::translate(objWorldMatrix, glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z));
+
+		glm::mat4 objCameraMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-eyePos.x, -eyePos.y, -eyePos.z)) * objWorldMatrix;
 		objCameraMatrix = modelViewMatrix *  glm::transpose(player->getLocationComponent()->getRotationMatrix()) * objCameraMatrix;
 
 		//Get the renderable component and bind in the shader

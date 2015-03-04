@@ -405,15 +405,12 @@ void Display::run(std::string remote_IP, int remote_port, std::string local_IP, 
 			lastTime += 1.0;
 		}
 
-		//AT THE MOMENT THIS SENDS MESSAGES TOO FAST FOR THE SERVER TO HANDLE QUICKLY ENOUGH
-		//client.sendPitchRollYaw(getHeadOrientation());
-
 		
 		//networking get updates;
 		unsigned char *buffer = new unsigned char[1024];
 		int updateSize;
 		if ((updateSize = client.receive(buffer,1024)) >= 0) {
-			//std::cout << "received update from server, size " << updateSize << "\n";
+			std::cout << "received update from server, size " << updateSize << "\n";
 			int pos = 0;
 			while (pos < updateSize) {
 				int temp;

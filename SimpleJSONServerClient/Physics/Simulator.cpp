@@ -9,6 +9,7 @@
 #include "../Player.hpp"
 #include "../UpdateManager.hpp"
 #include "../World/Chunk.hpp"
+#include "../CubeSize.hpp"
 
 #define THRESHOLD 0.02f
 
@@ -138,6 +139,38 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				}
 			}
 			terrainCollision = chunk->cubeAt(currentObj->getX());
+			/*vec3 terrainPosToCheck;
+			for (int i = 0; i < PLAYER_CUBE_SIZE; i++){
+				for (int j = 0; j < PLAYER_CUBE_SIZE; j++){
+					if (j + 1 >= PLAYER_CUBE_SIZE || i + 1 >= PLAYER_CUBE_SIZE){
+						// We can use (+-i,+-j) to generate perimiter offsets.
+						terrainPosToCheck = currentObj->getX() + vec3(i, -15.0f, j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+						terrainPosToCheck = currentObj->getX() - vec3(-i, -15.0f, j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+						terrainPosToCheck = currentObj->getX() - vec3(i, -15.0f, -j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+						terrainPosToCheck = currentObj->getX() - vec3(-i, -15.0f, -j);
+						if (chunk->cubeAt(terrainPosToCheck)){
+							terrainCollision = true;
+							break;
+						}
+					}
+					if (terrainCollision){
+						break;
+					}
+				}
+				
+			}*/
 			if (terrainCollision){
 				vertexVector vectorAABB = std::vector<glm::vec3>(2);
 				vectorAABB.at(0) = vec3(-chunk->getCubeSize() / 2.0f);
@@ -159,7 +192,7 @@ void Simulator::processCollisions(std::map<GameObjectGlobalID, std::shared_ptr<G
 				tmpTerrain->setMass(0.0f);
 				tmpObj.physComp = tmpTerrain;
 				tmpTerrain->setRest(0.5);
-				//std::cout << "Collision between " << it->second->ID << " and terrain\n";
+				std::cout << "Collision between " << it->second->ID << " and terrain\n";
 				PhysicsMaths::handleCollision(*gameObj, tmpObj);
 			}
 		}

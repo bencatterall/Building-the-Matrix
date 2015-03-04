@@ -45,7 +45,8 @@ PhysicsObject::~PhysicsObject()
 const std::shared_ptr<AABB> PhysicsObject::getWorldAABB() const {
 	std::shared_ptr<vertexVector> fullBox = boundingBox->getFullBox();
 	glm::mat4x4 translateMatrix = glm::translate(glm::mat4x4(1.0f), location->getPosition());
-	translateMatrix *= location->getRotationMatrix();
+	glm::mat4x4 rotMatrix = location->getRotationMatrix();
+	translateMatrix = translateMatrix * rotMatrix;
 	std::shared_ptr<vertexVector> worldSpace = PhysicsMaths::translateVertexVector(translateMatrix, fullBox);
 	std::shared_ptr<AABB> worldBox = std::make_shared<AABB>(*worldSpace);
 	return worldBox;

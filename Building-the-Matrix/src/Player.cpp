@@ -7,12 +7,14 @@
 #include "shader.hpp"
 #include "RenderableComponent.hpp"
 #include "Texture.hpp"
-
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <utility>
 #include <memory>
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-
+#include <glm/gtc/constants.hpp>
 Player::Player(float xPos, float yPos, float zPos) :
 GameObject(glm::vec3(xPos, yPos, zPos)) {
 	headCube = std::make_shared<Cube>(glm::vec3(xPos, yPos + 1.5*Chunk::getCubeSize(), zPos), (float)Chunk::getCubeSize() / 2.0f);
@@ -49,8 +51,8 @@ GameObject(glm::vec3(xPos, yPos, zPos)) {
 	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headBottom"), std::string("BoyHeadBottom")));
 	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headFront"), std::string("BoyHeadFront")));
 	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headBack"), std::string("BoyHeadBack")));
-	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headLeft"), std::string("BoyHeadSide1")));
-	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headRight"), std::string("BoyHeadSide2")));
+	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headLeft"), std::string("BoyHeadSide2")));
+	headTypeToID.insert(std::make_pair<std::string, std::string>(std::string("headRight"), std::string("BoyHeadSide1")));
 
 	std::map<std::string, std::string> vehicleTypeToID;
 	vehicleTypeToID.insert(std::make_pair<std::string, std::string>(std::string("vehicleTop"), std::string("RedCarTop")));
@@ -149,24 +151,30 @@ void Player::setTileTexture(float xPos, float yPos, float zPos, int* numVertices
 void Player::setVehicleOrientation(glm::vec3 forwardVec) {
 	//glm::mat4 rotationMat = glm::orientation(forwardVec, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 rotationMat = glm::orientation(forwardVec, glm::vec3(0.0f, 0.0f, -1.0f));
-	(this->getLocationComponent())->setRotationMatrix(rotationMat);
-	vehicleCube->getLocationComponent()->setRotationMatrix(rotationMat);
+	glm::mat4 rotateMat = rotationMat *glm::rotate(glm::mat4(1.0f), glm::pi<float>(), glm::vec3(0.0f, 1.0f, 0.0f));
+	(this->getLocationComponent())->setRotationMatrix(rotateMat);
+	vehicleCube->getLocationComponent()->setRotationMatrix(rotateMat);
 }
 
-//NOTE: INVERTED WHEN GOING IN THE +Z DIRECTION - THINK IT ASSUMES FORWARD FACING DIRECTION TO BE CONSTANT
 void Player::setHeadOrientation(glm::vec3 PRY) {
 	glm::mat4 rotationMatrix = glm::mat4(1.0f);
-	
+	glm::vec3 dir = (this->getPhysicsComponent())->getOrientation();
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 other = glm::cross(dir,up);
+
 	//roll
-	rotationMatrix = glm::rotate(rotationMatrix, PRY.x, glm::vec3(0.0f, 0.0f, 1.0f));
+	rotationMatrix = glm::rotate(rotationMatrix, PRY.x, dir);
 
 	//yaw
-	rotationMatrix = glm::rotate(rotationMatrix, PRY.z, glm::vec3(0.0f, 1.0f, 0.0f));
+	rotationMatrix = glm::rotate(rotationMatrix, PRY.z, up);
 
 	//pitch
-	rotationMatrix = glm::rotate(rotationMatrix, PRY.y, glm::vec3(1.0f, 0.0f, 0.0f));
+	rotationMatrix = glm::rotate(rotationMatrix, PRY.y, other);
 
-	headCube->getLocationComponent()->setRotationMatrix(rotationMatrix * ((this->getLocationComponent()->getRotationMatrix())));
+	glm::mat4 rotateMat = rotationMatrix * glm::rotate(glm::mat4(1.0f), glm::pi<float>(), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+	headCube->getLocationComponent()->setRotationMatrix(rotateMat * ((this->getLocationComponent()->getRotationMatrix())));
 }
 
 //places serialized values into object return the size of the buffer read as an int 

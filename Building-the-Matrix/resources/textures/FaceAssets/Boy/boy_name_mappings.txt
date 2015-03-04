@@ -1,0 +1,12 @@
+200
+200
+6
+1
+RGBA
+6
+0 BoyHeadBack
+1 BoyHeadBottom
+2 BoyHeadFront
+3 BoyHeadSide1
+4 BoyHeadSide2
+5 BoyHeadTop
