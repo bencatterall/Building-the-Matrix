@@ -3,6 +3,7 @@
 #include <iostream>
 #include <thread>
 #include <time.h>
+#define MAX_PACKET_SIZE 1024
 
 Sender::Sender() {
 	(this->cont) = true;
@@ -15,7 +16,7 @@ void Sender::setSocket(Socket *s) {
 }
 
 void Sender::sendUpdateMessage(std::vector <Address> addresses, std::map<GameObjectGlobalID, std::shared_ptr<GameObject>> message) {
-	unsigned char *m = new unsigned char[1024];
+	unsigned char *m = new unsigned char[MAX_PACKET_SIZE];
 	int size = 0;
 	for (std::pair<GameObjectGlobalID, std::shared_ptr<GameObject>> go : message) {
 		bool deleted = go.second->deleted;
@@ -59,7 +60,7 @@ void Sender::sendUpdateMessage(std::vector <Address> addresses, std::map<GameObj
 	std::vector<Address>::iterator it;
 	for (it = addresses.begin(); it != addresses.end(); it++) {
 		time_t  timev;
-		std::cout << "Sending update " << time(&timev) << "\n";
+		// std::cout << "Sending update " << time(&timev) << "\n";
 		Message mess = Message(*it, m, size);
 		(this->toSend).pushToEnd(mess);
 	}
